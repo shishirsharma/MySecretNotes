@@ -25,6 +25,7 @@
   "permissions": [
     "background",
     "storage",
+    "unlimitedStorage",
     "tabs",
     "notifications"
   ]

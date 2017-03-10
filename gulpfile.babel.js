@@ -68,7 +68,7 @@ gulp.task('fonts', () => {
     .pipe(gulp.dest('dist/fonts'));
 });
 
-gulp.task('html', ['styles'], () => {
+gulp.task('html', ['styles', 'webpack'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.sourcemaps.init())
@@ -108,23 +108,20 @@ gulp.task('babel', () => {
 gulp.task('webpack', () => {
     return gulp.src('app/scripts/index.js')
         .pipe($.webpack({
-            resolve: {
-                modulesDirectories: ["web_modules", "node_modules", "bower_components"]
-            },
-            plugins: [
-                new webpack.ResolverPlugin(
-                    new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])
-                )
-            ]
+            // resolve: {
+            //     modulesDirectories: ["node_modules"]
+            // },
+            output: {
+                filename: 'bundle.js'
+            }
         }))
         .pipe(gulp.dest('app/scripts'));
 });
 
 
-
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['lint', 'babel'], () => {
+gulp.task('watch', ['lint', 'babel', 'webpack'], () => {
   $.livereload.listen();
 
   gulp.watch([
@@ -137,6 +134,7 @@ gulp.task('watch', ['lint', 'babel'], () => {
 
   gulp.watch(['app/scripts.babel/**/*.js', 'app/scripts.babel/**/*.jsx'], ['lint', 'babel']);
   gulp.watch('app/styles.scss/**/*.scss', ['styles']);
+  gulp.watch('app/scripts/index.js', ['webpack']);
   gulp.watch('bower.json', ['wiredep']);
 });
 
