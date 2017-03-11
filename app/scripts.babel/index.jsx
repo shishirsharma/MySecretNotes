@@ -71,6 +71,10 @@ class RichEditorExample extends React.Component {
              * });*/
         }
 
+        this.deleteNote = (uuid) => {
+            if (window.console) { console.log('[notes] note added >>>', props.uuid, uuid); }
+            this.props.deleteNote(this.props.uuid);
+        }
         this.handleKeyCommand = (command) => this._handleKeyCommand(command);
         this.onTab = (e) => this._onTab(e);
         this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -126,6 +130,8 @@ class RichEditorExample extends React.Component {
 
         return (
             <div className="RichEditor-root">
+                <CloseButton
+                    onMouseDown={this.deleteNote} />
                 {/* <BlockStyleControls
                     editorState={editorState}
                     onToggle={this.toggleBlockType}
@@ -140,6 +146,7 @@ class RichEditorExample extends React.Component {
                         customStyleMap={styleMap}
                         editorState={editorState}
                         handleKeyCommand={this.handleKeyCommand}
+                        deleteNote={this.deleteNote}
                         onChange={this.onChange}
                         onTab={this.onTab}
                         placeholder=""
@@ -191,6 +198,26 @@ class StyleButton extends React.Component {
         );
     }
 }
+
+class CloseButton extends React.Component {
+    constructor() {
+        super();
+        this.onMouseDown = (e) => {
+            e.preventDefault();
+            this.props.onMouseDown(this.props.uuid);
+        };
+    }
+    render() {
+        return (
+            <div className="Notes-controls">
+                <span onMouseDown={this.onMouseDown}>
+                    <i className="fa fa-times" aria-hidden="true"></i>
+                </span>
+            </div>
+        );
+    }
+};
+
 
 const BLOCK_TYPES = [
     {label: 'H1', style: 'header-one'},
@@ -245,7 +272,7 @@ const InlineStyleControls = (props) => {
                     active={currentStyle.has(type.style)}
                     label={type.label}
                     onToggle={props.onToggle}
-  x                  style={type.style}
+                    style={type.style}
                 />
              )}
         </div>
@@ -260,7 +287,8 @@ function Card(props) {
             <div className="card-block">
                 <RichEditorExample
                     initialState={props.content}
-                    uuid={props.uuid} />
+                    uuid={props.uuid}
+                    deleteNote={props.deleteNote} />
             </div>
         </div>
     );
@@ -279,7 +307,8 @@ class CardColumns extends React.Component {
                 <Card
                     key={card.uuid}
                     uuid={card.uuid}
-                    content={card.content} />
+                    content={card.content}
+                    deleteNote={this.props.deleteNote} />
             );
         }, this);
         return (
@@ -310,6 +339,17 @@ class Notes extends React.Component {
             if (window.console) { console.log('[notes] note added', cards); }
 
             // this.setState({cards: this.state.cards.concat([{uuid: uuid, content: default_note_content}])});
+            this.setState({cards: cards}, function () {
+                if (window.console) { console.log('[notes] updated state', this.state.cards); }
+            });
+        }
+        this.deleteNote = (uuid) => {
+            if (window.console) { console.log('[notes] removing', uuid); }
+
+            localStorage.removeItem(uuid);
+            const old_cards = this.state.cards;
+
+            var cards = old_cards.filter(function(elem, idx) { if(elem.uuid != uuid) return elem });
             this.setState({cards: cards}, function () {
                 if (window.console) { console.log('[notes] updated state', this.state.cards); }
             });
@@ -345,7 +385,9 @@ class Notes extends React.Component {
                     <div className="well">
                         <div id="main-table">
                             <div className="notes">
-                                <CardColumns cards={this.state.cards} />
+                                <CardColumns
+                                    cards={this.state.cards}
+                                    deleteNote={this.deleteNote} />
                             </div>
                         </div>
                     </div>
@@ -366,4 +408,3 @@ ReactDOM.render(
         cards={cards} />,
     document.getElementById('main-table')
 );
-
