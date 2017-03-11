@@ -21,7 +21,12 @@ class RichEditorExample extends React.Component {
     constructor(props) {
         super(props);
         /* this.state = {editorState: EditorState.createEmpty()};*/
+        const default_note_content = '{"entityMap":{},"blocks":[{"key":"9id36","text":"Title","type":"header-three","depth":0,"inlineStyleRanges":[{"offset":0,"length":5,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"209rs","text":"Subtitle","type":"header-five","depth":0,"inlineStyleRanges":[{"offset":0,"length":8,"style":"BOLD"},{"offset":0,"length":8,"style":"ITALIC"}],"entityRanges":[],"data":{}},{"key":"arjcc","text":"Para para para para para para para para para para para para para para para para para para para","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}';
+
         var aValue = localStorage.getItem(props.uuid);
+        if (aValue == null) {
+            aValue = default_note_content;
+        }
         /* var initialState = convertFromRaw(JSON.parse(props.initialState));*/
         var initialState = convertFromRaw(JSON.parse(aValue));
         this.state = {editorState: EditorState.createWithContent(initialState)};
@@ -40,10 +45,10 @@ class RichEditorExample extends React.Component {
 
 
         /* var p2 = p1.then(function(val) {*/
-            /* var processedHTML = convertFromHTML(props.initialState);
-             * var initialState = ContentState.createFromBlockArray(processedHTML);*/
-            /* console.log(initialState); 
-             * console.log(convertFromRaw(JSON.parse(initialState))); */
+        /* var processedHTML = convertFromHTML(props.initialState);
+         * var initialState = ContentState.createFromBlockArray(processedHTML);*/
+        /* console.log(initialState); 
+         * console.log(convertFromRaw(JSON.parse(initialState))); */
         /*
            if (window.console) { console.log('[notes] loading initialState:', initialState); }
 
@@ -240,7 +245,7 @@ const InlineStyleControls = (props) => {
                     active={currentStyle.has(type.style)}
                     label={type.label}
                     onToggle={props.onToggle}
-                    style={type.style}
+  x                  style={type.style}
                 />
              )}
         </div>
@@ -261,29 +266,93 @@ function Card(props) {
     );
 }
 
-function CardColumns(props) {
-    var cards = props.cards;
-    var cardItems = cards.map(function (card) {
+class CardColumns extends React.Component {
+    constructor(props) {
+        if (window.console) { console.log('[cardcolumns] constructor'); }
+        super(props);
+    }
+    render() {
+        var cards = this.props.cards;
+        if (window.console) { console.log('[cardcolumns] render', cards); }
+        var cardItems = cards.map(function (card) {
+            return (
+                <Card
+                    key={card.uuid}
+                    uuid={card.uuid}
+                    content={card.content} />
+            );
+        }, this);
         return (
-            <Card
-                key={card.uuid}
-                uuid={card.uuid}
-                content={card.content} />
+            <div className="card-columns">
+                {cardItems}
+            </div>
         );
-    }, this);
-    return (
-        <div className="card-columns">
-            {cardItems}
-        </div>
-    );
+    }
 }
+const default_note_content = '{"entityMap":{},"blocks":[{"key":"9id36","text":"Title","type":"header-three","depth":0,"inlineStyleRanges":[{"offset":0,"length":5,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"209rs","text":"Subtitle","type":"header-five","depth":0,"inlineStyleRanges":[{"offset":0,"length":8,"style":"BOLD"},{"offset":0,"length":8,"style":"ITALIC"}],"entityRanges":[],"data":{}},{"key":"arjcc","text":"Para para para para para para para para para para para para para para para para para para para","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}';
+class Notes extends React.Component {
+    constructor(props) {
+        super(props);
+        if (window.console) { console.log('[notes] constructor finished', props); }
 
-function Notes(props) {
-    return (
-        <div className="notes">
-            <CardColumns cards={props.cards}/>
-        </div>
-    );
+        var keys = [];
+        for (var key in localStorage) {
+            if (localStorage.hasOwnProperty(key)) {
+                keys.push({uuid: key, content: localStorage.getItem(key)});
+            }
+        }
+        this.state = {cards: keys};
+        this.addNote = (e) => {
+            e.preventDefault();
+            var old_cards = this.state.cards;
+            var uuid = generateUUID();
+            var cards = [{uuid: uuid, content: default_note_content}].concat(old_cards);
+            if (window.console) { console.log('[notes] note added', cards); }
+
+            // this.setState({cards: this.state.cards.concat([{uuid: uuid, content: default_note_content}])});
+            this.setState({cards: cards}, function () {
+                if (window.console) { console.log('[notes] updated state', this.state.cards); }
+            });
+        }
+    }
+
+    render() {
+        if (window.console) { console.log('[notes] rendering'); }
+        return (
+            <div>
+                <header className="navbar navbar-light navbar-toggleable-md">
+                    <div className="collapse navbar-collapse">
+                        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <a className="navbar-brand" href="#"><i className="fa fa-book" aria-hidden="true"></i>&nbsp;My Secret Notes </a>
+                        <div className="collapse navbar-collapse navbar-options" id="navbarSupportedContent">
+                            <form className="form-inline my-2 my-lg-0">
+                                <button className="btn btn-link" onClick={this.addNote}>
+                                    <i className="fa fa-plus" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" className="btn btn-link" data-toggle="modal" data-target="#credentialModal">
+                                    <i className="fa fa-cog" aria-hidden="true"></i>
+                                </button>
+                                <button type="button" className="btn btn-link" data-toggle="modal" data-target="#helpModal">
+                                    <i className="fa fa-question" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </header>
+                <div className="container-fluid">
+                    <div className="well">
+                        <div id="main-table">
+                            <div className="notes">
+                                <CardColumns cards={this.state.cards} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }
 
 const cards = [

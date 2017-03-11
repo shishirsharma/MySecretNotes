@@ -28,33 +28,7 @@
     </head>
     <body>
         <iframe id="sandbox" class="hidden-xl-down" src="sandbox.html"></iframe>
-        <header class="navbar navbar-light navbar-toggleable-md">
-            <div class="collapse navbar-collapse">
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <a class="navbar-brand" href="#">
-                    <i class="fa fa-book" aria-hidden="true"></i>&nbsp;My Secret Notes
-                </a>
-
-                <div class="collapse navbar-collapse navbar-options" id="navbarSupportedContent">
-                    <form class="form-inline my-2 my-lg-0">
-                        <select class="form-control" id="buckets-select"></select>
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#credentialModal">
-                            <i class="fa fa-cog" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#helpModal">
-                            <i class="fa fa-question" aria-hidden="true"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </header>
-        <div class="container-fluid">
-            <div class="well">
-                <div id="main-table"></div>
-            </div>
-        </div>
+        <div id="main-table"></div>
 
         <!-- Modal -->
         <div class="modal fade" id="credentialModal" tabindex="-1" role="credential-dialog" aria-labelledby="credentialModalLabel">
