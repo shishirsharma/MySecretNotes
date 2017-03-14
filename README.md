@@ -12,7 +12,7 @@ This is a chrome extention notes app.
 ## Local Setup
 * Checkout code
 * `$ npm install && bower install`
-* `$ gulp watch`
+* `$ gulp build && gulp watch`
 
 ## Build/Package
 * `$ gulp build package`
