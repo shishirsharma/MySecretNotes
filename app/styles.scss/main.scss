@@ -3,9 +3,22 @@
 @import "../bower_components/bootstrap/scss/bootstrap.scss";
 // endbower
 
-/* body { */
-/*   font-family: Helvetica, sans-serif; */
-/* } */
+.nav-btn {
+  span {
+    font-size: 18px;
+  }
+}
+
+// Modal adjustments
+.modal {
+  .modal-dialog {
+    top: 10%
+  }
+}
+
+.content-wrapper {
+  padding-top: 18px;
+} 
 
 .react-autosuggest__container {
   position: relative;

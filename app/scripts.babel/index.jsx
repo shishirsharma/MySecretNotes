@@ -3,6 +3,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Editor, EditorState, RichUtils, ContentState, convertFromHTML, convertToRaw, convertFromRaw} from 'draft-js';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import NavBar from './NavBar';
 
 
 function generateUUID() { // Public Domain/MIT
@@ -360,35 +362,15 @@ class Notes extends React.Component {
         if (window.console) { console.log('[notes] rendering'); }
         return (
             <div>
-                <header className="navbar navbar-light navbar-toggleable-md">
-                    <div className="collapse navbar-collapse">
-                        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
-                        <a className="navbar-brand" href="#"><i className="fa fa-book" aria-hidden="true"></i>&nbsp;My Secret Notes </a>
-                        <div className="collapse navbar-collapse navbar-options" id="navbarSupportedContent">
-                            <form className="form-inline my-2 my-lg-0">
-                                <button className="btn btn-link" onClick={this.addNote}>
-                                    <i className="fa fa-plus" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" className="btn btn-link" data-toggle="modal" data-target="#credentialModal">
-                                    <i className="fa fa-cog" aria-hidden="true"></i>
-                                </button>
-                                <button type="button" className="btn btn-link" data-toggle="modal" data-target="#helpModal">
-                                    <i className="fa fa-question" aria-hidden="true"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </header>
-                <div className="container-fluid">
-                    <div className="well">
-                        <div id="main-table">
-                            <div className="notes">
-                                <CardColumns
-                                    cards={this.state.cards}
-                                    deleteNote={this.deleteNote} />
-                            </div>
+                <MuiThemeProvider>
+                    <NavBar addNote={this.addNote.bind(this)} />
+                </MuiThemeProvider>
+                <div className="container-fluid content-wrapper">
+                    <div id="main-table">
+                        <div className="notes">
+                            <CardColumns
+                                cards={this.state.cards}
+                                deleteNote={this.deleteNote} />
                         </div>
                     </div>
                 </div>
