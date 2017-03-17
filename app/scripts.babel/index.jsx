@@ -213,7 +213,7 @@ class CloseButton extends React.Component {
     return (
       <div className="note-controls">
       <span onMouseDown={this.onMouseDown}>
-      <i className="fa fa-times" aria-hidden="true"></i>
+      <i className="fa fa-trash" aria-hidden="true"></i> DELETE
       </span>
       </div>
       );

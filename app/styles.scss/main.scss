@@ -34,18 +34,35 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
   border-radius: 2px;
+  padding: 1.2rem;
   
   .note-controls {
+    cursor: pointer;
+    float: right;
     text-align: right;
+    right: 1.2rem;
+    top: 1.2rem;
+
+    span {
+      font-size: 0.7rem;
+      font-weight: bold;
+      letter-spacing: 0.05rem;
+    }
   }
 
   h3 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    padding-bottom: 0.5rem;
   }
 
   h5 {
     color: rgba(0, 0, 0, 0.541176);
-    font-size: 1rem;
+    font-size: 0.9rem;
+    padding-bottom: 2rem;
+  }
+
+  h3, h5 {
+    margin: 0;
   }
 }
 

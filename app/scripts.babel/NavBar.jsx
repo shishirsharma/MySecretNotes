@@ -38,6 +38,7 @@ export default class NavBar extends React.Component {
       title= {
         <span style={this.state.styles.title}>My Secret Notes</span>
       }
+      iconClassNameLeft={'fa fa-book'}
       iconElementRight={
         <div>
         <FlatButton label="New Note" onClick={this.handleAddNote.bind(this)} />
