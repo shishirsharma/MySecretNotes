@@ -4,13 +4,13 @@
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
-    "16": "images/1481821230_browser-16.png",
-    "48": "images/1481821228_browser-48.png",
-    "128": "images/1481821197_browser-128.png"
+    "16": "images/notebook-16.png",
+    "64": "images/notebook-64.png",
+    "128": "images/notebook-128.png"
   },
   "default_locale": "en",
   "browser_action": {
-    "default_icon": "images/favicon-72.png",
+    "default_icon": "images/notebook-128.png",
     "default_title": "My Secret Notes"
   },
   "background": {
