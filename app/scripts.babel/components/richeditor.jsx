@@ -1,0 +1,371 @@
+'use strict';
+
+import React from 'react';
+import {Editor, EditorState, RichUtils, ContentState, convertFromHTML, convertToRaw, convertFromRaw} from 'draft-js';
+
+function getBlockStyle(block) {
+    switch (block.getType()) {
+        case 'blockquote': return 'RichEditor-blockquote';
+        default: return null;
+    }
+}
+const styleMap = {
+    CODE: {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+        fontSize: 16,
+        padding: 2,
+    },
+};
+
+class StyleButton extends React.Component {
+    constructor() {
+        super();
+        this.onToggle = (e) => {
+            e.preventDefault();
+            this.props.onToggle(this.props.style);
+        };
+    }
+
+    render() {
+        let className = 'RichEditor-styleButton';
+        if (this.props.active) {
+            className += ' RichEditor-activeButton';
+        }
+
+        return (
+            <span className={className} onMouseDown={this.onToggle}>
+                {this.props.label}
+            </span>
+        );
+    }
+}
+
+const BLOCK_TYPES = [
+    {label: 'H1', style: 'header-one'},
+    {label: 'H2', style: 'header-two'},
+    {label: 'H3', style: 'header-three'},
+    {label: 'H4', style: 'header-four'},
+    {label: 'H5', style: 'header-five'},
+    {label: 'H6', style: 'header-six'},
+    {label: 'Blockquote', style: 'blockquote'},
+    {label: 'UL', style: 'unordered-list-item'},
+    {label: 'OL', style: 'ordered-list-item'},
+    {label: 'Code Block', style: 'code-block'},
+];
+
+const BlockStyleControls = (props) => {
+    const {editorState} = props;
+    const selection = editorState.getSelection();
+    const blockType = editorState
+        .getCurrentContent()
+        .getBlockForKey(selection.getStartKey())
+        .getType();
+
+    return (
+        <div className="RichEditor-controls">
+            {BLOCK_TYPES.map((type) =>
+                <StyleButton
+                    key={type.label}
+                    active={type.style === blockType}
+                    label={type.label}
+                    onToggle={props.onToggle}
+                    style={type.style}
+                />
+             )}
+        </div>
+    );
+};
+
+var INLINE_STYLES = [
+    {label: 'Bold', style: 'BOLD'},
+    {label: 'Italic', style: 'ITALIC'},
+    {label: 'Underline', style: 'UNDERLINE'},
+    {label: 'Monospace', style: 'CODE'},
+];
+
+const InlineStyleControls = (props) => {
+    var currentStyle = props.editorState.getCurrentInlineStyle();
+    return (
+        <div className="RichEditor-controls">
+            {INLINE_STYLES.map(type =>
+                <StyleButton
+                    key={type.label}
+                    active={currentStyle.has(type.style)}
+                    label={type.label}
+                    onToggle={props.onToggle}
+                    style={type.style}
+                />
+             )}
+        </div>
+    );
+};
+
+export default class RichEditor extends React.Component {
+    constructor(props) {
+        super(props);
+        // this.state = {editorState: EditorState.createEmpty()};
+
+        // var aValue = localStorage.getItem(props.uuid);
+        // var aValue = Store.get(props.uuid);
+        const default_note_content = '{"entityMap":{},"blocks":[{"key":"9id36","text":"New Note","type":"header-three","depth":0,"inlineStyleRanges":[{"offset":0,"length":5,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"arjcc","text":"New note","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}';
+        var aValue = props.content;
+        if (aValue == null || aValue === '') {
+            console.log('[RichEditor] new note:', aValue );
+            aValue = default_note_content;
+        }
+        /* var initialState = convertFromRaw(JSON.parse(props.initialState));*/
+        console.log('[RichEditor] constructor:', aValue );
+        var initialState = convertFromRaw(JSON.parse(aValue));
+        this.state = {editorState: EditorState.createWithContent(initialState), init: true};
+
+        /* var that = this;
+         * var p1 = new Promise(function(resolve, reject) {
+         *     chrome.storage.local.get(props.uuid, function(result) {
+         *         if (window.console) { console.log('[notes] loading uuid:', props.uuid, result, that); }
+         *         const contentState = convertFromRaw(JSON.parse(result[props.uuid]));
+         *         const editorState = EditorState.push(that.state.editorstate, contentState);
+         *         that.setState({editorState});
+         *         resolve(true);
+         *     });
+         * });*/
+
+
+
+        /* var p2 = p1.then(function(val) {*/
+        /* var processedHTML = convertFromHTML(props.initialState);
+         * var initialState = ContentState.createFromBlockArray(processedHTML);*/
+        /* console.log(initialState);
+         * console.log(convertFromRaw(JSON.parse(initialState))); */
+        /*
+           if (window.console) { console.log('[notes] loading initialState:', initialState); }
+
+           });*/
+
+        this.focus = () => this.refs.editor.focus();
+        this.onChange = (editorState) => {
+            this.setState({editorState});
+            // This is a redundent call
+            const content = this.state.editorState.getCurrentContent();
+            const serialized = JSON.stringify(convertToRaw(content));
+            var data = {};
+            data[props.uuid] = serialized;
+            console.log('[notes] serialized uuid:', props.uuid, ' [', serialized, ']');
+            //editorState.getCurrentContent().getBlockMap().first().getKey() === selectionState.getAnchor/FocusKey();
+            var selectionState = editorState.getSelection();
+            var anchorKey = selectionState.getAnchorKey();
+            var currentContent = editorState.getCurrentContent();
+            if(currentContent.getBlockMap().first().getKey() === anchorKey) {
+                console.log('[notes] Title:', currentContent.getBlockMap().first().getKey() === anchorKey);
+                var currentBlockType = RichUtils.getCurrentBlockType(editorState)
+                console.log('[notes] Title:', currentBlockType);
+                if (currentBlockType != 'header-three') {
+                    this._toggleBlockType(editorState, 'header-three');
+                }
+            }
+            // Store.set(props.uuid, serialized);
+            var data = {};
+            data[props.uuid] = serialized;
+            chrome.storage.local.set(data, function() {
+                if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
+            });
+
+            /* chrome.storage.local.set(data, function() {
+             *     if (window.console) {
+             *         console.log('[notes] serialized uuid:', props.uuid, ' [', serialized, ']');
+             *     }
+             * });*/
+        }
+
+        this.deleteNote = (uuid) => {
+            if (window.console) { console.log('[notes] note added >>>', props.uuid, uuid); }
+            this.props.deleteNote(this.props.uuid);
+        }
+        this.handleKeyCommand = (command) => this._handleKeyCommand(command);
+        this.onTab = (e) => this._onTab(e);
+        this.toggleBlockType = (type) => this._toggleBlockType(type);
+        this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+        if (window.console) { console.log('[notes] constructor finished'); }
+    }
+
+    componentDidMount() {
+        // var that = this;
+        if (window.console) { console.log('[RichEditor] componentDidMount:', this.props.uuid, this.state.init); }
+        if(this.state.init === true) {
+            const uuid = this.props.uuid;
+            chrome.storage.local.get(uuid, function(result) {
+                const content = result[uuid];
+                if (window.console) { console.log('[RichEditor] loading uuid:', uuid, content); }
+                if (content != undefined) {
+                    const contentState = convertFromRaw(JSON.parse(content));
+                    const editorState = EditorState.push(this.state.editorState, contentState);
+                    if (window.console) { console.log('[RichEditor] loaded content:', content, this.state); }
+                    this.setState({editorState: editorState, init: false});
+                }
+            }.bind(this));
+        }
+    }
+
+    _handleKeyCommand(command) {
+        const {editorState} = this.state;
+        const newState = RichUtils.handleKeyCommand(editorState, command);
+        if (newState) {
+            this.onChange(newState);
+            return true;
+        }
+        return false;
+    }
+
+    _onTab(e) {
+        const maxDepth = 4;
+        this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
+    }
+
+    _toggleBlockType(blockType) {
+        this.onChange(
+            RichUtils.toggleBlockType(
+                this.state.editorState,
+                blockType
+            )
+        );
+    }
+
+    _toggleInlineStyle(inlineStyle) {
+        this.onChange(
+            RichUtils.toggleInlineStyle(
+                this.state.editorState,
+                inlineStyle
+            )
+        );
+    }
+
+    render() {
+        if (window.console) { console.log('[RichEditor] render:', this.props.uuid, this.state); }
+
+        const {editorState} = this.state;
+
+        // If the user changes block type before entering any text, we can
+        // either style the placeholder or hide it. Let's just hide it now.
+        let className = 'RichEditor-editor';
+        var contentState = editorState.getCurrentContent();
+        if (!contentState.hasText()) {
+            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+                className += ' RichEditor-hidePlaceholder';
+            }
+        }
+        // Not needed
+        // Part of Editor Plugins system. We are not using
+        /* const options = {
+         *     breakoutBlockType: 'unordered-list-item',
+         *     breakoutBlocks: ['header-one', 'header-two', 'header-three']
+         * }
+         * const blockBreakoutPlugin = createBlockBreakoutPlugin(options);
+         * const plugins = [blockBreakoutPlugin];*/
+
+        return (
+            <div className="RichEditor-root">
+                <CloseButton
+                    onMouseDown={this.deleteNote} />
+                {/* <BlockStyleControls
+                    editorState={editorState}
+                    onToggle={this.toggleBlockType}
+                    /> */}
+                {/* <InlineStyleControls
+                    editorState={editorState}
+                    onToggle={this.toggleInlineStyle}
+                    /> */}
+                <div className={className} onClick={this.focus}>
+                    <Editor
+                        blockStyleFn={getBlockStyle}
+                        customStyleMap={styleMap}
+                        editorState={editorState}
+                        handleKeyCommand={this.handleKeyCommand}
+                        deleteNote={this.deleteNote}
+                        onChange={this.onChange}
+                        onTab={this.onTab}
+                        placeholder=""
+                        ref="editor"
+                        spellCheck={true}
+                    />
+                </div>
+            </div>
+        );
+    }
+}
+
+class CloseButton extends React.Component {
+    constructor() {
+        super();
+        this.onMouseDown = (e) => {
+            e.preventDefault();
+            this.props.onMouseDown(this.props.uuid);
+        };
+    }
+    render() {
+        return (
+            <div className="note-controls">
+                <span onMouseDown={this.onMouseDown}>
+                    <i className="fa fa-trash" aria-hidden="true"></i> DELETE
+                </span>
+            </div>
+        );
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* const cloudrail = require("cloudrail-si");
+ * cloudrail.Settings.setKey("[CloudRail License Key]");
+ * 
+ * const redirectReceiver = cloudrail.RedirectReceivers.getLocalAuthenticator(12345); // for local testing
+ * const redirectUri = "http://localhost:12345"; // for local testing
+ * 
+ * // let cs = new cloudrail.services.Box(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
+ * // let cs = new cloudrail.services.OneDrive(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
+ * // let cs = new cloudrail.services.OneDriveBusiness(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
+ * // let cs = new cloudrail.services.GoogleDrive(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
+ * let cs = new cloudrail.services.Dropbox(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
+ * 
+ * cs.createFolder("/TestFolder", (err) => { // <---
+ *     if (err) throw err;
+ *     let fileStream = fs.createReadStream("UserData.csv");
+ *     let size = fs.statSync("UserData.csv").size;
+ *     cs.upload("/TestFolder/Data.csv", fileStream, size, false, (err) => { // <---
+ *         if (err) throw err;
+ *         console.log("Upload successfully finished");
+ *     });
+ * });*/
+
+
+import RemoteStorage from 'remotestoragejs';
+
+var remoteStorage = new RemoteStorage({
+    logging: true  // optinally enable debug logs (defaults to false)
+});
+
+
+var userAddress = ''; // fill me in
+var token = ''; // fill me in
+
+RemoteStorage.Discover(userAddress).then(function (obj) {
+    console.log('- configuring remote', userAddress, obj.href, obj.storageType);
+    remoteStorage.remote.configure({
+        userAddress: userAddress,
+        href: obj.href,
+        storageApi: obj.storageType,
+        properties: obj.properties,
+        token: token
+    });
+});

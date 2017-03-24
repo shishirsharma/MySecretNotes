@@ -108,9 +108,9 @@ gulp.task('babel', () => {
 gulp.task('webpack', () => {
     return gulp.src('app/scripts/index.js')
         .pipe($.webpack({
-            // resolve: {
-            //     modulesDirectories: ["node_modules"]
-            // },
+            resolve: {
+                modulesDirectories: ["node_modules", "app/scripts"]
+            },
             output: {
                 filename: 'bundle.js'
             }
