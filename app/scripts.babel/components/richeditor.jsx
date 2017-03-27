@@ -104,77 +104,21 @@ const InlineStyleControls = (props) => {
 export default class RichEditor extends React.Component {
     constructor(props) {
         super(props);
-        // this.state = {editorState: EditorState.createEmpty()};
-
-        // var aValue = localStorage.getItem(props.uuid);
-        // var aValue = Store.get(props.uuid);
         const default_note_content = '{"entityMap":{},"blocks":[{"key":"9id36","text":"New Note","type":"header-three","depth":0,"inlineStyleRanges":[{"offset":0,"length":5,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"arjcc","text":"New note","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}';
         var aValue = props.content;
         if (aValue == null || aValue === '') {
             console.log('[RichEditor] new note:', aValue );
             aValue = default_note_content;
         }
-        /* var initialState = convertFromRaw(JSON.parse(props.initialState));*/
         console.log('[RichEditor] constructor:', aValue );
         var initialState = convertFromRaw(JSON.parse(aValue));
         this.state = {editorState: EditorState.createWithContent(initialState), init: true};
 
-        /* var that = this;
-         * var p1 = new Promise(function(resolve, reject) {
-         *     chrome.storage.local.get(props.uuid, function(result) {
-         *         if (window.console) { console.log('[notes] loading uuid:', props.uuid, result, that); }
-         *         const contentState = convertFromRaw(JSON.parse(result[props.uuid]));
-         *         const editorState = EditorState.push(that.state.editorstate, contentState);
-         *         that.setState({editorState});
-         *         resolve(true);
-         *     });
-         * });*/
-
-
-
-        /* var p2 = p1.then(function(val) {*/
-        /* var processedHTML = convertFromHTML(props.initialState);
-         * var initialState = ContentState.createFromBlockArray(processedHTML);*/
-        /* console.log(initialState);
-         * console.log(convertFromRaw(JSON.parse(initialState))); */
-        /*
-           if (window.console) { console.log('[notes] loading initialState:', initialState); }
-
-           });*/
-
         this.focus = () => this.refs.editor.focus();
         this.onChange = (editorState) => {
             this.setState({editorState});
-            // This is a redundent call
-            const content = this.state.editorState.getCurrentContent();
-            const serialized = JSON.stringify(convertToRaw(content));
-            var data = {};
-            data[props.uuid] = serialized;
-            console.log('[notes] serialized uuid:', props.uuid, ' [', serialized, ']');
-            //editorState.getCurrentContent().getBlockMap().first().getKey() === selectionState.getAnchor/FocusKey();
-            var selectionState = editorState.getSelection();
-            var anchorKey = selectionState.getAnchorKey();
-            var currentContent = editorState.getCurrentContent();
-            if(currentContent.getBlockMap().first().getKey() === anchorKey) {
-                console.log('[notes] Title:', currentContent.getBlockMap().first().getKey() === anchorKey);
-                var currentBlockType = RichUtils.getCurrentBlockType(editorState)
-                console.log('[notes] Title:', currentBlockType);
-                if (currentBlockType != 'header-three') {
-                    this._toggleBlockType(editorState, 'header-three');
-                }
-            }
-            // Store.set(props.uuid, serialized);
-            var data = {};
-            data[props.uuid] = serialized;
-            chrome.storage.local.set(data, function() {
-                if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
-            });
-
-            /* chrome.storage.local.set(data, function() {
-             *     if (window.console) {
-             *         console.log('[notes] serialized uuid:', props.uuid, ' [', serialized, ']');
-             *     }
-             * });*/
+            this._handleTitle(editorState)
+            this._handleStore(editorState)
         }
 
         this.deleteNote = (uuid) => {
@@ -192,17 +136,47 @@ export default class RichEditor extends React.Component {
         // var that = this;
         if (window.console) { console.log('[RichEditor] componentDidMount:', this.props.uuid, this.state.init); }
         if(this.state.init === true) {
-            const uuid = this.props.uuid;
-            chrome.storage.local.get(uuid, function(result) {
-                const content = result[uuid];
-                if (window.console) { console.log('[RichEditor] loading uuid:', uuid, content); }
-                if (content != undefined) {
-                    const contentState = convertFromRaw(JSON.parse(content));
-                    const editorState = EditorState.push(this.state.editorState, contentState);
-                    if (window.console) { console.log('[RichEditor] loaded content:', content, this.state); }
-                    this.setState({editorState: editorState, init: false});
-                }
-            }.bind(this));
+            this._handleGet(this.state.editorState)
+        }
+    }
+
+    _handleStore(editorState) {
+        const props = this.props;
+        const content = this.state.editorState.getCurrentContent();
+        const serialized = JSON.stringify(convertToRaw(content));
+        var data = {};
+        data[props.uuid] = serialized;
+        console.log('[notes] serialized uuid:', props.uuid, ' [', serialized, ']');
+        chrome.storage.local.set(data, function() {
+            if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
+        });
+    }
+
+    _handleGet(editorState) {
+        const uuid = this.props.uuid;
+        chrome.storage.local.get(uuid, function(result) {
+            const content = result[uuid];
+            if (window.console) { console.log('[RichEditor] loading uuid:', uuid, content); }
+            if (content != undefined) {
+                const contentState = convertFromRaw(JSON.parse(content));
+                const editorState = EditorState.push(this.state.editorState, contentState);
+                if (window.console) { console.log('[RichEditor] loaded content:', content, this.state); }
+                this.setState({editorState: editorState, init: false});
+            }
+        }.bind(this));
+    }
+
+    _handleTitle(editorState) {
+        var selectionState = editorState.getSelection();
+        var anchorKey = selectionState.getAnchorKey();
+        var currentContent = editorState.getCurrentContent();
+        if(currentContent.getBlockMap().first().getKey() === anchorKey) {
+            console.log('[notes] Title:', currentContent.getBlockMap().first().getKey() === anchorKey);
+            var currentBlockType = RichUtils.getCurrentBlockType(editorState)
+            console.log('[notes] Title:', currentBlockType);
+            if (currentBlockType != 'header-three') {
+                this._toggleBlockType(editorState, 'header-three');
+            }
         }
     }
 
@@ -253,14 +227,6 @@ export default class RichEditor extends React.Component {
                 className += ' RichEditor-hidePlaceholder';
             }
         }
-        // Not needed
-        // Part of Editor Plugins system. We are not using
-        /* const options = {
-         *     breakoutBlockType: 'unordered-list-item',
-         *     breakoutBlocks: ['header-one', 'header-two', 'header-three']
-         * }
-         * const blockBreakoutPlugin = createBlockBreakoutPlugin(options);
-         * const plugins = [blockBreakoutPlugin];*/
 
         return (
             <div className="RichEditor-root">
@@ -349,23 +315,23 @@ class CloseButton extends React.Component {
  * });*/
 
 
-import RemoteStorage from 'remotestoragejs';
-
-var remoteStorage = new RemoteStorage({
-    logging: true  // optinally enable debug logs (defaults to false)
-});
-
-
-var userAddress = ''; // fill me in
-var token = ''; // fill me in
-
-RemoteStorage.Discover(userAddress).then(function (obj) {
-    console.log('- configuring remote', userAddress, obj.href, obj.storageType);
-    remoteStorage.remote.configure({
-        userAddress: userAddress,
-        href: obj.href,
-        storageApi: obj.storageType,
-        properties: obj.properties,
-        token: token
-    });
-});
+/* import RemoteStorage from 'remotestoragejs';
+ * 
+ * var remoteStorage = new RemoteStorage({
+ *     logging: true  // optinally enable debug logs (defaults to false)
+ * });
+ * 
+ * 
+ * var userAddress = ''; // fill me in
+ * var token = ''; // fill me in
+ * 
+ * RemoteStorage.Discover(userAddress).then(function (obj) {
+ *     console.log('- configuring remote', userAddress, obj.href, obj.storageType);
+ *     remoteStorage.remote.configure({
+ *         userAddress: userAddress,
+ *         href: obj.href,
+ *         storageApi: obj.storageType,
+ *         properties: obj.properties,
+ *         token: token
+ *     });
+ * });*/

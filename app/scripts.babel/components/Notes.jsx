@@ -2,6 +2,7 @@
 
 import Store from 'store';
 import React from 'react'; 
+import crypto from 'crypto';
 
 /* import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin'*/
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -19,35 +20,79 @@ class Notes extends React.Component {
         Store.each(function(value, key) {
             keys.push({uuid: key});
         })
-        /* for (var key in localStorage) {
-         *     if (localStorage.hasOwnProperty(key)) {
-         *         keys.push({uuid: key, content: localStorage.getItem(key)});
-         *     }
-         * }*/
-        this.state = {cards: keys};
+        this.state = {cards: keys, password:'password'};
         this.addNote = (e) => {
             e.preventDefault();
-            var old_cards = this.state.cards;
-            var uuid = generateUUID();
-            var cards = [{uuid: uuid }].concat(old_cards);
-            if (window.console) { console.log('[notes] note added', cards); }
-
-            // this.setState({cards: this.state.cards.concat([{uuid: uuid, content: default_note_content}])});
-            this.setState({cards: cards}, function () {
-                if (window.console) { console.log('[notes] updated state', this.state.cards); }
-            });
+            this._handleAddNote()
         }
         this.deleteNote = (uuid) => {
             if (window.console) { console.log('[notes] removing', uuid); }
-
-            Store.remove(uuid);
-            const old_cards = this.state.cards;
-
-            var cards = old_cards.filter(function(elem, idx) { if(elem.uuid != uuid) return elem });
-            this.setState({cards: cards}, function () {
-                if (window.console) { console.log('[notes] updated state', this.state.cards); }
-            });
+            this._handleDeleteNote(uuid);
         }
+    }
+
+    _handleCipher(password) {
+        const cipher = crypto.createCipher('aes192', password);
+
+        let encrypted = '';
+        cipher.on('readable', () => {
+            const data = cipher.read();
+            if (data)
+                encrypted += data.toString('hex');
+        });
+        cipher.on('end', () => {
+            console.log('encrypted', encrypted);
+            // Prints: ca981be48e90867604588e75d04feabb63cc007a8f8ad89b10616ed84d815504
+        });
+
+        /* cipher.write('some clear text data');
+         * cipher.end();*/
+        return cipher;
+    }
+
+    _handleDecipher(password) {
+        const decipher = crypto.createDecipher('aes192', password);
+
+        let decrypted = '';
+        decipher.on('readable', () => {
+            const data = decipher.read();
+            if (data)
+                decrypted += data.toString('utf8');
+        });
+        decipher.on('end', () => {
+            console.log('decrypted', decrypted);
+            // Prints: some clear text data
+        });
+
+        //const encrypted = 'ca981be48e90867604588e75d04feabb63cc007a8f8ad89b10616ed84d815504';
+        /* decipher.write(encrypted, 'hex');
+         * decipher.end();*/
+        return decipher;
+    }
+
+    _handleAddNote() {
+        var old_cards = this.state.cards;
+        const password = this.state.password;
+        var uuid = generateUUID();
+        var cards = [{uuid: uuid }].concat(old_cards);
+
+        if (window.console) { console.log('[notes] note added', cards); }
+
+        // this.setState({cards: this.state.cards.concat([{uuid: uuid, content: default_note_content}])});
+        this.setState({cards, password}, function () {
+            if (window.console) { console.log('[notes] updated state', this.state.cards); }
+        });
+    }
+
+    _handleDeleteNote(uuid) {
+        Store.remove(uuid);
+        const old_cards = this.state.cards;
+        const password = this.state.password;
+
+        var cards = old_cards.filter(function(elem, idx) { if(elem.uuid != uuid) return elem });
+        this.setState({cards, password}, function () {
+            if (window.console) { console.log('[notes] updated state', this.state.cards); }
+        });
     }
 
     render() {
@@ -62,6 +107,8 @@ class Notes extends React.Component {
                         <div className="notes">
                             <CardColumns
                                 cards={this.state.cards}
+                                decipher={this._handleDecipher(this.state.password)}
+                                cipher={this._handleCipher(this.state.password)}
                                 deleteNote={this.deleteNote} />
                         </div>
                     </div>
