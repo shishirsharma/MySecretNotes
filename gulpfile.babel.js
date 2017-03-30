@@ -156,7 +156,7 @@ gulp.task('wiredep', () => {
 gulp.task('package', function () {
   var manifest = require('./dist/manifest.json');
   return gulp.src('dist/**')
-    .pipe($.zip('my s3 browser-' + manifest.version + '.zip'))
+    .pipe($.zip('my-secret-notes-' + manifest.version + '.zip'))
     .pipe(gulp.dest('package'));
 });
 
