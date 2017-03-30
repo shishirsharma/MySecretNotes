@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import RichEditor from 'components/richeditor';
+import RichEditor from 'components/RichEditor';
 
 class Card extends React.Component {
     constructor(props) {
