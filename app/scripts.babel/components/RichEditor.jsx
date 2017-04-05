@@ -143,7 +143,7 @@ export default class RichEditor extends React.Component {
     _handleStore(editorState) {
         const props = this.props;
         const content = this.state.editorState.getCurrentContent();
-        const serialized = JSON.stringify(convertToRaw(content));
+        const serialized = this.props.encrypt(JSON.stringify(convertToRaw(content)));
         var data = {};
         data[props.uuid] = serialized;
         console.log('[notes] serialized uuid:', props.uuid, ' [', serialized, ']');
@@ -156,9 +156,9 @@ export default class RichEditor extends React.Component {
         const uuid = this.props.uuid;
         chrome.storage.local.get(uuid, function(result) {
             const content = result[uuid];
-            if (window.console) { console.log('[RichEditor] loading uuid:', uuid, content); }
+            if (window.console) { console.log('[RichEditor] loading uuid:', uuid, this.props.decrypt(content)); }
             if (content != undefined) {
-                const contentState = convertFromRaw(JSON.parse(content));
+                const contentState = convertFromRaw(JSON.parse(this.props.decrypt(content)));
                 const editorState = EditorState.push(this.state.editorState, contentState);
                 if (window.console) { console.log('[RichEditor] loaded content:', content, this.state); }
                 this.setState({editorState: editorState, init: false});

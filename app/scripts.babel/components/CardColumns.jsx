@@ -16,6 +16,8 @@ class Card extends React.Component {
             <div className="card">
                 <div className="card-block">
                     <RichEditor
+                        decrypt={this.props.decrypt}
+                        encrypt={this.props.encrypt}
                         content={this.props.content}
                         uuid={this.props.uuid}
                         deleteNote={this.props.deleteNote} />
@@ -39,6 +41,8 @@ class CardColumns extends React.Component {
                     key={card.uuid}
                     uuid={card.uuid}
                     content={card.content}
+                    decrypt={this.props.decrypt}
+                    encrypt={this.props.encrypt}
                     deleteNote={this.props.deleteNote} />
             );
         }, this);

@@ -58,6 +58,7 @@ const cards = [
 
 ReactDOM.render(
     <Notes
-        cards={cards} />,
+        cards={cards}
+        password='password' />,
     document.getElementById('main-table')
 );

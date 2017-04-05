@@ -1,7 +1,7 @@
 'use strict';
 
 import Store from 'store';
-import React from 'react'; 
+import React from 'react';
 import crypto from 'crypto';
 
 /* import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin'*/
@@ -10,6 +10,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import generateUUID from 'utils';
 import NavBar from 'components/NavBar';
 import CardColumns from 'components/CardColumns';
+import HelpModal from 'components/HelpModal';
+import UnlockModal from 'components/UnlockModal';
 
 class Notes extends React.Component {
     constructor(props) {
@@ -20,7 +22,9 @@ class Notes extends React.Component {
         Store.each(function(value, key) {
             keys.push({uuid: key});
         });
-        this.state = {cards: keys, init: true, password:'password'};
+        var password = 'password';
+
+        this.state = {cards: keys, init: true, password: password };
         this.addNote = (e) => {
             e.preventDefault();
             this._handleAddNote()
@@ -29,6 +33,13 @@ class Notes extends React.Component {
             if (window.console) { console.log('[notes] removing', uuid); }
             this._handleDeleteNote(uuid);
         }
+        this.encrypt = (text) => {
+            return this._handleEncrypt(text);
+        }
+        this.decrypt = (crypted) => {
+            return this._handleDecrypt(crypted);
+        }
+
     }
 
     componentDidMount() {
@@ -53,43 +64,20 @@ class Notes extends React.Component {
     }
 
 
-    _handleCipher(password) {
-        const cipher = crypto.createCipher('aes192', password);
+    _handleEncrypt(text) {
+        const cipher = crypto.createCipher('aes192', this.state.password);
+        var crypted = cipher.update(text,'utf8','hex')
+        crypted += cipher.final('hex');
 
-        let encrypted = '';
-        cipher.on('readable', () => {
-            const data = cipher.read();
-            if (data)
-                encrypted += data.toString('hex');
-        });
-        cipher.on('end', () => {
-            console.log('encrypted', encrypted);
-            // Prints: ca981be48e90867604588e75d04feabb63cc007a8f8ad89b10616ed84d815504
-        });
-
-        /* cipher.write('some clear text data');
-         * cipher.end();*/
-        return cipher;
+        return crypted;
     }
 
-    _handleDecipher(password) {
-        const decipher = crypto.createDecipher('aes192', password);
+    _handleDecrypt(crypted) {
+        const decipher = crypto.createDecipher('aes192', this.state.password);
+        var decrypted = decipher.update(crypted,'hex','utf8')
+        decrypted += decipher.final('utf8');
 
-        let decrypted = '';
-        decipher.on('readable', () => {
-            const data = decipher.read();
-            if (data)
-                decrypted += data.toString('utf8');
-        });
-        decipher.on('end', () => {
-            console.log('decrypted', decrypted);
-            // Prints: some clear text data
-        });
-
-        //const encrypted = 'ca981be48e90867604588e75d04feabb63cc007a8f8ad89b10616ed84d815504';
-        /* decipher.write(encrypted, 'hex');
-         * decipher.end();*/
-        return decipher;
+        return decrypted;
     }
 
     _handleCards(cards) {
@@ -102,7 +90,7 @@ class Notes extends React.Component {
         });
     }
 
-    _handleAddNote() { 
+    _handleAddNote() {
         var old_cards = this.state.cards;
         const password = this.state.password;
         var uuid = generateUUID();
@@ -135,16 +123,18 @@ class Notes extends React.Component {
                     <NavBar addNote={this.addNote.bind(this)} />
                 </MuiThemeProvider>
                 <div className="container-fluid content-wrapper">
-                    <div id="main-table">
+                    <div>
                         <div className="notes">
                             <CardColumns
                                 cards={this.state.cards}
-                                decipher={this._handleDecipher(this.state.password)}
-                                cipher={this._handleCipher(this.state.password)}
+                                decrypt={this.decrypt}
+                                encrypt={this.encrypt}
                                 deleteNote={this.deleteNote} />
                         </div>
                     </div>
                 </div>
+                <HelpModal />
+                <UnlockModal /> 
             </div>
         );
     }
