@@ -6,39 +6,52 @@ import React from 'react';
 class UnlockModal extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {password: ''};
+
+    this.handleChange = (e) => { 
+      this._handleChange(e);
+    }
+    this.handleSubmit = (e) => {
+      this._handleSubmit(e);
+    }
   }
 
-  handleSave(e) {
-    this.props.handleSave(e);
+  _handleSubmit(event) {
+    event.preventDefault();
+    if (window.console) { console.log('[UnlockModal] submit handled:', this.state.password); }
+    this.props.unlockNotes(this.state.password);
+    $('#unlockModal').modal('hide');
   }
+
+  _handleChange(event) {
+    if (window.console) { console.log('[UnlockModal] change'); }
+    this.setState({password: event.target.value});
+  } 
 
 
   render() {
     return (
       /* <!-- Modal -->*/
-      <div className="modal fade" id="unlockModal" tabindex="-1" role="unlock-dialog" aria-labelledby="unlockModalLabel">
+      <div className="modal fade" id="unlockModal" tabIndex="-1" role="unlock-dialog" aria-labelledby="unlockModalLabel">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="unlockModalLabel">Locking Key</h5>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
             </div>
-            <div className="modal-body">
-              <form id="formUnlock" className="form-horizontal">
+            <form id="formUnlock" className="form-horizontal" onSubmit={this.handleSubmit}>
+              <div className="modal-body">
                 <div className="form-group">
-                  <label className="col-sm-12 control-label" for="input-packing-key">Your Packing Key</label>
+                  <label className="col-sm-12 control-label" htmlFor="input-packing-key">Your Packing Key</label>
                   <div className="col-sm-12">
-                    <input type="password" className="form-control" id="packing-key" required placeholder="Packing Key" />
+                    <input type="password" className="form-control" onChange={this.handleChange} id="packing-key" required placeholder="Packing Key" />
+                  </div>
+                  <div className="modal-footer">
+                    <input type="submit" value="Unlock" className="btn btn-primary" />
                   </div>
                 </div>
-                <button type="submit" hidden className="btn btn-primary"><i className="fa fa-unlock" aria-hidden="true"></i></button>
-              </form>
-
-              <div className="modal-footer">
-                <button id="btnSaveChange" type="button" onClick={this._handleSave} className="btn btn-primary">Save changes</button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ class HelpModal extends React.Component {
     render() {
         return (
             // <!-- Modal -->
-            <div className="modal fade" id="helpModal" tabindex="-1" role="help-dialog" aria-labelledby="helpModalLabel">
+            <div className="modal fade" id="helpModal" tabIndex="-1" role="help-dialog" aria-labelledby="helpModalLabel">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -42,7 +42,7 @@ class HelpModal extends React.Component {
                             </table>
                             <div>Icons made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver">Madebyoliver</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
                             <div className="modal-footer">
-                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" className="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>

@@ -24,6 +24,12 @@ body {
   padding-top: 18px;
 }
 
+
+.react-autosuggest__container {
+    position: fixed;
+    top: 0;
+    right: 40%;
+}
 // Cards
 .card {
   color: rgba(0, 0, 0, 0.870588);

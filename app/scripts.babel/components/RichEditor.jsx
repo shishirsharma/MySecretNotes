@@ -110,7 +110,6 @@ export default class RichEditor extends React.Component {
             console.log('[RichEditor] new note:', aValue );
             aValue = default_note_content;
         }
-        console.log('[RichEditor] constructor:', aValue );
         var initialState = convertFromRaw(JSON.parse(aValue));
         this.state = {editorState: EditorState.createWithContent(initialState), init: true};
 
@@ -122,14 +121,14 @@ export default class RichEditor extends React.Component {
         }
 
         this.deleteNote = (uuid) => {
-            if (window.console) { console.log('[notes] note added >>>', props.uuid, uuid); }
+            if (window.console) { console.log('[RichEditor] note added >>>', props.uuid, uuid); }
             this.props.deleteNote(this.props.uuid);
         }
         this.handleKeyCommand = (command) => this._handleKeyCommand(command);
         this.onTab = (e) => this._onTab(e);
         this.toggleBlockType = (type) => this._toggleBlockType(type);
         this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-        if (window.console) { console.log('[notes] constructor finished'); }
+        if (window.console) { console.log('[RichEditor] constructor finished'); }
     }
 
     componentDidMount() {
@@ -140,13 +139,29 @@ export default class RichEditor extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        const props = this.props;
+        const content = this.state.editorState.getCurrentContent();
+        const serialized = nextProps.encrypt(JSON.stringify(convertToRaw(content)));
+        var data = {};
+        data[props.uuid] = serialized;
+        console.log('[RichEditor] serialized uuid with new props:', props.uuid, ' [', serialized, ']');
+        chrome.storage.local.set(data, function() {
+            if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
+        });
+    }
+
+    /* componentWillUpdate(nextProps, nextState) {
+     *     
+     * }*/
+
     _handleStore(editorState) {
         const props = this.props;
         const content = this.state.editorState.getCurrentContent();
         const serialized = this.props.encrypt(JSON.stringify(convertToRaw(content)));
         var data = {};
         data[props.uuid] = serialized;
-        console.log('[notes] serialized uuid:', props.uuid, ' [', serialized, ']');
+        console.log('[RichEditor] serialized uuid:', props.uuid, ' [', serialized, ']');
         chrome.storage.local.set(data, function() {
             if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
         });
@@ -156,7 +171,7 @@ export default class RichEditor extends React.Component {
         const uuid = this.props.uuid;
         chrome.storage.local.get(uuid, function(result) {
             const content = result[uuid];
-            if (window.console) { console.log('[RichEditor] loading uuid:', uuid, this.props.decrypt(content)); }
+            if (window.console) { console.log('[RichEditor] loading from storage uuid:', uuid, this.props.decrypt(content)); }
             if (content != undefined) {
                 const contentState = convertFromRaw(JSON.parse(this.props.decrypt(content)));
                 const editorState = EditorState.push(this.state.editorState, contentState);
@@ -173,7 +188,7 @@ export default class RichEditor extends React.Component {
         if(currentContent.getBlockMap().first().getKey() === anchorKey) {
             console.log('[notes] Title:', currentContent.getBlockMap().first().getKey() === anchorKey);
             var currentBlockType = RichUtils.getCurrentBlockType(editorState)
-            console.log('[notes] Title:', currentBlockType);
+            console.log('[RichEditor] Title:', currentBlockType);
             if (currentBlockType != 'header-three') {
                 this._toggleBlockType(editorState, 'header-three');
             }
