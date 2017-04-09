@@ -24,12 +24,10 @@ body {
   padding-top: 18px;
 }
 
-
-.react-autosuggest__container {
-    position: fixed;
-    top: 0;
-    right: 40%;
+.app-title {
+  float: left;
 }
+
 // Cards
 .card {
   color: rgba(0, 0, 0, 0.870588);
@@ -74,18 +72,23 @@ body {
 }
 
 .react-autosuggest__container {
-  position: relative;
+  float: left;
+  line-height: 57px;
+  margin-left: 20px;
 }
 
 .react-autosuggest__input {
-  width: 240px;
-  height: 30px;
-  padding: 10px 20px;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 0;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
   font-family: Helvetica, sans-serif;
-  font-weight: 300;
   font-size: 16px;
-  border: 1px solid #aaa;
-  border-radius: 4px;
+  font-weight: 300;
+  height: 44px;
+  padding: 10px 20px;
+  transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  width: 600px;
 }
 
 .react-autosuggest__input--focused {
@@ -105,9 +108,10 @@ body {
   display: block;
   position: absolute;
   top: 51px;
-  width: 280px;
-  border: 1px solid #aaa;
+  width: 600px;
+  border: 0;
   background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
   font-family: Helvetica, sans-serif;
   font-weight: 300;
   font-size: 16px;
@@ -123,12 +127,13 @@ body {
 }
 
 .react-autosuggest__suggestion {
+  color: #000;
   cursor: pointer;
   padding: 10px 20px;
 }
 
 .react-autosuggest__suggestion--highlighted {
-  background-color: #ddd;
+  background-color: #eee;
 }
 
 //////////////////////////////////

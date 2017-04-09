@@ -89,7 +89,7 @@ class SearchBar extends React.Component {
 
     // Autosuggest will pass through all these props to the input element.
     const inputProps = {
-      placeholder: 'Type a programming language',
+      placeholder: 'Search within notes...',
       value,
       onChange: this.onChange
     };
@@ -140,7 +140,7 @@ export default class NavBar extends React.Component {
 
   _title() {
     return (
-      <div><span style={this.state.styles.title}>My Secret Notes</span><SearchBar /></div>
+      <div><span className="app-title" style={this.state.styles.title}>My Secret Notes</span><SearchBar /></div>
     )
   }
 
