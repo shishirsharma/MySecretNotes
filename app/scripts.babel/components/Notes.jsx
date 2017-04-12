@@ -24,10 +24,20 @@ class Notes extends React.Component {
     });
     var password = 'shishir';
 
-    this.state = {cards: keys, init: true, locked: true, password: password };
+    this.state = {cards: keys, init: true, locked: true, password: password, query: "" };
     this.addNote = (e) => {
       e.preventDefault();
       this._handleAddNote()
+    }
+    this.search = (query) => {
+      const cards = this.state.cards;
+      const password = this.state.password;
+      const locked = this.state.locked;
+      const init = this.state.init;
+      var query = query;
+      if (window.console) { console.log('[Notes] search:', {cards, init, locked, password, query}); }
+
+      this.setState({cards, init, locked, password, query});
     }
     this.unlockNotes = (password) => {
       if (window.console) { console.log('[Notes] unlocking:', password); }
@@ -55,10 +65,11 @@ class Notes extends React.Component {
 
   _handleUnlock(password) {
     const cards = this.state.cards;
+    const query = this.state.query;
     var password = password;
     const locked = false;
     const init = false;
-    if (window.console) { console.log('[Notes] _handleUnlock:', {cards, init, locked,  password}); }
+    if (window.console) { console.log('[Notes] _handleUnlock:', {cards, init, locked,  password, query}); }
 
     this.setState({cards, init, locked, password});
   }
@@ -67,11 +78,13 @@ class Notes extends React.Component {
     const cards_key = 'cards';
     const password = this.state.password;
     const lock = this.state.lock;
+    const query = this.state.query;
+
     chrome.storage.local.get(cards_key, function(result) {
       const cards = result[cards_key];
       if (window.console) { console.log('[Notes] loading cards:', cards); }
       if (cards != undefined) {
-        this.setState({cards, lock, password});
+        this.setState({cards, lock, password, query});
       }
     }.bind(this));
   }
@@ -106,6 +119,7 @@ class Notes extends React.Component {
   _handleAddNote() {
     var old_cards = this.state.cards;
     const password = this.state.password;
+    const query = this.state.query;
     const lock = this.state.lock;
     var uuid = generateUUID();
     var cards = [{uuid: uuid }].concat(old_cards);
@@ -113,7 +127,7 @@ class Notes extends React.Component {
     if (window.console) { console.log('[Notes] note added', cards); }
 
     // this.setState({cards: this.state.cards.concat([{uuid: uuid, content: default_note_content}])});
-    this.setState({cards, lock, password}, function () {
+    this.setState({cards, lock, password, query}, function () {
       if (window.console) { console.log('[Notes] updated state', this.state.cards); }
     });
   }
@@ -122,10 +136,11 @@ class Notes extends React.Component {
     Store.remove(uuid);
     const old_cards = this.state.cards;
     const password = this.state.password;
+    const query = this.state.query;
     const lock = this.state.lock;
     var cards = old_cards.filter(function(elem, idx) { if(elem.uuid != uuid) return elem });
     this._handleCards(cards);
-    this.setState({cards, lock, password}, function () {
+    this.setState({cards, lock, password, query}, function () {
       if (window.console) { console.log('[Notes] updated state', this.state.cards); }
     });
   }
@@ -141,6 +156,7 @@ class Notes extends React.Component {
       if (window.console) { console.log('[Notes] OPEN'); }
       cardColumns = <CardColumns
                         cards={this.state.cards}
+                        query={this.state.query}
                         decrypt={this.decrypt}
                         encrypt={this.encrypt}
                         deleteNote={this.deleteNote} />;
@@ -149,7 +165,7 @@ class Notes extends React.Component {
     return (
       <div>
         <MuiThemeProvider>
-          <NavBar addNote={this.addNote} />
+          <NavBar addNote={this.addNote} search={this.search} />
         </MuiThemeProvider>
         <div className="container-fluid content-wrapper">
           <div>

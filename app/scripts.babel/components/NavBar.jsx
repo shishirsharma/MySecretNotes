@@ -48,8 +48,8 @@ const renderSuggestion = suggestion => (
 );
 
 class SearchBar extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     // Autosuggest is a controlled component.
     // This means that you need to provide an input value
@@ -61,51 +61,29 @@ class SearchBar extends React.Component {
       suggestions: []
     };
 
-    this.onChange = (event, { newValue }) => {
+    this.onChange = (event) => {
+      if (window.console) { console.log('[SearchBar] change handled:'); }
       this.setState({
-        value: newValue
+        value: event.target.value
       });
+      this.props.search(event.target.value)
     };
-    // Autosuggest will call this function every time you need to update suggestions.
-    // You already implemented this logic above, so just use it.
-    this.onSuggestionsFetchRequested = ({ value }) => {
-      this.setState({
-        suggestions: getSuggestions(value)
-      });
-    };
+    this._handleMount = () => {
 
-    // Autosuggest will call this function every time you need to clear suggestions.
-    this.onSuggestionsClearRequested = () => {
-      this.setState({
-        suggestions: []
-      });
     };
   }
 
-
-
   render() {
-    const { value, suggestions } = this.state;
+    /* const { value, suggestions } = this.state;*/
 
     // Autosuggest will pass through all these props to the input element.
-    const inputProps = {
-      placeholder: 'Search within notes...',
-      value,
-      onChange: this.onChange
-    };
-
     // Finally, render it!
     return (
       <div>
-      <Autosuggest
-      suggestions={suggestions}
-      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-      onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-      getSuggestionValue={getSuggestionValue}
-      renderSuggestion={renderSuggestion}
-      inputProps={inputProps}
-      />
-  </div>
+        <div className="react-autosuggest__container">
+          <input type="text" autocomplete="off" role="combobox" aria-autocomplete="list" aria-owns="react-autowhatever-1" aria-expanded="false" aria-haspopup="false" className="react-autosuggest__input" placeholder="Search within notes..." onChange={this.onChange}/>
+        </div>
+      </div>
     );
   }
 }
@@ -140,7 +118,7 @@ export default class NavBar extends React.Component {
 
   _title() {
     return (
-      <div><span className="app-title" style={this.state.styles.title}>My Secret Notes</span><SearchBar /></div>
+      <div><span className="app-title" style={this.state.styles.title}>My Secret Notes</span><SearchBar search={this.props.search} /></div>
     )
   }
 

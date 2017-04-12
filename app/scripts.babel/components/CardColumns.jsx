@@ -13,16 +13,13 @@ class Card extends React.Component {
         if (window.console) { console.log('[Card] render:', this.props.uuid, this.state); }
 
         return (
-            <div className="card">
-                <div className="card-block">
-                    <RichEditor
+            <RichEditor
                         decrypt={this.props.decrypt}
                         encrypt={this.props.encrypt}
                         content={this.props.content}
+                        query={this.props.query}
                         uuid={this.props.uuid}
                         deleteNote={this.props.deleteNote} />
-                </div>
-            </div>
         );
     }
 }
@@ -40,6 +37,7 @@ class CardColumns extends React.Component {
                 <Card
                     key={card.uuid}
                     uuid={card.uuid}
+                    query={this.props.query}
                     content={card.content}
                     decrypt={this.props.decrypt}
                     encrypt={this.props.encrypt}
