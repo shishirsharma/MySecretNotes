@@ -136,6 +136,7 @@ export default class NavBar extends React.Component {
   render() {
     return(
       <AppBar
+          className='navbar-main'
           title={this._title()}
           iconClassNameLeft={'fa fa-book'}
           iconElementRight={this._iconElementRight()} />

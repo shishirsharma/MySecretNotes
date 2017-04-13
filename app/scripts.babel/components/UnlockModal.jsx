@@ -36,15 +36,14 @@ class UnlockModal extends React.Component {
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="unlockModalLabel">Locking Key</h5>
+              <h5 className="modal-title" id="unlockModalLabel">Enter your passkey</h5>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <form id="formUnlock" className="form-horizontal" onSubmit={this.handleSubmit}>
               <div className="modal-body">
                 <div className="form-group">
-                  <label className="col-sm-12 control-label" htmlFor="input-packing-key">Your Packing Key</label>
                   <div className="col-sm-12">
-                    <input type="password" className="form-control" onChange={this.handleChange} id="packing-key" required placeholder="Packing Key" />
+                    <input type="password" className="form-control" onChange={this.handleChange} id="packing-key" required placeholder="Enter key here..." />
                   </div>
                   <div className="modal-footer">
                     <input type="submit" value="Unlock" className="btn btn-primary" />
