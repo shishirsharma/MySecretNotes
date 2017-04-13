@@ -152,7 +152,7 @@ export default class RichEditor extends React.Component {
   }
 
   /* componentWillUpdate(nextProps, nextState) {
-   *     
+   *
    * }*/
 
   _handleStore(editorState) {
@@ -171,12 +171,14 @@ export default class RichEditor extends React.Component {
     const uuid = this.props.uuid;
     chrome.storage.local.get(uuid, function(result) {
       const content = result[uuid];
-      if (window.console) { console.log('[RichEditor] loading from storage uuid:', uuid, this.props.decrypt(content)); }
-      if (content != undefined) {
-        const contentState = convertFromRaw(JSON.parse(this.props.decrypt(content)));
-        const editorState = EditorState.push(this.state.editorState, contentState);
-        if (window.console) { console.log('[RichEditor] loaded content:', content, this.state); }
-        this.setState({editorState: editorState, init: false});
+      if(content != undefined) {
+        if (window.console) { console.log('[RichEditor] loading from storage uuid:', uuid, this.props.decrypt(content)); }
+        if (content != undefined) {
+          const contentState = convertFromRaw(JSON.parse(this.props.decrypt(content)));
+          const editorState = EditorState.push(this.state.editorState, contentState);
+          if (window.console) { console.log('[RichEditor] loaded content:', content, this.state); }
+          this.setState({editorState: editorState, init: false});
+        }
       }
     }.bind(this));
   }
@@ -323,16 +325,16 @@ class CloseButton extends React.Component {
 
 /* const cloudrail = require("cloudrail-si");
  * cloudrail.Settings.setKey("[CloudRail License Key]");
- * 
+ *
  * const redirectReceiver = cloudrail.RedirectReceivers.getLocalAuthenticator(12345); // for local testing
  * const redirectUri = "http://localhost:12345"; // for local testing
- * 
+ *
  * // let cs = new cloudrail.services.Box(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
  * // let cs = new cloudrail.services.OneDrive(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
  * // let cs = new cloudrail.services.OneDriveBusiness(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
  * // let cs = new cloudrail.services.GoogleDrive(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
  * let cs = new cloudrail.services.Dropbox(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
- * 
+ *
  * cs.createFolder("/TestFolder", (err) => { // <---
  *     if (err) throw err;
  *     let fileStream = fs.createReadStream("UserData.csv");
@@ -345,15 +347,15 @@ class CloseButton extends React.Component {
 
 
 /* import RemoteStorage from 'remotestoragejs';
- * 
+ *
  * var remoteStorage = new RemoteStorage({
  *     logging: true  // optinally enable debug logs (defaults to false)
  * });
- * 
- * 
+ *
+ *
  * var userAddress = ''; // fill me in
  * var token = ''; // fill me in
- * 
+ *
  * RemoteStorage.Discover(userAddress).then(function (obj) {
  *     console.log('- configuring remote', userAddress, obj.href, obj.storageType);
  *     remoteStorage.remote.configure({
