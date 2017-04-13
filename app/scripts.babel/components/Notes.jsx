@@ -12,6 +12,7 @@ import NavBar from 'components/NavBar';
 import CardColumns from 'components/CardColumns';
 import HelpModal from 'components/HelpModal';
 import UnlockModal from 'components/UnlockModal';
+import SettingsModal from 'components/SettingsModal';
 
 class Notes extends React.Component {
   constructor(props) {
@@ -176,6 +177,7 @@ class Notes extends React.Component {
         </div>
         <HelpModal />
         <UnlockModal unlockNotes={this.unlockNotes} /> 
+        <SettingsModal unlockNotes={this.unlockNotes} /> 
       </div>
     );
   }

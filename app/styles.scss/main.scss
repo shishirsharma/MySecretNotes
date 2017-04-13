@@ -77,6 +77,18 @@ body {
   }
 }
 
+#settingsModal {
+  .modal-body {
+    .form-control {
+      margin: 10px 0 0;
+    }
+  }
+
+  .alert {
+    font-size: 12px;
+  }
+}
+
 .content-wrapper {
   padding-top: 18px;
 }
