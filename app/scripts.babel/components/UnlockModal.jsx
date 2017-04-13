@@ -16,6 +16,16 @@ class UnlockModal extends React.Component {
     }
   }
 
+  componentDidMount() {
+    setTimeout(function() {
+      this.refs.keyInput.focus();
+    }.bind(this), 0);
+
+    //this.refs.keyInput.focus();
+    if (window.console) { console.log('[UnlockModal] Focus fired'); }
+  }
+
+
   _handleSubmit(event) {
     event.preventDefault();
     if (window.console) { console.log('[UnlockModal] submit handled:', this.state.password); }
@@ -43,7 +53,7 @@ class UnlockModal extends React.Component {
               <div className="modal-body">
                 <div className="form-group">
                   <div className="col-sm-12">
-                    <input type="password" className="form-control" onChange={this.handleChange} id="packing-key" required placeholder="Enter key here..." />
+                    <input type="password" ref="keyInput" autoFocus className="form-control" onChange={this.handleChange} id="packing-key" required placeholder="Enter key here..." />
                   </div>
                   <div className="modal-footer">
                     <input type="submit" value="Unlock" className="btn btn-primary" />
