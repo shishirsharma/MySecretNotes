@@ -44,6 +44,10 @@ class Notes extends React.Component {
       if (window.console) { console.log('[Notes] unlocking:', password); }
       this._handleUnlock(password)
     }
+    this.updateNotes = (password) => {
+      if (window.console) { console.log('[Notes] updating:', password); }
+      this._handleUpdate(password)
+    }
     this.deleteNote = (uuid) => {
       if (window.console) { console.log('[Notes] removing', uuid); }
       this._handleDeleteNote(uuid);
@@ -75,10 +79,36 @@ class Notes extends React.Component {
     this.setState({cards, init, locked, password});
   }
 
+  _handleUpdate(password) {
+    const cards = this.state.cards;
+    const query = this.state.query;
+    var password = password;
+    const locked = false;
+    const init = false;
+    const update = true;
+    if (window.console) { console.log('[Notes] _handleUpdate:', {cards, init, locked,  password, query, update}); }
+
+    this.setState({cards, init, locked, password, update});
+  }
+
+  _handleChange(uuid, content) {
+    const cards = this.state.cards;
+    const query = this.state.query;
+    var password = password;
+    const locked = false;
+    const init = false;
+    const update = false;
+    var index = this.state.index;
+    if (!index) { index = {}; }
+    if (window.console) { console.log('[Notes] _handleUpdate:', {cards, init, locked,  password, query, update}); }
+
+    this.setState({cards, init, locked, password, update, index});
+  }
+
   _handleGet(state) {
     const cards_key = 'cards';
     const password = this.state.password;
-    const lock = this.state.lock;
+     const lock = this.state.lock;
     const query = this.state.query;
 
     chrome.storage.local.get(cards_key, function(result) {
@@ -158,6 +188,7 @@ class Notes extends React.Component {
       cardColumns = <CardColumns
                         cards={this.state.cards}
                         query={this.state.query}
+                        update={this.state.update}
                         decrypt={this.decrypt}
                         encrypt={this.encrypt}
                         deleteNote={this.deleteNote} />;
@@ -177,7 +208,7 @@ class Notes extends React.Component {
         </div>
         <HelpModal />
         <UnlockModal unlockNotes={this.unlockNotes} /> 
-        <SettingsModal unlockNotes={this.unlockNotes} /> 
+        <SettingsModal unlockNotes={this.updateNotes} /> 
       </div>
     );
   }

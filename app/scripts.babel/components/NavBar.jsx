@@ -127,7 +127,7 @@ export default class NavBar extends React.Component {
       <div>
         <FlatButton label="New Note" onClick={this.handleAddNote.bind(this)} />
         <IconButton iconClassName="fa fa-lock" iconStyle={this.state.styles.navButton} data-toggle="modal" data-target="#unlockModal" />
-        <IconButton iconClassName="fa fa-cog" iconStyle={this.state.styles.navButton} />
+        <IconButton iconClassName="fa fa-cog" iconStyle={this.state.styles.navButton} data-toggle="modal" data-target="#settingsModal"/>
         <IconButton iconClassName="fa fa-question" iconStyle={this.state.styles.navButton} data-toggle="modal" data-target="#helpModal" />
       </div>
     )

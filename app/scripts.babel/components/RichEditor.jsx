@@ -104,7 +104,7 @@ const InlineStyleControls = (props) => {
 export default class RichEditor extends React.Component {
   constructor(props) {
     super(props);
-    const default_note_content = '{"entityMap":{},"blocks":[{"key":"9id36","text":"New Note","type":"header-three","depth":0,"inlineStyleRanges":[{"offset":0,"length":5,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"arjcc","text":"New note","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}';
+    const default_note_content = '{"entityMap":{},"blocks":[{"key":"9id36","text":"New Note","type":"header-three","depth":0,"inlineStyleRanges":[{"offset":0,"length":8,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"arjcc","text":"New note","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}';
     var aValue = props.content;
     if (aValue == null || aValue === '') {
       console.log('[RichEditor] new note:', aValue );
@@ -116,8 +116,8 @@ export default class RichEditor extends React.Component {
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
       this.setState({editorState});
-      this._handleTitle(editorState)
-      this._handleStore(editorState)
+      this._handleTitle(editorState);
+      this._handleStore(editorState);
     }
 
     this.deleteNote = (uuid) => {
@@ -137,18 +137,21 @@ export default class RichEditor extends React.Component {
     if(this.state.init === true) {
       this._handleGet(this.state.editorState)
     }
+    this.focus();
   }
 
   componentWillReceiveProps(nextProps) {
     const props = this.props;
     const content = this.state.editorState.getCurrentContent();
-    const serialized = nextProps.encrypt(JSON.stringify(convertToRaw(content)));
-    var data = {};
-    data[props.uuid] = serialized;
-    console.log('[RichEditor] serialized uuid with new props:', props.uuid, ' [', serialized, ']');
-    chrome.storage.local.set(data, function() {
-      if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
-    });
+    if(nextProps.update) {
+      const serialized = nextProps.encrypt(JSON.stringify(convertToRaw(content)));
+      var data = {};
+      data[props.uuid] = serialized;
+      console.log('[RichEditor] updated:', props.uuid, ' [', serialized, ']');
+      chrome.storage.local.set(data, function() {
+        if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
+      });
+    }
   }
 
   /* componentWillUpdate(nextProps, nextState) {
@@ -230,6 +233,18 @@ export default class RichEditor extends React.Component {
     );
   }
 
+  _handleSearch(contentState, query) {
+    var text = contentState.getPlainText(' ').toLowerCase();
+
+    if (window.console) { console.log('[RichEditor] search', this.props.uuid, 'found', text.search(query), 'query:', query, 'text:', text ); }
+
+    if(text.search(query.toLowerCase()) === -1) {
+      if (window.console) { console.log('[RichEditor] uuid', this.props.uuid, 'query:', query, 'Not Found' ); }
+      return false;
+    }
+    return true;
+  }
+
   render() {
     if (window.console) { console.log('[RichEditor] render:', this.props.uuid, this.state); }
 
@@ -245,17 +260,14 @@ export default class RichEditor extends React.Component {
       }
     }
     const query  = this.props.query;
-    var found = true;
-    var text = contentState.getPlainText(' ');
 
-    if (window.console) { console.log('[RichEditor] search', this.props.uuid, 'found', text.search(query), 'query:', query, 'text:', text ); }
-
-    if(text.search(query) === -1) {
+    if(!this._handleSearch(contentState, query)) {
       if (window.console) { console.log('[RichEditor] uuid', this.props.uuid, 'query:', query, 'Not Found' ); }
       return null;
     }
+
     return (
-      <div className="card">
+      <div className="card" onClick={this.focus} autoFocus>
         <div className="card-block">
 
           <div className="RichEditor-root">
@@ -269,7 +281,7 @@ export default class RichEditor extends React.Component {
                 editorState={editorState}
                 onToggle={this.toggleInlineStyle}
                 /> */}
-            <div className={className} onClick={this.focus}>
+            <div className={className} >
               <Editor
                   blockStyleFn={getBlockStyle}
                   customStyleMap={styleMap}
