@@ -44,6 +44,11 @@ class Notes extends React.Component {
       if (window.console) { console.log('[Notes] unlocking:', password); }
       this._handleUnlock(password)
     }
+    this.lockNotes = (e) => {
+      e.preventDefault();
+      if (window.console) { console.log('[Notes] locking'); }
+      this._handleLock(e)
+    }
     this.updateNotes = (password) => {
       if (window.console) { console.log('[Notes] updating:', password); }
       this._handleUpdate(password)
@@ -75,6 +80,18 @@ class Notes extends React.Component {
     const locked = false;
     const init = false;
     if (window.console) { console.log('[Notes] _handleUnlock:', {cards, init, locked,  password, query}); }
+
+    this.setState({cards, init, locked, password});
+  }
+
+  _handleLock() {
+    const cards = this.state.cards;
+    const init = this.state.init;
+    const query = '';
+    var password = '';
+    const locked = true;
+
+    if (window.console) { console.log('[Notes] _handlelock:', {cards, init, locked,  password, query}); }
 
     this.setState({cards, init, locked, password});
   }
@@ -181,8 +198,8 @@ class Notes extends React.Component {
     let cardColumns = null;
     if (this.state.locked == true) {
       if (window.console) { console.log('[Notes] LOCKED'); }
-      $('#unlockModal').modal('show');
       cardColumns = <div></div>;
+      $('#unlockModal').modal('show');
     } else {
       if (window.console) { console.log('[Notes] OPEN'); }
       cardColumns = <CardColumns
@@ -197,7 +214,7 @@ class Notes extends React.Component {
     return (
       <div>
         <MuiThemeProvider>
-          <NavBar addNote={this.addNote} search={this.search} />
+          <NavBar addNote={this.addNote} search={this.search} lockNotes={this.lockNotes} />
         </MuiThemeProvider>
         <div className="container-fluid content-wrapper">
           <div>

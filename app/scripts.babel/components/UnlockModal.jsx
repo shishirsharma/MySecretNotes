@@ -8,7 +8,7 @@ class UnlockModal extends React.Component {
     super(props);
     this.state = {password: ''};
 
-    this.handleChange = (e) => { 
+    this.handleChange = (e) => {
       this._handleChange(e);
     }
     this.handleSubmit = (e) => {
@@ -24,7 +24,6 @@ class UnlockModal extends React.Component {
     })
   }
 
-
   _handleSubmit(event) {
     event.preventDefault();
     if (window.console) { console.log('[UnlockModal] submit handled:', this.state.password); }
@@ -35,8 +34,7 @@ class UnlockModal extends React.Component {
   _handleChange(event) {
     if (window.console) { console.log('[UnlockModal] change'); }
     this.setState({password: event.target.value});
-  } 
-
+  }
 
   render() {
     return (

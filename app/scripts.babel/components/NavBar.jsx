@@ -109,11 +109,8 @@ export default class NavBar extends React.Component {
   }
 
   handleLockNotes(e) {
-    this.props.addNote(e);
-  }
-
-  handleLockNotes(e) {
-    this.props.addNote(e);
+    if (window.console) { console.log('[NavBar] lockNotes'); }
+    this.props.lockNotes(e);
   }
 
   _title() {
@@ -126,7 +123,7 @@ export default class NavBar extends React.Component {
     return(
       <div>
         <FlatButton label="New Note" onClick={this.handleAddNote.bind(this)} />
-        <IconButton iconClassName="fa fa-lock" iconStyle={this.state.styles.navButton} data-toggle="modal" data-target="#unlockModal" />
+        <IconButton iconClassName="fa fa-lock" iconStyle={this.state.styles.navButton} onClick={this.handleLockNotes.bind(this)} />
         <IconButton iconClassName="fa fa-cog" iconStyle={this.state.styles.navButton} data-toggle="modal" data-target="#settingsModal"/>
         <IconButton iconClassName="fa fa-question" iconStyle={this.state.styles.navButton} data-toggle="modal" data-target="#helpModal" />
       </div>
