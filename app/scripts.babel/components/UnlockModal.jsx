@@ -19,32 +19,31 @@ class UnlockModal extends React.Component {
   componentDidMount() {
     // This is limitation of bootstrap modal. autoFocus does not work in BS
     $('#unlockModal').on('shown.bs.modal', function () {
-      if (window.console) { console.log('[UnlockModal] Focus fired'); }
+      if (window.console) { console.debug('[UnlockModal] Focus fired'); }
       $('#packing-key').focus();
     })
   }
 
   _handleSubmit(event) {
     event.preventDefault();
-    if (window.console) { console.log('[UnlockModal] submit handled:', this.state.password); }
+    if (window.console) { console.debug('[UnlockModal] submit handled:', this.state.password); }
     this.props.unlockNotes(this.state.password);
     $('#unlockModal').modal('hide');
   }
 
   _handleChange(event) {
-    if (window.console) { console.log('[UnlockModal] change'); }
+    if (window.console) { console.debug('[UnlockModal] change'); }
     this.setState({password: event.target.value});
   }
 
   render() {
     return (
       /* <!-- Modal -->*/
-      <div className="modal fade" id="unlockModal" tabIndex="-1" role="unlock-dialog" aria-labelledby="unlockModalLabel">
+        <div className="modal show" id="unlockModal" tabIndex="-1" role="unlock-dialog" aria-labelledby="unlockModalLabel" data-backdrop="static" data-keyboard="false">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="unlockModalLabel">Enter your passkey</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <form id="formUnlock" className="form-horizontal" onSubmit={this.handleSubmit}>
               <div className="modal-body">

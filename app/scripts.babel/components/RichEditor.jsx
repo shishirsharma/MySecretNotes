@@ -104,10 +104,10 @@ const InlineStyleControls = (props) => {
 export default class RichEditor extends React.Component {
   constructor(props) {
     super(props);
-    const default_note_content = '{"entityMap":{},"blocks":[{"key":"9id36","text":"New Note","type":"header-three","depth":0,"inlineStyleRanges":[{"offset":0,"length":8,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"arjcc","text":"New note","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}';
+    const default_note_content = '{"entityMap":{},"blocks":[{"key":"9id36","text":"New Note","type":"header-three","depth":0,"entityRanges":[],"data":{}},{"key":"arjcc","text":"New note","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}';
     var aValue = props.content;
     if (aValue == null || aValue === '') {
-      console.log('[RichEditor] new note:', aValue );
+      if (window.console) { console.debug('[RichEditor] new note:', aValue ); }
       aValue = default_note_content;
     }
     var initialState = convertFromRaw(JSON.parse(aValue));
@@ -115,25 +115,38 @@ export default class RichEditor extends React.Component {
 
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => {
-      this.setState({editorState});
-      this._handleTitle(editorState);
-      this._handleStore(editorState);
+      const currentContentState = this.state.editorState.getCurrentContent();
+      const newContentState = editorState.getCurrentContent();
+      if (currentContentState !== newContentState) {
+        // There was a change in the content
+        var newEditorState = this._handleTitle(editorState);
+        if (newEditorState) {
+          this._handleStore(newEditorState);
+          this.setState({editorState: newEditorState});
+        }
+        /* else {
+         *   this._handleStore(editorState);
+         *   this.setState({editorState});
+         * }*/
+      } else {
+        this.setState({editorState});
+      }
     }
 
     this.deleteNote = (uuid) => {
-      if (window.console) { console.log('[RichEditor] note added >>>', props.uuid, uuid); }
+      if (window.console) { console.debug('[RichEditor] note added >>>', props.uuid, uuid); }
       this.props.deleteNote(this.props.uuid);
     }
     this.handleKeyCommand = (command) => this._handleKeyCommand(command);
     this.onTab = (e) => this._onTab(e);
     this.toggleBlockType = (type) => this._toggleBlockType(type);
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-    if (window.console) { console.log('[RichEditor] constructor finished'); }
+    if (window.console) { console.debug('[RichEditor] constructor finished'); }
   }
 
   componentDidMount() {
     // var that = this;
-    if (window.console) { console.log('[RichEditor] componentDidMount:', this.props.uuid, this.state.init); }
+    if (window.console) { console.debug('[RichEditor] componentDidMount:', this.props.uuid, this.state.init); }
     if(this.state.init === true) {
       this._handleGet(this.state.editorState)
     }
@@ -147,9 +160,9 @@ export default class RichEditor extends React.Component {
       const serialized = nextProps.encrypt(JSON.stringify(convertToRaw(content)));
       var data = {};
       data[props.uuid] = serialized;
-      console.log('[RichEditor] updated:', props.uuid, ' [', serialized, ']');
+      console.debug('[RichEditor] updated:', props.uuid, ' [', serialized, ']');
       chrome.storage.local.set(data, function() {
-        if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
+        if (window.console) { console.debug('[chrome.storage]', props.uuid, ':', serialized); }
       });
     }
   }
@@ -160,13 +173,15 @@ export default class RichEditor extends React.Component {
 
   _handleStore(editorState) {
     const props = this.props;
-    const content = this.state.editorState.getCurrentContent();
-    const serialized = this.props.encrypt(JSON.stringify(convertToRaw(content)));
+    const contentState = this.state.editorState.getCurrentContent();
+    const text = contentState.getPlainText(' ').toLowerCase();
+    const serialized = this.props.encrypt(JSON.stringify(convertToRaw(contentState)));
     var data = {};
     data[props.uuid] = serialized;
-    console.log('[RichEditor] serialized uuid:', props.uuid, ' [', serialized, ']');
+    console.debug('[RichEditor] serialized uuid:', props.uuid, ': [', serialized, '] ', text);
+
     chrome.storage.local.set(data, function() {
-      if (window.console) { console.log('[chrome.storage]', props.uuid, ':', serialized); }
+      if (window.console) { console.debug('[chrome.storage] Saved uuid', props.uuid, ': [', serialized, ']'); }
     });
   }
 
@@ -175,11 +190,11 @@ export default class RichEditor extends React.Component {
     chrome.storage.local.get(uuid, function(result) {
       const content = result[uuid];
       if(content != undefined) {
-        if (window.console) { console.log('[RichEditor] loading from storage uuid:', uuid, this.props.decrypt(content)); }
+        if (window.console) { console.debug('[RichEditor] loading from storage uuid:', uuid, this.props.decrypt(content)); }
         if (content != undefined) {
           const contentState = convertFromRaw(JSON.parse(this.props.decrypt(content)));
           const editorState = EditorState.push(this.state.editorState, contentState);
-          if (window.console) { console.log('[RichEditor] loaded content:', content, this.state); }
+          if (window.console) { console.debug('[RichEditor] loaded content:', content, this.state); }
           this.setState({editorState: editorState, init: false});
         }
       }
@@ -191,13 +206,14 @@ export default class RichEditor extends React.Component {
     var anchorKey = selectionState.getAnchorKey();
     var currentContent = editorState.getCurrentContent();
     if(currentContent.getBlockMap().first().getKey() === anchorKey) {
-      console.log('[notes] Title:', currentContent.getBlockMap().first().getKey() === anchorKey);
+      console.debug('[RichEditor] Title:', currentContent.getBlockMap().first().getKey() === anchorKey);
       var currentBlockType = RichUtils.getCurrentBlockType(editorState)
-      console.log('[RichEditor] Title:', currentBlockType);
+      console.debug('[RichEditor] Title:', currentBlockType);
       if (currentBlockType != 'header-three') {
-        this._toggleBlockType(editorState, 'header-three');
+        return RichUtils.toggleBlockType(editorState, 'header-three' )
       }
     }
+    return editorState
   }
 
   _handleKeyCommand(command) {
@@ -236,17 +252,17 @@ export default class RichEditor extends React.Component {
   _handleSearch(contentState, query) {
     var text = contentState.getPlainText(' ').toLowerCase();
 
-    if (window.console) { console.log('[RichEditor] search', this.props.uuid, 'found', text.search(query), 'query:', query, 'text:', text ); }
+    if (window.console) { console.debug('[RichEditor] search', this.props.uuid, 'found', text.search(query), 'query:', query, 'text:', text ); }
 
     if(text.search(query.toLowerCase()) === -1) {
-      if (window.console) { console.log('[RichEditor] uuid', this.props.uuid, 'query:', query, 'Not Found' ); }
+      if (window.console) { console.debug('[RichEditor] uuid', this.props.uuid, 'query:', query, 'Not Found' ); }
       return false;
     }
     return true;
   }
 
   render() {
-    if (window.console) { console.log('[RichEditor] render:', this.props.uuid, this.state); }
+    if (window.console) { console.debug('[RichEditor] render:', this.props.uuid, this.state); }
 
     const {editorState} = this.state;
 
@@ -262,7 +278,7 @@ export default class RichEditor extends React.Component {
     const query  = this.props.query;
 
     if(!this._handleSearch(contentState, query)) {
-      if (window.console) { console.log('[RichEditor] uuid', this.props.uuid, 'query:', query, 'Not Found' ); }
+      if (window.console) { console.debug('[RichEditor] uuid', this.props.uuid, 'query:', query, 'Not Found' ); }
       return null;
     }
 
@@ -328,13 +344,6 @@ class CloseButton extends React.Component {
 
 
 
-
-
-
-
-
-
-
 /* const cloudrail = require("cloudrail-si");
  * cloudrail.Settings.setKey("[CloudRail License Key]");
  *
@@ -353,7 +362,7 @@ class CloseButton extends React.Component {
  *     let size = fs.statSync("UserData.csv").size;
  *     cs.upload("/TestFolder/Data.csv", fileStream, size, false, (err) => { // <---
  *         if (err) throw err;
- *         console.log("Upload successfully finished");
+ *         console.debug("Upload successfully finished");
  *     });
  * });*/
 
@@ -369,7 +378,7 @@ class CloseButton extends React.Component {
  * var token = ''; // fill me in
  *
  * RemoteStorage.Discover(userAddress).then(function (obj) {
- *     console.log('- configuring remote', userAddress, obj.href, obj.storageType);
+ *     console.debug('- configuring remote', userAddress, obj.href, obj.storageType);
  *     remoteStorage.remote.configure({
  *         userAddress: userAddress,
  *         href: obj.href,

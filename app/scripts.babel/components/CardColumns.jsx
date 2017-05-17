@@ -5,13 +5,13 @@ import RichEditor from 'components/RichEditor';
 
 class Card extends React.Component {
   constructor(props) {
-    if (window.console) { console.log('[cardcolumns] constructor'); }
+    if (window.console) { console.debug('[cardcolumns] constructor'); }
     super(props);
     this.state = {init: true, content: props.content};
   }
 
   render() {
-    if (window.console) { console.log('[Card] render:', this.props.uuid, this.state); }
+    if (window.console) { console.debug('[Card] render:', this.props.uuid, this.state); }
     return (
       <RichEditor
           decrypt={this.props.decrypt}
@@ -27,12 +27,12 @@ class Card extends React.Component {
 
 class CardColumns extends React.Component {
   constructor(props) {
-    if (window.console) { console.log('[cardcolumns] constructor'); }
+    if (window.console) { console.debug('[cardcolumns] constructor'); }
     super(props);
   }
   render() {
     var cards = this.props.cards;
-    if (window.console) { console.log('[cardcolumns] render', cards); }
+    if (window.console) { console.debug('[cardcolumns] render', cards); }
     var cardItems = cards.map(function (card) {
       return (
         <Card
