@@ -117,6 +117,7 @@ export default class RichEditor extends React.Component {
     this.onChange = (editorState) => {
       const currentContentState = this.state.editorState.getCurrentContent();
       const newContentState = editorState.getCurrentContent();
+      if (window.console) { console.debug('[RichEditor] ', JSON.stringify(convertToRaw(newContentState))); } 
       if (currentContentState !== newContentState) {
         // There was a change in the content
         var newEditorState = this._handleTitle(editorState);
