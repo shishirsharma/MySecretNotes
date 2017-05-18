@@ -9,6 +9,12 @@ body {
 
 .navbar-main {
   z-index: 100 !important;
+
+  button, .app-title {
+    &:hover {
+      cursor: default !important;
+    }
+  }
 }
 
 .nav-btn {

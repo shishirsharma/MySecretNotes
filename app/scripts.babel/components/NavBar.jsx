@@ -115,7 +115,7 @@ export default class NavBar extends React.Component {
 
   _title() {
     return (
-      <div><span className="app-title" style={this.state.styles.title}>My Secret Notes</span><SearchBar search={this.props.search} /></div>
+      <div><span className="app-title">My Secret Notes</span><SearchBar search={this.props.search} /></div>
     )
   }
 
