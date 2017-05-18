@@ -10,7 +10,7 @@ body {
 .navbar-main {
   z-index: 100 !important;
 
-  button, .app-title {
+  .app-title {
     &:hover {
       cursor: default !important;
     }
@@ -230,66 +230,66 @@ USAGE: include FontAwesome on page, as shown on http://fontawesome.io
        class.  Note: try to avoid or manually label links to websites, as that
        detection code is necessarily janky. when in doubt, just end all external
        links with a trailing slash (/), a query string (?), or a link target (#)
-       */
-       a.link-icon:before, a.link-icon.link-file[href]:before {
-        content: "\f016";
-        /* generic file icon */
-        display: inline-bck;
-        font: normal normal normal 14px/1 FontAwesome;
-        font-size: inherit;
-        text-rendering: auto;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        transform: translate(0, 0);
-        width: 20px;
-        text-align: right;
-        margin-right: 10px;
-      }
-      a[filename$=".txt"].link-icon:before, a[filename$=".log"].link-icon:before, a.link-icon.link-text[href]:before {
-        content: "\f0f6";
-        /*Text*/
-      }
-      a[filename$=".pdf"].link-icon:before, a.link-icon.link-pdf[href]:before {
-        content: "\f1c1";
-        /*PDF*/
-      }
-      a[filename$=".doc"].link-icon:before, a[filename$=".docx"].link-icon:before, a.link-icon.link-word[href]:before {
-        content: "\f1c2";
-        /*Word*/
-      }
-      a[filename$=".xls"].link-icon:before, a[filename$=".xlsx"].link-icon:before, a.link-icon.link-excel[href]:before {
-        content: "\f1c3";
-        /*Excel*/
-      }
-      a[filename$=".ppt"].link-icon:before, a[filename$=".pptx"].link-icon:before, a.link-icon.link-powerpoint[href]:before {
-        content: "\f1c4";
-        /*Powerpoint*/
-      }
-      a[filename$=".gif"].link-icon:before, a[filename$=".jpg"].link-icon:before, a[filename$=".jpeg"].link-icon:before, a[filename$=".png"].link-icon:before, a[filename$=".bmp"].link-icon:before, a[filename$=".tif"].link-icon:before, a.link-icon.link-image[href]:before {
-        content: "\f1c5";
-        /*Image*/
-      }
-      a[filename$=".zip"].link-icon:before, a[filename$=".zipx"].link-icon:before, a[filename$=".rar"].link-icon:before, a[filename$=".tar"].link-icon:before, a[filename$=".gz"].link-icon:before, a[filename$=".dmg"].link-icon:before, a[filename$=".iso"].link-icon:before, a.link-icon.link-archive[href]:before {
-        content: "\f1c6";
-        /*Archive*/
-      }
-      a[filename$=".wav"].link-icon:before, a[filename$=".mp3"].link-icon:before, a[filename$=".fla"].link-icon:before, a[filename$=".flac"].link-icon:before, a[filename$=".ra"].link-icon:before, a[filename$=".rma"].link-icon:before, a[filename$=".aif"].link-icon:before, a[filename$=".aiff"].link-icon:before, a[filename$=".aa"].link-icon:before, a[filename$=".aac"].link-icon:before, a[filename$=".aax"].link-icon:before, a[filename$=".ac3"].link-icon:before, a[filename$=".au"].link-icon:before, a[filename$=".ogg"].link-icon:before, a[filename$=".avr"].link-icon:before, a[filename$=".3ga"].link-icon:before, a[filename$=".flac"].link-icon:before, a[filename$=".mid"].link-icon:before, a[filename$=".midi"].link-icon:before, a[filename$=".m4a"].link-icon:before, a[filename$=".mp4a"].link-icon:before, a[filename$=".amz"].link-icon:before, a[filename$=".mka"].link-icon:before, a[filename$=".asx"].link-icon:before, a[filename$=".pcm"].link-icon:before, a[filename$=".m3u"].link-icon:before, a[filename$=".wma"].link-icon:before, a[filename$=".xwma"].link-icon:before, a.link-icon.link-audio[href]:before {
-        content: "\f1c7";
-        /*Audio*/
-      }
-      a[filename$=".avi"].link-icon:before, a[filename$=".mpg"].link-icon:before, a[filename$=".mp4"].link-icon:before, a[filename$=".mkv"].link-icon:before, a[filename$=".mov"].link-icon:before, a[filename$=".wmv"].link-icon:before, a[filename$=".vp6"].link-icon:before, a[filename$=".264"].link-icon:before, a[filename$=".vid"].link-icon:before, a[filename$=".rv"].link-icon:before, a[filename$=".webm"].link-icon:before, a[filename$=".swf"].link-icon:before, a[filename$=".h264"].link-icon:before, a[filename$=".flv"].link-icon:before, a[filename$=".mk3d"].link-icon:before, a[filename$=".gifv"].link-icon:before, a[filename$=".oggv"].link-icon:before, a[filename$=".3gp"].link-icon:before, a[filename$=".m4v"].link-icon:before, a[filename$=".movie"].link-icon:before, a[filename$=".divx"].link-icon:before, a.link-icon.link-video[href]:before {
-        content: "\f1c8";
-        /*Video*/
-      }
-      a[filename$=".css"].link-icon:before, a[filename$=".js"].link-icon:before, a[filename$=".py"].link-icon:before, a[filename$=".git"].link-icon:before, a[filename$=".py"].link-icon:before, a[filename$=".cpp"].link-icon:before, a[filename$=".h"].link-icon:before, a[filename$=".ini"].link-icon:before, a[filename$=".config"].link-icon:before, a.link-icon.link-code[href]:before {
-        content: "\f1c9";
-        /*code*/
-      }
-      a[filename$=".exe"].link-icon:before, a[filename$=".jar"].link-icon:before, a[filename$=".dll"].link-icon:before, a[filename$=".bat"].link-icon:before, a[filename$=".pl"].link-icon:before, a[filename$=".scr"].link-icon:before, a[filename$=".msi"].link-icon:before, a[filename$=".app"].link-icon:before, a[filename$=".deb"].link-icon:before, a[filename$=".apk"].link-icon:before, a[filename$=".jar"].link-icon:before, a[filename$=".vb"].link-icon:before, a[filename$=".prg"].link-icon:before, a[filename$=".sh"].link-icon:before, a.link-icon.link-exe[href]:before {
-        content: "\f085";
-        /*Executable*/
-      }
-      a[filename$=".com"].link-icon:before, a[filename$=".net"].link-icon:before, a[filename$=".org"].link-icon:before, a[filename$=".edu"].link-icon:before, a[filename$=".gov"].link-icon:before, a[filename$=".mil"].link-icon:before, a[filename$="/"].link-icon:before, a[filename$=".html"].link-icon:before, a[filename$=".htm"].link-icon:before, a[filename$=".xhtml"].link-icon:before, a[filename$=".jhtml"].link-icon:before, a[filename$=".php"].link-icon:before, a[filename$=".php3"].link-icon:before, a[filename$=".php4"].link-icon:before, a[filename$=".php5"].link-icon:before, a[filename$=".phtml"].link-icon:before, a[filename$=".asp"].link-icon:before, a[filename$=".aspx"].link-icon:before, a[filename$=".cfm"].link-icon:before, a[filename*="?"].link-icon:before, a[filename*="#"].link-icon:before, a.link-icon:not([href*='.']):before, a.link-icon.link[href]:before {
-        content: "\f0c1";
-        /*link*/
-      }
+*/
+a.link-icon:before, a.link-icon.link-file[href]:before {
+  content: "\f016";
+  /* generic file icon */
+  display: inline-bck;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+  width: 20px;
+  text-align: right;
+  margin-right: 10px;
+}
+a[filename$=".txt"].link-icon:before, a[filename$=".log"].link-icon:before, a.link-icon.link-text[href]:before {
+  content: "\f0f6";
+  /*Text*/
+}
+a[filename$=".pdf"].link-icon:before, a.link-icon.link-pdf[href]:before {
+  content: "\f1c1";
+  /*PDF*/
+}
+a[filename$=".doc"].link-icon:before, a[filename$=".docx"].link-icon:before, a.link-icon.link-word[href]:before {
+  content: "\f1c2";
+  /*Word*/
+}
+a[filename$=".xls"].link-icon:before, a[filename$=".xlsx"].link-icon:before, a.link-icon.link-excel[href]:before {
+  content: "\f1c3";
+  /*Excel*/
+}
+a[filename$=".ppt"].link-icon:before, a[filename$=".pptx"].link-icon:before, a.link-icon.link-powerpoint[href]:before {
+  content: "\f1c4";
+  /*Powerpoint*/
+}
+a[filename$=".gif"].link-icon:before, a[filename$=".jpg"].link-icon:before, a[filename$=".jpeg"].link-icon:before, a[filename$=".png"].link-icon:before, a[filename$=".bmp"].link-icon:before, a[filename$=".tif"].link-icon:before, a.link-icon.link-image[href]:before {
+  content: "\f1c5";
+  /*Image*/
+}
+a[filename$=".zip"].link-icon:before, a[filename$=".zipx"].link-icon:before, a[filename$=".rar"].link-icon:before, a[filename$=".tar"].link-icon:before, a[filename$=".gz"].link-icon:before, a[filename$=".dmg"].link-icon:before, a[filename$=".iso"].link-icon:before, a.link-icon.link-archive[href]:before {
+  content: "\f1c6";
+  /*Archive*/
+}
+a[filename$=".wav"].link-icon:before, a[filename$=".mp3"].link-icon:before, a[filename$=".fla"].link-icon:before, a[filename$=".flac"].link-icon:before, a[filename$=".ra"].link-icon:before, a[filename$=".rma"].link-icon:before, a[filename$=".aif"].link-icon:before, a[filename$=".aiff"].link-icon:before, a[filename$=".aa"].link-icon:before, a[filename$=".aac"].link-icon:before, a[filename$=".aax"].link-icon:before, a[filename$=".ac3"].link-icon:before, a[filename$=".au"].link-icon:before, a[filename$=".ogg"].link-icon:before, a[filename$=".avr"].link-icon:before, a[filename$=".3ga"].link-icon:before, a[filename$=".flac"].link-icon:before, a[filename$=".mid"].link-icon:before, a[filename$=".midi"].link-icon:before, a[filename$=".m4a"].link-icon:before, a[filename$=".mp4a"].link-icon:before, a[filename$=".amz"].link-icon:before, a[filename$=".mka"].link-icon:before, a[filename$=".asx"].link-icon:before, a[filename$=".pcm"].link-icon:before, a[filename$=".m3u"].link-icon:before, a[filename$=".wma"].link-icon:before, a[filename$=".xwma"].link-icon:before, a.link-icon.link-audio[href]:before {
+  content: "\f1c7";
+  /*Audio*/
+}
+a[filename$=".avi"].link-icon:before, a[filename$=".mpg"].link-icon:before, a[filename$=".mp4"].link-icon:before, a[filename$=".mkv"].link-icon:before, a[filename$=".mov"].link-icon:before, a[filename$=".wmv"].link-icon:before, a[filename$=".vp6"].link-icon:before, a[filename$=".264"].link-icon:before, a[filename$=".vid"].link-icon:before, a[filename$=".rv"].link-icon:before, a[filename$=".webm"].link-icon:before, a[filename$=".swf"].link-icon:before, a[filename$=".h264"].link-icon:before, a[filename$=".flv"].link-icon:before, a[filename$=".mk3d"].link-icon:before, a[filename$=".gifv"].link-icon:before, a[filename$=".oggv"].link-icon:before, a[filename$=".3gp"].link-icon:before, a[filename$=".m4v"].link-icon:before, a[filename$=".movie"].link-icon:before, a[filename$=".divx"].link-icon:before, a.link-icon.link-video[href]:before {
+  content: "\f1c8";
+  /*Video*/
+}
+a[filename$=".css"].link-icon:before, a[filename$=".js"].link-icon:before, a[filename$=".py"].link-icon:before, a[filename$=".git"].link-icon:before, a[filename$=".py"].link-icon:before, a[filename$=".cpp"].link-icon:before, a[filename$=".h"].link-icon:before, a[filename$=".ini"].link-icon:before, a[filename$=".config"].link-icon:before, a.link-icon.link-code[href]:before {
+  content: "\f1c9";
+  /*code*/
+}
+a[filename$=".exe"].link-icon:before, a[filename$=".jar"].link-icon:before, a[filename$=".dll"].link-icon:before, a[filename$=".bat"].link-icon:before, a[filename$=".pl"].link-icon:before, a[filename$=".scr"].link-icon:before, a[filename$=".msi"].link-icon:before, a[filename$=".app"].link-icon:before, a[filename$=".deb"].link-icon:before, a[filename$=".apk"].link-icon:before, a[filename$=".jar"].link-icon:before, a[filename$=".vb"].link-icon:before, a[filename$=".prg"].link-icon:before, a[filename$=".sh"].link-icon:before, a.link-icon.link-exe[href]:before {
+  content: "\f085";
+  /*Executable*/
+}
+a[filename$=".com"].link-icon:before, a[filename$=".net"].link-icon:before, a[filename$=".org"].link-icon:before, a[filename$=".edu"].link-icon:before, a[filename$=".gov"].link-icon:before, a[filename$=".mil"].link-icon:before, a[filename$="/"].link-icon:before, a[filename$=".html"].link-icon:before, a[filename$=".htm"].link-icon:before, a[filename$=".xhtml"].link-icon:before, a[filename$=".jhtml"].link-icon:before, a[filename$=".php"].link-icon:before, a[filename$=".php3"].link-icon:before, a[filename$=".php4"].link-icon:before, a[filename$=".php5"].link-icon:before, a[filename$=".phtml"].link-icon:before, a[filename$=".asp"].link-icon:before, a[filename$=".aspx"].link-icon:before, a[filename$=".cfm"].link-icon:before, a[filename*="?"].link-icon:before, a[filename*="#"].link-icon:before, a.link-icon:not([href*='.']):before, a.link-icon.link[href]:before {
+  content: "\f0c1";
+  /*link*/
+}
