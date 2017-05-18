@@ -30,6 +30,13 @@ function lint(files, options) {
 }
 
 gulp.task('lint', lint('app/scripts.babel/**/*.js', {
+  extends: "eslint:recommended",
+  // rules: {
+  //   indent: ["error", 2],
+  //   "linebreak-style": ["error", "unix"],
+  //   //quotes: ["error", "single"],
+  //   semi: ["error", "always"]
+  // },
   env: {
     es6: true
   }
@@ -126,7 +133,7 @@ gulp.task('watch', ['lint', 'babel', 'webpack'], () => {
 
   gulp.watch([
     'app/*.html',
-    'app/scripts/**/*.js',
+    'app/scripts/bundle.js',
     'app/images/**/*',
     'app/styles/**/*.css',
     'app/_locales/**/*.json'

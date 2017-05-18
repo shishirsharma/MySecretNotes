@@ -17,93 +17,118 @@ import SettingsModal from 'components/SettingsModal';
 class Notes extends React.Component {
   constructor(props) {
     super(props);
-    if (window.console) { console.debug('[Notes] constructor finished', props); }
+    if (window.console) { console.debug('[Notes] constructor: ', props); }
 
-    var keys = [];
-    Store.each(function(value, key) {
-      keys.push({uuid: key});
-    });
-    var password = 'shishir';
+    var cards = [];
+    var password = '';
+    var query = '';
+    var init = true;
+    var locked = true;
+    var first_run = this.props.first_run;
 
-    this.state = {cards: keys, init: true, locked: true, password: password, query: "" };
+    this.state = {cards, password, query, init, locked, first_run};
+
     this.addNote = (e) => {
       e.preventDefault();
       this._handleAddNote()
     }
-    this.search = (query) => {
-      const cards = this.state.cards;
-      const password = this.state.password;
-      const locked = this.state.locked;
-      const init = this.state.init;
-      var query = query;
-      if (window.console) { console.debug('[Notes] search:', {cards, init, locked, password, query}); }
 
-      this.setState({cards, init, locked, password, query});
+    this.search = (query) => {
+      var state = Object.assign({}, this.state);
+      state.query = query;
+      if (window.console) { console.debug('[Notes] search: ', state); }
+      this.setState(state);
     }
+
     this.unlockNotes = (password) => {
       if (window.console) { console.debug('[Notes] unlocking:', password); }
       this._handleUnlock(password)
     }
+
     this.lockNotes = (e) => {
       e.preventDefault();
       if (window.console) { console.debug('[Notes] locking'); }
-      this._handleLock(e)
+      this._handleLock(false)
     }
+
     this.updateNotes = (password) => {
       if (window.console) { console.debug('[Notes] updating:', password); }
       this._handleUpdate(password)
     }
+
     this.deleteNote = (uuid) => {
       if (window.console) { console.debug('[Notes] removing', uuid); }
       this._handleDeleteNote(uuid);
     }
+
     this.encrypt = (text) => {
+      if (window.console) { console.debug('[Notes] encrypt', text); }
       return this._handleEncrypt(text);
     }
+
     this.decrypt = (crypted) => {
       return this._handleDecrypt(crypted);
     }
   }
 
   componentDidMount() {
-    // var that = this;
-    if (window.console) { console.debug('[Notes] componentDidMount:', this.state, this.state.init); }
-    if(this.state.init === true) {
+    if (window.console) { console.debug('[Notes] componentDidMount:', this.state); }
+
+    if (this.state.first_run == true) {
+      $('#settingsModal').modal('show');
+    } else if(this.state.init === true) {
       this._handleGet(this.state)
+      $('#unlockModal').modal('show'); 
+    } else if (this.state.locked == true) {
+      $('#unlockModal').modal('show');
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (window.console) { console.debug('[Notes] componentDidUpdate:', this.state); }
+    if (this.state.locked == true) {
+      $('#unlockModal').modal('show');
+    }
+  }
+  _handleLock(invalid_key) {
+    if (window.console) { console.debug('[Notes] _handlelock:', this.state); }
+    if (this.state.locked != true) {
+      var state = Object.assign({}, this.state);
+      state.locked = true;
+      state.query = '';
+      state.password = '';
+      state.invalid_key = invalid_key;
+      if (window.console) { console.debug('[Notes] trigger lock'); }
+      this.setState(state);
     }
   }
 
   _handleUnlock(password) {
-    const cards = this.state.cards;
-    const query = this.state.query;
-    var password = password;
-    const locked = false;
-    const init = false;
-    if (window.console) { console.debug('[Notes] _handleUnlock:', {cards, init, locked,  password, query}); }
-
-    this.setState({cards, init, locked, password});
-  }
-
-  _handleLock() {
-    const cards = this.state.cards;
-    const init = this.state.init;
-    const query = '';
-    var password = '';
-    const locked = true;
-    if (window.console) { console.debug('[Notes] _handlelock:', {cards, init, locked,  password, query}); }
-    this.setState({cards, init, locked, password});
+    var state = Object.assign({}, this.state);
+    state.password = password;
+    state.locked = false;
+    state.init = false;
+    if (window.console) { console.debug('[Notes] _handleUnlock:', state); }
+    this.setState(state);
   }
 
   _handleUpdate(password) {
-    const cards = this.state.cards;
-    const query = this.state.query;
-    var password = password;
-    const locked = false;
-    const init = false;
-    const update = true;
-    if (window.console) { console.debug('[Notes] _handleUpdate:', {cards, init, locked,  password, query, update}); }
-
-    this.setState({cards, init, locked, password, update});
+    var state = Object.assign({}, this.state);
+    state.password = password;
+    state.locked = false;
+    state.init = false;
+    if (this.state.init) {
+      state.first_run = false;
+      state.update = false;
+      state.init = false;
+    } else if (this.state.init) {
+      state.update = false;
+      state.init = false;
+    } else {
+      state.update = true;
+    }
+    if (window.console) { console.debug('[Notes] _handleUpdate:', state); }
+    this.setState(state);
   }
 
   _handleChange(uuid, content) {
@@ -122,15 +147,14 @@ class Notes extends React.Component {
 
   _handleGet(state) {
     const cards_key = 'cards';
-    const password = this.state.password;
-    const lock = this.state.lock;
-    const query = this.state.query;
-
+    var state = Object.assign({}, this.state);
+    if (window.console) { console.debug('[Notes] loading cards'); }
     chrome.storage.local.get(cards_key, function(result) {
-      const cards = result[cards_key];
-      if (window.console) { console.debug('[Notes] loading cards:', cards); }
-      if (cards != undefined) {
-        this.setState({cards, lock, password, query});
+      state.cards = result[cards_key];
+      if (state.cards != undefined) {
+        this.setState(state, function() {
+          if (window.console) { console.debug('[chrome.storage] loading cards: ', state.cards); }
+        });
       }
     }.bind(this));
   }
@@ -140,24 +164,31 @@ class Notes extends React.Component {
     const cipher = crypto.createCipher('aes192', this.state.password);
     var crypted = cipher.update(text,'utf8','hex');
     crypted += cipher.final('hex');
-    
-    const md5 = crypto.createHash('md5');
-    var checksum = md5.update(text, 'utf8', 'hex');
-    checksum += md5.digest('hex');
+
+    var  md5 = crypto.createHash('md5');
+    md5.update(text, 'utf8');
+    var checksum = md5.digest('hex');
     if (window.console) { console.debug('[Notes] Encrypt checksum:', checksum); }
 
-    return crypted;
+    return crypted+checksum;
   }
 
-  _handleDecrypt(crypted) {
+  _handleDecrypt(blob) {
+    var crypted = blob.slice(0,-32);
+    var validsum = blob.slice(-32);
     const decipher = crypto.createDecipher('aes192', this.state.password);
     var decrypted = decipher.update(crypted,'hex','utf8');
     decrypted += decipher.final('utf8');
 
     const md5 = crypto.createHash('md5');
-    var checksum = md5.update(decrypted, 'utf8', 'hex');
-    checksum += md5.digest('hex');
-    if (window.console) { console.debug('[Notes] Decrypt checksum:', checksum); } 
+    md5.update(decrypted, 'utf8');
+    var checksum = md5.digest('hex');
+    if (window.console) { console.debug('[Notes] Valid decrypt:', checksum==validsum, ' checksum:', checksum, ' validsum', validsum); }
+    if(checksum != validsum) {
+      if (window.console) { console.debug('[Notes] locking notes:'); }
+      this._handleLock(true);
+      return false;
+    }
 
     return decrypted;
   }
@@ -173,23 +204,17 @@ class Notes extends React.Component {
   }
 
   _handleAddNote() {
-    var old_cards = this.state.cards;
-    const password = this.state.password;
-    const query = this.state.query;
-    const lock = this.state.lock;
+    var state = Object.assign({}, this.state);
     var uuid = generateUUID();
-    var cards = [{uuid: uuid }].concat(old_cards);
-    this._handleCards(cards);
-    if (window.console) { console.debug('[Notes] note added', cards); }
-
-    // this.setState({cards: this.state.cards.concat([{uuid: uuid, content: default_note_content}])});
-    this.setState({cards, lock, password, query}, function () {
-      if (window.console) { console.debug('[Notes] updated state', this.state.cards); }
+    state.cards = [{uuid: uuid }].concat(state.cards);
+    if (window.console) { console.debug('[Notes] note added', state.cards); }
+    this._handleCards(state.cards); 
+    this.setState(state, function () {
+      if (window.console) { console.debug('[Notes] updated state', this.state); }
     });
   }
 
   _handleDeleteNote(uuid) {
-    Store.remove(uuid);
     const old_cards = this.state.cards;
     const password = this.state.password;
     const query = this.state.query;
@@ -205,10 +230,13 @@ class Notes extends React.Component {
     if (window.console) { console.debug('[Notes] rendering'); }
     let cardColumns = null;
     let settingsModal = null;
-    if (this.state.locked == true) {
+    if (this.state.first_run == true) {
+      if (window.console) { console.debug('[Notes] INIT'); }
+      cardColumns = <div></div>;
+      settingsModal = <SettingsModal updateNotes={this.updateNotes} init={this.state.init} />
+    } else if (this.state.locked == true) {
       if (window.console) { console.debug('[Notes] LOCKED'); }
       cardColumns = <div></div>;
-      $('#unlockModal').modal('show');
     } else {
       if (window.console) { console.debug('[Notes] OPEN'); }
       cardColumns = <CardColumns
@@ -234,7 +262,7 @@ class Notes extends React.Component {
           </div>
         </div>
         <HelpModal />
-        <UnlockModal unlockNotes={this.unlockNotes} />
+        <UnlockModal unlockNotes={this.unlockNotes} invalid_key={this.state.invalid_key}/>
         { settingsModal }
       </div>
     );

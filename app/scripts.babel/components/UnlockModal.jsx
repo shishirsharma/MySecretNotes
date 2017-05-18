@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-
 class UnlockModal extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +16,7 @@ class UnlockModal extends React.Component {
   }
 
   componentDidMount() {
-    // This is limitation of bootstrap modal. autoFocus does not work in BS
+    // This is limitation of bootstrap modal. autoFocus does not work in BS Modal
     $('#unlockModal').on('shown.bs.modal', function () {
       if (window.console) { console.debug('[UnlockModal] Focus fired'); }
       $('#packing-key').focus();
@@ -29,6 +28,8 @@ class UnlockModal extends React.Component {
     if (window.console) { console.debug('[UnlockModal] submit handled:', this.state.password); }
     this.props.unlockNotes(this.state.password);
     $('#unlockModal').modal('hide');
+    this.setState({password: ''});
+    this.keyInput.value = "";
   }
 
   _handleChange(event) {
@@ -37,9 +38,14 @@ class UnlockModal extends React.Component {
   }
 
   render() {
+    let alert = null;
+    if (this.props.invalid_key) {
+      alert = <div className="alert alert-danger hide">Invalid pass key</div>;
+    }
+    if (window.console) { console.debug('[UnlockModal] render'); } 
     return (
-      /* <!-- Modal -->*/
-        <div className="modal show" id="unlockModal" tabIndex="-1" role="unlock-dialog" aria-labelledby="unlockModalLabel" data-backdrop="static" data-keyboard="false">
+      /* <!-- Modal --> */
+      <div className="modal show" id="unlockModal" tabIndex="-1" role="unlock-dialog" aria-labelledby="unlockModalLabel" data-backdrop="static" data-keyboard="false">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -49,7 +55,8 @@ class UnlockModal extends React.Component {
               <div className="modal-body">
                 <div className="form-group">
                   <div className="col-sm-12">
-                    <input type="password" ref="keyInput" className="form-control" onChange={this.handleChange} id="packing-key" required placeholder="Enter key here..."/>
+                    {alert}
+                    <input type="password" ref={(input) => {this.keyInput = input}} className="form-control" onChange={this.handleChange} id="packing-key" required placeholder="Enter key here..."/>
                   </div>
                   <div className="modal-footer">
                     <input type="submit" value="Unlock" className="btn btn-primary"/>

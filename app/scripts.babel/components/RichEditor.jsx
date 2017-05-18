@@ -123,11 +123,9 @@ export default class RichEditor extends React.Component {
         if (newEditorState) {
           this._handleStore(newEditorState);
           this.setState({editorState: newEditorState});
+        } else {
+          if (window.console) { console.debug('[RichEditor] <<< State did not save >>>'); }
         }
-        /* else {
-         *   this._handleStore(editorState);
-         *   this.setState({editorState});
-         * }*/
       } else {
         this.setState({editorState});
       }
@@ -167,13 +165,9 @@ export default class RichEditor extends React.Component {
     }
   }
 
-  /* componentWillUpdate(nextProps, nextState) {
-   *
-   * }*/
-
   _handleStore(editorState) {
     const props = this.props;
-    const contentState = this.state.editorState.getCurrentContent();
+    const contentState = editorState.getCurrentContent();
     const text = contentState.getPlainText(' ').toLowerCase();
     const serialized = this.props.encrypt(JSON.stringify(convertToRaw(contentState)));
     var data = {};
@@ -189,14 +183,27 @@ export default class RichEditor extends React.Component {
     const uuid = this.props.uuid;
     chrome.storage.local.get(uuid, function(result) {
       const content = result[uuid];
+      if (window.console) {
+        console.debug('[chrome.storage] loading from storage uuid: ', uuid, 'result: ', result[uuid]);
+      }
       if(content != undefined) {
-        if (window.console) { console.debug('[RichEditor] loading from storage uuid:', uuid, this.props.decrypt(content)); }
-        if (content != undefined) {
-          const contentState = convertFromRaw(JSON.parse(this.props.decrypt(content)));
+        if (window.console) {
+          console.debug('[RichEditor] loading from storage uuid:', uuid, this.props.decrypt(content));
+        }
+        var jsonContentState = this.props.decrypt(content)
+        if (jsonContentState) {
+          const contentState = convertFromRaw(JSON.parse(jsonContentState));
           const editorState = EditorState.push(this.state.editorState, contentState);
           if (window.console) { console.debug('[RichEditor] loaded content:', content, this.state); }
           this.setState({editorState: editorState, init: false});
+        } else {
+          if (window.console) { console.debug('[RichEditor] invalid data'); }
+          if (this.state.no_data == false && this.state.init == false) {
+            this.setState({editorState: {}, init: false, no_data: true});
+          }
         }
+      } else {
+        this._handleStore(editorState)
       }
     }.bind(this));
   }
@@ -280,6 +287,10 @@ export default class RichEditor extends React.Component {
     if(!this._handleSearch(contentState, query)) {
       if (window.console) { console.debug('[RichEditor] uuid', this.props.uuid, 'query:', query, 'Not Found' ); }
       return null;
+    }
+
+    if (this.state.no_data) {
+      return null
     }
 
     return (
