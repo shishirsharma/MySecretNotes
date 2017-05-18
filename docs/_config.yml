@@ -25,8 +25,9 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: shishirsharma
 github_username:  shishirsharma
 
-#show_downloads: ["true" or "false" to indicate whether to provide a download URL]
-#google_analytics: [Your Google Analytics tracking ID]
+chrome_web_store_url: https://chrome.google.com/webstore/detail/my-secret-notes/ffljpcklgmboohacifhdcbdajibcbmnh
+show_downloads: "true"
+google_analytics: UA-96335576-1
 
 
 # About/contact
