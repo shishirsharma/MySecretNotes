@@ -51,6 +51,7 @@ const lightTheme = createTheme({
     MuiCardContent: {
       styleOverrides: {
         root: {
+          backgroundColor: '#ffffff',
           color: '#2a2520',
         },
       },
@@ -226,6 +227,7 @@ const darkTheme = createTheme({
     MuiCardContent: {
       styleOverrides: {
         root: {
+          backgroundColor: '#2a2520',
           color: '#ede9e3',
         },
       },
