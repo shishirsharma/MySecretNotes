@@ -5,12 +5,15 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import BookIcon from '@mui/icons-material/Book';
 import LockIcon from '@mui/icons-material/Lock';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
+import ContrastIcon from '@mui/icons-material/Contrast';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -45,22 +48,46 @@ export default class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDarkMode: localStorage.getItem('theme') === 'dark'
+      currentTheme: localStorage.getItem('theme') || 'light',
+      themeMenuAnchor: null
     };
   }
 
   componentDidMount() {
     // Apply saved theme on mount
-    const theme = this.state.isDarkMode ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', this.state.currentTheme);
   }
 
-  toggleTheme = () => {
-    const newDarkMode = !this.state.isDarkMode;
-    this.setState({ isDarkMode: newDarkMode });
-    const theme = newDarkMode ? 'dark' : 'light';
+  setTheme = (theme) => {
+    this.setState({ currentTheme: theme, themeMenuAnchor: null });
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+  }
+
+  openThemeMenu = (event) => {
+    this.setState({ themeMenuAnchor: event.currentTarget });
+  }
+
+  closeThemeMenu = () => {
+    this.setState({ themeMenuAnchor: null });
+  }
+
+  getThemeIcon = () => {
+    const { currentTheme } = this.state;
+    if (currentTheme.includes('dark')) return <Brightness4Icon />;
+    if (currentTheme.includes('hc')) return <ContrastIcon />;
+    return <Brightness7Icon />;
+  }
+
+  getThemeLabel = () => {
+    const { currentTheme } = this.state;
+    const labels = {
+      light: 'Light',
+      dark: 'Dark',
+      'light-hc': 'Light HC',
+      'dark-hc': 'Dark HC'
+    };
+    return labels[currentTheme] || 'Light';
   }
 
   handleAddNote(e) {
@@ -102,12 +129,44 @@ export default class NavBar extends React.Component {
             </Button>
             <IconButton
               color="inherit"
-              onClick={this.toggleTheme}
-              title={this.state.isDarkMode ? 'Light mode' : 'Dark mode'}
+              onClick={this.openThemeMenu}
+              title="Theme"
               sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
             >
-              {this.state.isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+              {this.getThemeIcon()}
             </IconButton>
+            <Menu
+              anchorEl={this.state.themeMenuAnchor}
+              open={Boolean(this.state.themeMenuAnchor)}
+              onClose={this.closeThemeMenu}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+              <MenuItem
+                selected={this.state.currentTheme === 'light'}
+                onClick={() => this.setTheme('light')}
+              >
+                ☀️ Light
+              </MenuItem>
+              <MenuItem
+                selected={this.state.currentTheme === 'dark'}
+                onClick={() => this.setTheme('dark')}
+              >
+                🌙 Dark
+              </MenuItem>
+              <MenuItem
+                selected={this.state.currentTheme === 'light-hc'}
+                onClick={() => this.setTheme('light-hc')}
+              >
+                ⚪ Light HC
+              </MenuItem>
+              <MenuItem
+                selected={this.state.currentTheme === 'dark-hc'}
+                onClick={() => this.setTheme('dark-hc')}
+              >
+                ⚫ Dark HC
+              </MenuItem>
+            </Menu>
             <IconButton
               color="inherit"
               onClick={this.handleLockNotes.bind(this)}
