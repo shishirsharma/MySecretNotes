@@ -2,6 +2,8 @@
 
 import React from 'react';
 import {Editor, EditorState, RichUtils, ContentState, convertFromHTML, convertToRaw, convertFromRaw} from 'draft-js';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 function getBlockStyle(block) {
   switch (block.getType()) {
@@ -295,9 +297,8 @@ export default class RichEditor extends React.Component {
     }
 
     return (
-      <div className="card" onClick={this.focus} autoFocus>
-        <div className="card-block">
-
+      <Card className="note-card" onClick={this.focus}>
+        <CardContent>
           <div className="RichEditor-root">
             <CloseButton
                 onMouseDown={this.deleteNote} />
@@ -324,8 +325,8 @@ export default class RichEditor extends React.Component {
               />
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
   }
 }

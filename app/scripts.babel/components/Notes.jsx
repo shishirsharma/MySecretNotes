@@ -9,6 +9,7 @@ import CardColumns from 'components/CardColumns';
 import HelpModal from 'components/HelpModal';
 import UnlockModal from 'components/UnlockModal';
 import SettingsModal from 'components/SettingsModal';
+import Container from '@mui/material/Container';
 
 class Notes extends React.Component {
   constructor(props) {
@@ -251,13 +252,9 @@ class Notes extends React.Component {
     return (
       <div>
         <NavBar addNote={this.addNote} search={this.search} lockNotes={this.lockNotes} lock={this.state.lock} openSettings={() => this.setState({showSettings: true})} openHelp={() => this.setState({showHelp: true})} />
-        <div className="container-fluid content-wrapper">
-          <div>
-            <div className="notes">
-              {cardColumns}
-            </div>
-          </div>
-        </div>
+        <Container maxWidth={false} sx={{pt: 2}}>
+          {cardColumns}
+        </Container>
         <HelpModal open={this.state.showHelp} onClose={() => this.setState({showHelp: false})} />
         <UnlockModal open={this.state.showUnlock} onClose={() => this.setState({showUnlock: false})} unlockNotes={this.unlockNotes} invalid_key={this.state.invalid_key}/>
         { settingsModal }

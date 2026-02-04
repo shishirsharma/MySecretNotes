@@ -4,6 +4,12 @@ import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 class SettingsModal extends React.Component {
   constructor(props) {
@@ -53,35 +59,31 @@ class SettingsModal extends React.Component {
     } else {
       msg.settingsModalLabel = 'Change passkey';
       msg.keyInput_placeholder = 'Enter new key here...';
-      close_button = <button type="button" className="close" aria-label="Close" onClick={this.props.onClose}><span aria-hidden="true">&times;</span></button>
+      close_button = <IconButton aria-label="Close" onClick={this.props.onClose} sx={{color: '#FFF'}}><CloseIcon /></IconButton>
     }
 
     let alert = null;
     if (alertLevel === 'info') {
-      alert = <div className="alert alert-info">Please enter new keys here</div>;
+      alert = <Alert severity="info">Please enter new keys here</Alert>;
     } else {
-      alert = <div className="alert alert-danger">Keys & confirm key does not match</div>;
+      alert = <Alert severity="error">Keys & confirm key does not match</Alert>;
     }
     return (
       <Dialog open={this.props.open || false} onClose={() => {}} disableEscapeKeyDown>
-        <DialogTitle sx={{backgroundColor: 'rgb(0,188,212)', color:'#FFF'}}>
+        <DialogTitle sx={{backgroundColor: 'rgb(0,188,212)', color:'#FFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           {msg.settingsModalLabel}
           {close_button}
         </DialogTitle>
-        <DialogContent>
-          <form id="formSettings" className="form-horizontal" onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <div className="col-sm-12">
-                {alert}
-                <input type="password" className="form-control" onChange={this.handleKeyChange} id="new-packing-key" required placeholder={msg.keyInput_placeholder}/>
-                <input type="password" className="form-control" onChange={this.handleConfirmKeyChange} id="confirm-packing-key" required placeholder="Confirm key..." />
-              </div>
-              <div className="modal-footer">
-                <input type="submit" value="Update" className="btn btn-primary" />
-              </div>
-            </div>
-          </form>
-        </DialogContent>
+        <form onSubmit={this.handleSubmit}>
+          <DialogContent>
+            {alert}
+            <TextField type="password" onChange={this.handleKeyChange} required placeholder={msg.keyInput_placeholder} fullWidth />
+            <TextField type="password" onChange={this.handleConfirmKeyChange} required placeholder="Confirm key..." fullWidth sx={{mt: 1}} />
+          </DialogContent>
+          <DialogActions>
+            <Button type="submit" variant="contained" color="primary">Update</Button>
+          </DialogActions>
+        </form>
       </Dialog>
     )
   }

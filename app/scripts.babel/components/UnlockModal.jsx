@@ -4,6 +4,10 @@ import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 
 class UnlockModal extends React.Component {
   constructor(props) {
@@ -52,25 +56,21 @@ class UnlockModal extends React.Component {
   render() {
     let alert = null;
     if (this.props.invalid_key) {
-      alert = <div className="alert alert-danger">Invalid pass key</div>;
+      alert = <Alert severity="error">Invalid pass key</Alert>;
     }
     if (window.console) { console.debug('[UnlockModal] render'); }
     return (
       <Dialog open={this.props.open || false} onClose={(e, reason) => this._handleClose(reason)} disableEscapeKeyDown>
         <DialogTitle sx={{backgroundColor: 'rgb(0,188,212)', color:'#FFF'}}>Enter your passkey</DialogTitle>
-        <DialogContent>
-          <form id="formUnlock" className="form-horizontal" onSubmit={this.handleSubmit}>
-            <div className="form-group">
-              <div className="col-sm-12">
-                {alert}
-                <input type="password" ref={this.keyInput} className="form-control" onChange={this.handleChange} id="packing-key" required placeholder="Enter key here..."/>
-              </div>
-              <div className="modal-footer">
-                <input type="submit" value="Unlock" className="btn btn-primary"/>
-              </div>
-            </div>
-          </form>
-        </DialogContent>
+        <form onSubmit={this.handleSubmit}>
+          <DialogContent>
+            {alert}
+            <TextField type="password" inputRef={this.keyInput} onChange={this.handleChange} required placeholder="Enter key here..." fullWidth />
+          </DialogContent>
+          <DialogActions>
+            <Button type="submit" variant="contained" color="primary">Unlock</Button>
+          </DialogActions>
+        </form>
       </Dialog>
     )
   }

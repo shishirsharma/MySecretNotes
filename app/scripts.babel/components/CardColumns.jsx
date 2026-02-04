@@ -2,6 +2,7 @@
 
 import React from 'react';
 import RichEditor from 'components/RichEditor';
+import Grid from '@mui/material/Grid';
 
 class Card extends React.Component {
   constructor(props) {
@@ -35,21 +36,22 @@ class CardColumns extends React.Component {
     if (window.console) { console.debug('[cardcolumns] render', cards); }
     var cardItems = cards.map(function (card) {
       return (
-        <Card
-            key={card.uuid}
-            uuid={card.uuid}
-            query={this.props.query}
-            update={this.props.update}
-            content={card.content}
-            decrypt={this.props.decrypt}
-            encrypt={this.props.encrypt}
-            deleteNote={this.props.deleteNote} />
+        <Grid item xs={12} sm={6} md={4} key={card.uuid}>
+          <Card
+              uuid={card.uuid}
+              query={this.props.query}
+              update={this.props.update}
+              content={card.content}
+              decrypt={this.props.decrypt}
+              encrypt={this.props.encrypt}
+              deleteNote={this.props.deleteNote} />
+        </Grid>
       );
     }, this);
     return (
-      <div className="card-columns">
+      <Grid container spacing={2}>
         {cardItems}
-      </div>
+      </Grid>
     );
   }
 }

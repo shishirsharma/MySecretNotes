@@ -4,6 +4,13 @@ import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 class HelpModal extends React.Component {
     constructor(props) {
@@ -15,30 +22,30 @@ class HelpModal extends React.Component {
             <Dialog open={this.props.open || false} onClose={this.props.onClose}>
                 <DialogTitle sx={{backgroundColor: 'rgb(0,188,212)', color:'#FFF'}}>Key Bindings</DialogTitle>
                 <DialogContent>
-                    <table className="table table-hover">
-                        <thead>
-                            <tr><th>#</th><th>Key</th><th>Action</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr><th scope="row">1</th><td>⌘ <b>b</b></td><td><b>Bold</b></td></tr>
-                            <tr><th scope="row">2</th><td>⌃ <b>d</b></td><td>Delete</td></tr>
-                            <tr><th scope="row">3</th><td>⌃ <b>h</b></td><td>Backspace &#9003;</td></tr>
-                            <tr><th scope="row">4</th><td>⌘ <b>i</b></td><td><i>Italic</i></td></tr>
-                            <tr><th scope="row">5</th><td>⌘ <b>j</b></td><td><code>code</code></td></tr>
-                            <tr><th scope="row">6</th><td>⌃ <b>k</b></td><td>Kill line from current point</td></tr>
-                            <tr><th scope="row">7</th><td>⌃ <b>m</b></td><td>Split block</td></tr>
-                            <tr><th scope="row">8</th><td>⌃ <b>o</b></td><td>Split block</td></tr>
-                            <tr><th scope="row">9</th><td>⌃ <b>t</b></td><td>Transpose characters</td></tr>
-                            <tr><th scope="row">10</th><td>⌘ <b>u</b></td><td><u>Underline</u></td></tr>
-                            <tr><th scope="row">11</th><td>⌃ <b>w</b></td><td>Backspace word </td></tr>
-                            <tr><th scope="row">12</th><td>⌃ <b>y</b></td><td>Redo</td></tr>
-                        </tbody>
-                    </table>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow><TableCell>#</TableCell><TableCell>Key</TableCell><TableCell>Action</TableCell></TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow><TableCell>1</TableCell><TableCell>⌘ <b>b</b></TableCell><TableCell><b>Bold</b></TableCell></TableRow>
+                            <TableRow><TableCell>2</TableCell><TableCell>⌃ <b>d</b></TableCell><TableCell>Delete</TableCell></TableRow>
+                            <TableRow><TableCell>3</TableCell><TableCell>⌃ <b>h</b></TableCell><TableCell>Backspace &#9003;</TableCell></TableRow>
+                            <TableRow><TableCell>4</TableCell><TableCell>⌘ <b>i</b></TableCell><TableCell><i>Italic</i></TableCell></TableRow>
+                            <TableRow><TableCell>5</TableCell><TableCell>⌘ <b>j</b></TableCell><TableCell><code>code</code></TableCell></TableRow>
+                            <TableRow><TableCell>6</TableCell><TableCell>⌃ <b>k</b></TableCell><TableCell>Kill line from current point</TableCell></TableRow>
+                            <TableRow><TableCell>7</TableCell><TableCell>⌃ <b>m</b></TableCell><TableCell>Split block</TableCell></TableRow>
+                            <TableRow><TableCell>8</TableCell><TableCell>⌃ <b>o</b></TableCell><TableCell>Split block</TableCell></TableRow>
+                            <TableRow><TableCell>9</TableCell><TableCell>⌃ <b>t</b></TableCell><TableCell>Transpose characters</TableCell></TableRow>
+                            <TableRow><TableCell>10</TableCell><TableCell>⌘ <b>u</b></TableCell><TableCell><u>Underline</u></TableCell></TableRow>
+                            <TableRow><TableCell>11</TableCell><TableCell>⌃ <b>w</b></TableCell><TableCell>Backspace word </TableCell></TableRow>
+                            <TableRow><TableCell>12</TableCell><TableCell>⌃ <b>y</b></TableCell><TableCell>Redo</TableCell></TableRow>
+                        </TableBody>
+                    </Table>
                     <div>Icons made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver">Madebyoliver</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-default" onClick={this.props.onClose}>Close</button>
-                    </div>
                 </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.props.onClose}>Close</Button>
+                </DialogActions>
             </Dialog>
         )
     }

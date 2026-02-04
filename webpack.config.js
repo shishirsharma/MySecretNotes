@@ -1,5 +1,6 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './app/scripts.babel/index.jsx',
@@ -55,6 +56,10 @@ module.exports = {
     }
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+      Buffer: ['buffer', 'Buffer']
+    }),
     new CopyPlugin({
       patterns: [
         { from: 'app/manifest.json', to: 'manifest.json' },
