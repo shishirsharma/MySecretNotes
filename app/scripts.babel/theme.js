@@ -1,49 +1,50 @@
 'use strict';
 
 import { createTheme } from '@mui/material/styles';
+import { colors } from './colors';
 
 // Light theme - Warm Paper
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
     background: {
-      default: '#f5f0e8',
-      paper: '#ffffff',
+      default: colors.light.surface,
+      paper: colors.light.bg,
     },
     primary: {
-      main: '#4a6cf7',
-      dark: '#3a55d0',
-      light: '#e8ecfd',
+      main: colors.light.primary,
+      dark: colors.light.primaryDark,
+      light: colors.light.primaryLight,
     },
     secondary: {
-      main: '#c96b3f',
-      light: '#f5e5d9',
+      main: colors.light.accent,
+      light: colors.light.accentLight,
     },
     text: {
-      primary: '#2a2520',
-      secondary: '#6b6258',
-      disabled: '#9a9088',
+      primary: colors.light.textPrimary,
+      secondary: colors.light.textSecondary,
+      disabled: colors.light.textTertiary,
     },
-    divider: '#e5e0d8',
+    divider: colors.light.border,
   },
   typography: {
     fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     body1: {
-      color: '#2a2520',
+      color: colors.light.textPrimary,
     },
     body2: {
-      color: '#6b6258',
+      color: colors.light.textSecondary,
     },
   },
   components: {
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: '#ffffff',
-          color: '#2a2520',
-          boxShadow: '0 1px 2px rgba(90, 70, 50, 0.05)',
+          backgroundColor: colors.light.bg,
+          color: colors.light.textPrimary,
+          boxShadow: colors.light.shadowSm,
           '&:hover': {
-            boxShadow: '0 4px 6px rgba(90, 70, 50, 0.07)',
+            boxShadow: colors.light.shadowMd,
           },
         },
       },
@@ -51,23 +52,23 @@ const lightTheme = createTheme({
     MuiCardContent: {
       styleOverrides: {
         root: {
-          backgroundColor: '#ffffff',
-          color: '#2a2520',
+          backgroundColor: colors.light.bg,
+          color: colors.light.textPrimary,
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2c2c2e',
-          color: '#ffffff',
+          backgroundColor: colors.light.appbarBg,
+          color: colors.white,
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          color: '#ffffff',
+          color: colors.white,
           '&:hover': {
             backgroundColor: 'rgba(255,255,255,0.15)',
           },
@@ -77,7 +78,7 @@ const lightTheme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          color: '#ffffff',
+          color: colors.white,
           '&:hover': {
             backgroundColor: 'rgba(255,255,255,0.1)',
           },
@@ -87,16 +88,16 @@ const lightTheme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#ffffff',
-          color: '#2a2520',
+          backgroundColor: colors.light.bg,
+          color: colors.light.textPrimary,
         },
       },
     },
     MuiDialogTitle: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2c2c2e',
-          color: '#ffffff',
+          backgroundColor: colors.light.appbarBg,
+          color: colors.white,
           fontWeight: 600,
         },
       },
@@ -104,8 +105,8 @@ const lightTheme = createTheme({
     MuiDialogContent: {
       styleOverrides: {
         root: {
-          backgroundColor: '#ffffff',
-          color: '#2a2520',
+          backgroundColor: colors.light.bg,
+          color: colors.light.textPrimary,
           paddingTop: '24px',
           paddingBottom: '24px',
           paddingLeft: '24px',
@@ -116,9 +117,9 @@ const lightTheme = createTheme({
     MuiDialogActions: {
       styleOverrides: {
         root: {
-          backgroundColor: '#ffffff',
+          backgroundColor: colors.light.bg,
           padding: '16px',
-          borderTop: '1px solid #e5e0d8',
+          borderTop: `1px solid ${colors.light.border}`,
         },
       },
     },
@@ -136,12 +137,12 @@ const lightTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            color: '#2a2520',
-            backgroundColor: '#ffffff',
-            borderColor: '#d9cfc4',
+            color: colors.light.textPrimary,
+            backgroundColor: colors.light.inputBg,
+            borderColor: colors.light.inputBorder,
           },
           '& .MuiOutlinedInput-input::placeholder': {
-            color: '#9a9088',
+            color: colors.light.textTertiary,
             opacity: 1,
           },
         },
@@ -157,7 +158,7 @@ const lightTheme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f5f0e8',
+          backgroundColor: colors.light.surface,
           paddingTop: '32px',
           paddingBottom: '32px',
           paddingLeft: '8px',
@@ -183,43 +184,43 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     background: {
-      default: '#1e1b17',
-      paper: '#2a2520',
+      default: colors.dark.surface,
+      paper: colors.dark.bg,
     },
     primary: {
-      main: '#7b8ff0',
-      dark: '#5a6ed0',
-      light: '#2a3560',
+      main: colors.dark.primary,
+      dark: colors.dark.primaryDark,
+      light: colors.dark.primaryLight,
     },
     secondary: {
-      main: '#d98a6a',
-      light: '#5a4535',
+      main: colors.dark.accent,
+      light: colors.dark.accentLight,
     },
     text: {
-      primary: '#ede9e3',
-      secondary: '#c4bfb5',
-      disabled: '#8a8480',
+      primary: colors.dark.textPrimary,
+      secondary: colors.dark.textSecondary,
+      disabled: colors.dark.textTertiary,
     },
-    divider: '#3a3630',
+    divider: colors.dark.border,
   },
   typography: {
     fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     body1: {
-      color: '#ede9e3',
+      color: colors.dark.textPrimary,
     },
     body2: {
-      color: '#c4bfb5',
+      color: colors.dark.textSecondary,
     },
   },
   components: {
     MuiCard: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2a2520',
-          color: '#ede9e3',
-          boxShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
+          backgroundColor: colors.dark.bg,
+          color: colors.dark.textPrimary,
+          boxShadow: colors.dark.shadowSm,
           '&:hover': {
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.4)',
+            boxShadow: colors.dark.shadowMd,
           },
         },
       },
@@ -227,23 +228,23 @@ const darkTheme = createTheme({
     MuiCardContent: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2a2520',
-          color: '#ede9e3',
+          backgroundColor: colors.dark.bg,
+          color: colors.dark.textPrimary,
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#191715',
-          color: '#ffffff',
+          backgroundColor: colors.dark.appbarBg,
+          color: colors.white,
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          color: '#ffffff',
+          color: colors.white,
           '&:hover': {
             backgroundColor: 'rgba(255,255,255,0.15)',
           },
@@ -253,7 +254,7 @@ const darkTheme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          color: '#ffffff',
+          color: colors.white,
           '&:hover': {
             backgroundColor: 'rgba(255,255,255,0.1)',
           },
@@ -263,16 +264,16 @@ const darkTheme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#2a2520',
-          color: '#ede9e3',
+          backgroundColor: colors.dark.bg,
+          color: colors.dark.textPrimary,
         },
       },
     },
     MuiDialogTitle: {
       styleOverrides: {
         root: {
-          backgroundColor: '#191715',
-          color: '#ffffff',
+          backgroundColor: colors.dark.appbarBg,
+          color: colors.white,
           fontWeight: 600,
         },
       },
@@ -280,8 +281,8 @@ const darkTheme = createTheme({
     MuiDialogContent: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2a2520',
-          color: '#ede9e3',
+          backgroundColor: colors.dark.bg,
+          color: colors.dark.textPrimary,
           paddingTop: '24px',
           paddingBottom: '24px',
           paddingLeft: '24px',
@@ -292,9 +293,9 @@ const darkTheme = createTheme({
     MuiDialogActions: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2a2520',
+          backgroundColor: colors.dark.bg,
           padding: '16px',
-          borderTop: '1px solid #3a3630',
+          borderTop: `1px solid ${colors.dark.border}`,
         },
       },
     },
@@ -312,12 +313,12 @@ const darkTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            color: '#ede9e3',
-            backgroundColor: '#1e1b17',
-            borderColor: '#3a3630',
+            color: colors.dark.textPrimary,
+            backgroundColor: colors.dark.inputBg,
+            borderColor: colors.dark.inputBorder,
           },
           '& .MuiOutlinedInput-input::placeholder': {
-            color: '#8a8480',
+            color: colors.dark.textTertiary,
             opacity: 1,
           },
         },
@@ -333,7 +334,7 @@ const darkTheme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
-          backgroundColor: '#1e1b17',
+          backgroundColor: colors.dark.surface,
           paddingTop: '32px',
           paddingBottom: '32px',
           paddingLeft: '8px',
