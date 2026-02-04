@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const crypto = require('crypto');
 const fs = require('fs');
 
-// Custom plugin to update CSP for inline script in MV3
+// Custom plugin to set default CSP for MV3
 class CSPPlugin {
   apply(compiler) {
     compiler.hooks.done.tap('CSPPlugin', () => {
@@ -13,16 +13,17 @@ class CSPPlugin {
         const manifestPath = require('path').resolve(__dirname, 'dist/manifest.json');
         const manifest = JSON.parse(require('fs').readFileSync(manifestPath, 'utf8'));
 
-        // Update CSP to allow unsafe-inline for theme initialization script
-        // This is necessary for MV3 to allow the early theme-setting inline script
+        // Set standard CSP - no inline scripts allowed
+        // Default theme is set via CSS variables in index.html <style> tag
+        // Theme switching is handled by React/ThemeProvider
         manifest.content_security_policy = {
-          extension_pages: "script-src 'self' 'unsafe-inline'; object-src 'self'"
+          extension_pages: "script-src 'self'; object-src 'self'"
         };
 
         // Write updated manifest.json
         require('fs').writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 
-        console.log(`CSPPlugin: Updated CSP for extension pages`);
+        console.log(`CSPPlugin: Set CSP for extension pages`);
         console.log(`CSPPlugin: CSP directive: ${manifest.content_security_policy.extension_pages}`);
       } catch (err) {
         console.error('CSPPlugin error:', err);

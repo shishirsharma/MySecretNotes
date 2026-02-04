@@ -6,11 +6,22 @@
   <title>My Secret Notes</title>
   <link rel="shortcut icon" type="image/x-icon" href="images/notebook-128.png">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&display=swap" rel="stylesheet">
-  <script>
-// Apply theme before React renders to avoid flash of wrong theme
-const theme = localStorage.getItem('theme') || 'light';
-document.documentElement.setAttribute('data-theme', theme);
-  </script>
+  <style>
+    /* Default light theme to minimize flash before React loads */
+    :root {
+      --color-surface: #f5f0e8;
+      --color-bg: #ffffff;
+      --color-text-primary: #2a2520;
+      --color-text-secondary: #6b6258;
+      --color-text-tertiary: #9a9088;
+      --color-primary: #4a6cf7;
+      --color-primary-dark: #3a55d0;
+      --color-primary-light: #e8ecfd;
+      --color-accent: #c96b3f;
+      --appbar-bg: #2c2c2e;
+      --color-code-bg: rgba(74, 108, 247, 0.07);
+    }
+  </style>
 </head>
 <body>
   <div id="main-table"></div>
