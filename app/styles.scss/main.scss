@@ -351,12 +351,71 @@ input::placeholder, textarea::placeholder {
   }
 }
 
+/* Draft.js Editor Theme Styling */
+.DraftEditor-root,
+.public-DraftEditor-content {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  font-family: var(--font-body);
+}
+
+.public-DraftStyleDefault-block {
+  color: var(--color-text-primary);
+  position: relative;
+}
+
+.public-DraftEditor-content > div {
+  color: var(--color-text-primary);
+}
+
+.DraftEditorPlaceholder-root {
+  color: var(--color-text-tertiary);
+}
+
+.public-DraftStyleDefault-pre {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-md);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+/* Headers in Draft.js */
+.public-DraftStyleDefault-h1,
+.public-DraftStyleDefault-h2,
+.public-DraftStyleDefault-h3,
+.public-DraftStyleDefault-h4,
+.public-DraftStyleDefault-h5,
+.public-DraftStyleDefault-h6 {
+  color: var(--color-text-primary);
+}
+
+/* Blockquotes in Draft.js */
+.public-DraftStyleDefault-blockquote {
+  border-left: 3px solid var(--color-primary);
+  color: var(--color-text-secondary);
+  margin-left: 0;
+  padding-left: var(--spacing-md);
+  font-style: italic;
+}
+
+/* Code spans in Draft.js */
+.public-DraftStyleDefault-code {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: 'Menlo', 'Consolas', monospace;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
 /* Typography within editor */
 .draft-editor-wrapper {
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-body);
     font-weight: 600;
     margin: var(--spacing-lg) 0 var(--spacing-sm) 0;
+    color: var(--color-text-primary);
   }
 
   h1 { font-size: 2rem; }
@@ -372,70 +431,6 @@ blockquote {
   font-style: italic;
 }
 
-.react-autosuggest__container {
-  float: left;
-  line-height: 57px;
-  margin-left: 20px;
-}
-
-.react-autosuggest__input {
-  background-color: #fff;
-  border-radius: 2px;
-  border: 0;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
-  font-family: Helvetica, sans-serif;
-  font-size: 16px;
-  font-weight: 300;
-  height: 44px;
-  padding: 10px 20px;
-  transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
-  width: 600px;
-}
-
-.react-autosuggest__input--focused {
-  outline: none;
-}
-
-.react-autosuggest__input--open {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.react-autosuggest__suggestions-container {
-  display: none;
-}
-
-.react-autosuggest__suggestions-container--open {
-  display: block;
-  position: absolute;
-  top: 51px;
-  width: 600px;
-  border: 0;
-  background-color: #fff;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
-  font-family: Helvetica, sans-serif;
-  font-weight: 300;
-  font-size: 16px;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  z-index: 2;
-}
-
-.react-autosuggest__suggestions-list {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
-
-.react-autosuggest__suggestion {
-  color: #000;
-  cursor: pointer;
-  padding: 10px 20px;
-}
-
-.react-autosuggest__suggestion--highlighted {
-  background-color: #eee;
-}
 
 /*
 FILE FORMAT ICONS
