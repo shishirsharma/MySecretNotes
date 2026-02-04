@@ -4,43 +4,43 @@ const webpack = require('webpack');
 const crypto = require('crypto');
 const fs = require('fs');
 
-// Custom plugin to calculate and inject CSP hash for inline script
-class CSPHashPlugin {
+// Custom plugin to inject nonce for inline script CSP
+class CSPNoncePlugin {
   apply(compiler) {
-    compiler.hooks.done.tap('CSPHashPlugin', () => {
+    compiler.hooks.done.tap('CSPNoncePlugin', () => {
       try {
+        // Generate a random nonce
+        const nonce = crypto.randomBytes(16).toString('hex');
+
         // Read the built index.html
         const indexPath = path.resolve(__dirname, 'dist/index.html');
-        const indexContent = fs.readFileSync(indexPath, 'utf8');
+        let indexContent = fs.readFileSync(indexPath, 'utf8');
 
-        // Extract inline script content between <script> and </script> tags
-        const scriptMatch = indexContent.match(/<script>\s*([\s\S]*?)\s*<\/script>/);
-        if (!scriptMatch || !scriptMatch[1]) {
-          console.warn('CSPHashPlugin: Could not find inline script in index.html');
-          return;
-        }
+        // Add nonce attribute to inline script
+        indexContent = indexContent.replace(
+          /<script>/,
+          `<script nonce="${nonce}">`
+        );
 
-        const scriptContent = scriptMatch[1];
-
-        // Calculate SHA256 hash of the script content
-        const hash = crypto.createHash('sha256').update(scriptContent).digest('base64');
-        const cspHash = `sha256-${hash}`;
+        // Write updated index.html
+        fs.writeFileSync(indexPath, indexContent, 'utf8');
 
         // Read manifest.json
         const manifestPath = path.resolve(__dirname, 'dist/manifest.json');
         const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
-        // Update CSP with the calculated hash
+        // Update CSP with the nonce
         manifest.content_security_policy = {
-          extension_pages: `script-src 'self' '${cspHash}'; object-src 'self'`
+          extension_pages: `script-src 'self' 'nonce-${nonce}'; object-src 'self'`
         };
 
         // Write updated manifest.json
         fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 
-        console.log(`CSPHashPlugin: Generated CSP hash: ${cspHash}`);
+        console.log(`CSPNoncePlugin: Generated nonce: ${nonce}`);
+        console.log(`CSPNoncePlugin: CSP directive: ${manifest.content_security_policy.extension_pages}`);
       } catch (err) {
-        console.error('CSPHashPlugin error:', err);
+        console.error('CSPNoncePlugin error:', err);
       }
     });
   }
@@ -104,7 +104,7 @@ module.exports = {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer']
     }),
-    new CSPHashPlugin(),
+    new CSPNoncePlugin(),
     new CopyPlugin({
       patterns: [
         { from: 'app/manifest.json', to: 'manifest.json' },
