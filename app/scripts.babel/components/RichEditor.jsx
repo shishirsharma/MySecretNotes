@@ -13,10 +13,8 @@ function getBlockStyle(block) {
 }
 const styleMap = {
   CODE: {
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
     fontSize: 16,
-    padding: 2,
   },
 };
 
@@ -297,7 +295,7 @@ export default class RichEditor extends React.Component {
     }
 
     return (
-      <Card className="note-card" onClick={this.focus}>
+      <Card className="note-card" onClick={this.focus} sx={{backgroundColor: 'var(--color-bg)'}}>
         <CardContent>
           <div className="RichEditor-root">
             <CloseButton

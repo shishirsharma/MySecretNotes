@@ -63,7 +63,18 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: 'app/manifest.json', to: 'manifest.json' },
-        { from: 'app/index.html', to: 'index.html' },
+        {
+          from: 'app/index.html',
+          to: 'index.html',
+          transform(content) {
+            // Inject timestamp cache buster into bundle.js query string
+            const timestamp = Date.now();
+            return content.toString().replace(
+              /scripts\/bundle\.js(\?v=[^\s"]*)?/g,
+              `scripts/bundle.js?v=${timestamp}`
+            );
+          }
+        },
         { from: 'app/images', to: 'images' },
         { from: 'app/_locales', to: '_locales' },
         { from: 'app/scripts.babel/background.js', to: 'scripts/background.js' },
