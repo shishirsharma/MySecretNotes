@@ -2,8 +2,10 @@
 
 import React from 'react';
 import crypto from 'crypto';
+import { ThemeProvider } from '@mui/material/styles';
 
 import generateUUID from 'utils';
+import { getTheme } from '../theme';
 import NavBar from 'components/NavBar';
 import CardColumns from 'components/CardColumns';
 import HelpModal from 'components/HelpModal';
@@ -22,8 +24,9 @@ class Notes extends React.Component {
     var init = true;
     var locked = true;
     var first_run = this.props.first_run;
+    var currentTheme = localStorage.getItem('theme') || 'light';
 
-    this.state = {cards, password, query, init, locked, first_run, showUnlock: false, showSettings: false, showHelp: false};
+    this.state = {cards, password, query, init, locked, first_run, currentTheme, showUnlock: false, showSettings: false, showHelp: false};
 
     this.addNote = (e) => {
       e.preventDefault();
@@ -56,6 +59,11 @@ class Notes extends React.Component {
     this.deleteNote = (uuid) => {
       if (window.console) { console.debug('[Notes] removing', uuid); }
       this._handleDeleteNote(uuid);
+    }
+
+    this.updateTheme = (theme) => {
+      if (window.console) { console.debug('[Notes] updating theme:', theme); }
+      this.setState({ currentTheme: theme });
     }
 
     this.encrypt = (text) => {
@@ -249,26 +257,22 @@ class Notes extends React.Component {
       settingsModal = <SettingsModal open={this.state.showSettings} onClose={() => this.setState({showSettings: false})} updateNotes={this.updateNotes} />
     }
 
+    const theme = getTheme(this.state.currentTheme);
+
     return (
-      <div>
-        <NavBar addNote={this.addNote} search={this.search} lockNotes={this.lockNotes} lock={this.state.lock} openSettings={() => this.setState({showSettings: true})} openHelp={() => this.setState({showHelp: true})} />
-        <Container
-          maxWidth={false}
-          sx={{
-            pt: 4,
-            pb: 4,
-            px: { xs: 1, sm: 2, md: 3 },
-            backgroundColor: 'var(--color-surface)',
-            minHeight: 'calc(100vh - 64px)',
-            transition: 'background-color 300ms ease'
-          }}
-        >
-          {cardColumns}
-        </Container>
-        <HelpModal open={this.state.showHelp} onClose={() => this.setState({showHelp: false})} />
-        <UnlockModal open={this.state.showUnlock} onClose={() => this.setState({showUnlock: false})} unlockNotes={this.unlockNotes} invalid_key={this.state.invalid_key}/>
-        { settingsModal }
-      </div>
+      <ThemeProvider theme={theme}>
+        <div>
+          <NavBar addNote={this.addNote} search={this.search} lockNotes={this.lockNotes} lock={this.state.lock} openSettings={() => this.setState({showSettings: true})} openHelp={() => this.setState({showHelp: true})} onThemeChange={this.updateTheme} />
+          <Container
+            maxWidth={false}
+          >
+            {cardColumns}
+          </Container>
+          <HelpModal open={this.state.showHelp} onClose={() => this.setState({showHelp: false})} />
+          <UnlockModal open={this.state.showUnlock} onClose={() => this.setState({showUnlock: false})} unlockNotes={this.unlockNotes} invalid_key={this.state.invalid_key}/>
+          { settingsModal }
+        </div>
+      </ThemeProvider>
     );
   }
 }

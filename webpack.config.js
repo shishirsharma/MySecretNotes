@@ -1,6 +1,50 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
+const crypto = require('crypto');
+const fs = require('fs');
+
+// Custom plugin to calculate and inject CSP hash for inline script
+class CSPHashPlugin {
+  apply(compiler) {
+    compiler.hooks.done.tap('CSPHashPlugin', () => {
+      try {
+        // Read the built index.html
+        const indexPath = path.resolve(__dirname, 'dist/index.html');
+        const indexContent = fs.readFileSync(indexPath, 'utf8');
+
+        // Extract inline script content between <script> and </script> tags
+        const scriptMatch = indexContent.match(/<script>\s*([\s\S]*?)\s*<\/script>/);
+        if (!scriptMatch || !scriptMatch[1]) {
+          console.warn('CSPHashPlugin: Could not find inline script in index.html');
+          return;
+        }
+
+        const scriptContent = scriptMatch[1];
+
+        // Calculate SHA256 hash of the script content
+        const hash = crypto.createHash('sha256').update(scriptContent).digest('base64');
+        const cspHash = `sha256-${hash}`;
+
+        // Read manifest.json
+        const manifestPath = path.resolve(__dirname, 'dist/manifest.json');
+        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+
+        // Update CSP with the calculated hash
+        manifest.content_security_policy = {
+          extension_pages: `script-src 'self' '${cspHash}'; object-src 'self'`
+        };
+
+        // Write updated manifest.json
+        fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
+
+        console.log(`CSPHashPlugin: Generated CSP hash: ${cspHash}`);
+      } catch (err) {
+        console.error('CSPHashPlugin error:', err);
+      }
+    });
+  }
+}
 
 module.exports = {
   entry: './app/scripts.babel/index.jsx',
@@ -60,6 +104,7 @@ module.exports = {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer']
     }),
+    new CSPHashPlugin(),
     new CopyPlugin({
       patterns: [
         { from: 'app/manifest.json', to: 'manifest.json' },

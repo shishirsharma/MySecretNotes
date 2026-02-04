@@ -295,7 +295,7 @@ export default class RichEditor extends React.Component {
     }
 
     return (
-      <Card className="note-card" onClick={this.focus} sx={{backgroundColor: 'var(--color-bg)'}}>
+      <Card className="note-card" onClick={this.focus}>
         <CardContent>
           <div className="RichEditor-root">
             <CloseButton

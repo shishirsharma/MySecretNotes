@@ -58,6 +58,10 @@ export default class NavBar extends React.Component {
     this.setState({ currentTheme: theme });
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+    // Notify parent component (Notes) of theme change
+    if (this.props.onThemeChange) {
+      this.props.onThemeChange(theme);
+    }
   }
 
   handleAddNote(e) {

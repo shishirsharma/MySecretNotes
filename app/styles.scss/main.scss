@@ -307,6 +307,7 @@ input::placeholder, textarea::placeholder {
     font-size: 15px;
     line-height: 1.7;
     color: var(--color-text-primary);
+    background-color: var(--color-bg);
     min-height: 200px;
   }
 }
