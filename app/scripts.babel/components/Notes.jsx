@@ -1,11 +1,7 @@
 'use strict';
 
-import Store from 'store';
 import React from 'react';
 import crypto from 'crypto';
-
-/* import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin'*/
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import generateUUID from 'utils';
 import NavBar from 'components/NavBar';
@@ -26,7 +22,7 @@ class Notes extends React.Component {
     var locked = true;
     var first_run = this.props.first_run;
 
-    this.state = {cards, password, query, init, locked, first_run};
+    this.state = {cards, password, query, init, locked, first_run, showUnlock: false, showSettings: false, showHelp: false};
 
     this.addNote = (e) => {
       e.preventDefault();
@@ -75,21 +71,22 @@ class Notes extends React.Component {
     if (window.console) { console.debug('[Notes] componentDidMount:', this.state); }
 
     if (this.state.first_run == true) {
-      $('#settingsModal').modal('show');
+      this.setState({showSettings: true});
     } else if(this.state.init === true) {
       this._handleGet(this.state)
-      $('#unlockModal').modal('show'); 
+      this.setState({showUnlock: true});
     } else if (this.state.locked == true) {
-      $('#unlockModal').modal('show');
+      this.setState({showUnlock: true});
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (window.console) { console.debug('[Notes] componentDidUpdate:', this.state); }
-    if (this.state.locked == true) {
-      $('#unlockModal').modal('show');
+    if (this.state.locked == true && !this.state.showUnlock) {
+      this.setState({showUnlock: true});
     }
   }
+
   _handleLock(invalid_key) {
     if (window.console) { console.debug('[Notes] _handlelock:', this.state); }
     if (this.state.locked != true) {
@@ -108,6 +105,7 @@ class Notes extends React.Component {
     state.password = password;
     state.locked = false;
     state.init = false;
+    state.showUnlock = false;
     if (window.console) { console.debug('[Notes] _handleUnlock:', state); }
     this.setState(state);
   }
@@ -117,6 +115,7 @@ class Notes extends React.Component {
     state.password = password;
     state.locked = false;
     state.init = false;
+    state.showSettings = false;
     if (this.state.init) {
       state.first_run = false;
       state.update = false;
@@ -208,7 +207,7 @@ class Notes extends React.Component {
     var uuid = generateUUID();
     state.cards = [{uuid: uuid }].concat(state.cards);
     if (window.console) { console.debug('[Notes] note added', state.cards); }
-    this._handleCards(state.cards); 
+    this._handleCards(state.cards);
     this.setState(state, function () {
       if (window.console) { console.debug('[Notes] updated state', this.state); }
     });
@@ -233,7 +232,7 @@ class Notes extends React.Component {
     if (this.state.first_run == true) {
       if (window.console) { console.debug('[Notes] INIT'); }
       cardColumns = <div></div>;
-      settingsModal = <SettingsModal updateNotes={this.updateNotes} init={this.state.init} />
+      settingsModal = <SettingsModal open={this.state.showSettings} onClose={() => this.setState({showSettings: false})} updateNotes={this.updateNotes} init={this.state.init} />
     } else if (this.state.locked == true) {
       if (window.console) { console.debug('[Notes] LOCKED'); }
       cardColumns = <div></div>;
@@ -246,14 +245,12 @@ class Notes extends React.Component {
                         decrypt={this.decrypt}
                         encrypt={this.encrypt}
                         deleteNote={this.deleteNote} />;
-      settingsModal = <SettingsModal unlockNotes={this.updateNotes} />
+      settingsModal = <SettingsModal open={this.state.showSettings} onClose={() => this.setState({showSettings: false})} updateNotes={this.updateNotes} />
     }
 
     return (
       <div>
-        <MuiThemeProvider>
-          <NavBar addNote={this.addNote} search={this.search} lockNotes={this.lockNotes} lock={this.state.lock} />
-        </MuiThemeProvider>
+        <NavBar addNote={this.addNote} search={this.search} lockNotes={this.lockNotes} lock={this.state.lock} openSettings={() => this.setState({showSettings: true})} openHelp={() => this.setState({showHelp: true})} />
         <div className="container-fluid content-wrapper">
           <div>
             <div className="notes">
@@ -261,8 +258,8 @@ class Notes extends React.Component {
             </div>
           </div>
         </div>
-        <HelpModal />
-        <UnlockModal unlockNotes={this.unlockNotes} invalid_key={this.state.invalid_key}/>
+        <HelpModal open={this.state.showHelp} onClose={() => this.setState({showHelp: false})} />
+        <UnlockModal open={this.state.showUnlock} onClose={() => this.setState({showUnlock: false})} unlockNotes={this.unlockNotes} invalid_key={this.state.invalid_key}/>
         { settingsModal }
       </div>
     );

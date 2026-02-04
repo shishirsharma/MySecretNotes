@@ -1,7 +1,7 @@
 {
   "name": "__MSG_appName__",
-  "version": "0.0.6",
-  "manifest_version": 2,
+  "version": "0.0.7",
+  "manifest_version": 3,
   "description": "__MSG_appDescription__",
   "icons": {
     "16": "images/notebook-16.png",
@@ -9,21 +9,14 @@
     "128": "images/notebook-128.png"
   },
   "default_locale": "en",
-  "browser_action": {
+  "action": {
     "default_icon": "images/notebook-128.png",
     "default_title": "My Secret Notes"
   },
   "background": {
-    "scripts": [
-      "scripts/chromereload.js",
-      "scripts/background.js"
-    ]
-  },
-  "sandbox": {
-    "pages": ["sandbox.html"]
+    "service_worker": "scripts/background.js"
   },
   "permissions": [
-    "background",
     "storage",
     "unlimitedStorage",
     "tabs",

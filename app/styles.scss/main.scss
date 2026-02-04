@@ -1,7 +1,7 @@
-// bower: scss
-@import "../bower_components/font-awesome/scss/font-awesome.scss";
-@import "../bower_components/bootstrap/scss/bootstrap.scss";
-// endbower
+@import "~bootstrap/scss/bootstrap";
+$fa-font-path: "fonts" !default;
+@import "~font-awesome/scss/font-awesome";
+
 body {
   font-family: Roboto, sans-serif;
   font-size: 16px;
@@ -20,78 +20,6 @@ body {
 .nav-btn {
   span {
     font-size: 18px;
-  }
-}
-
-// Modal adjustments
-.modal {
-  .modal-dialog {
-    top: 10%
-  }
-
-  .modal-body {
-    text-align: center;
-    padding: 35px 50px 20px;
-
-    .form-group {
-      margin-bottom: 0;
-    }
-
-    .form-control {
-      //text-align: center;
-      padding: 11px 10px;
-      background: rgba(233, 233, 233, 0.5);
-      border-width: 0 0 1px 0;
-      border-color: rgba(217, 217, 217, 0.43);
-      font-size: 14px;
-    }
-  }
-
-  .modal-header {
-    background: rgb(0, 188, 212);
-    color: #FFF;
-
-    .modal-title {
-      margin: 0 auto;
-      padding-left: 10px;
-    }
-  }
-
-  .modal-content {
-    border: 0;
-    overflow: hidden;
-  }
-
-  .modal-footer {
-    border: 0;
-    padding-bottom: 0;
-
-    input.btn {
-      border-radius: 50px;
-      padding: 9px 20px;
-      text-transform: uppercase;
-      font-size: 13px;
-      letter-spacing: 0.5px;
-      margin: 10px auto;
-      background: #3fcf96;
-      border: 0;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-}
-
-#settingsModal {
-  .modal-body {
-    .form-control {
-      margin: 10px 0 0;
-    }
-  }
-
-  .alert {
-    font-size: 12px;
   }
 }
 
@@ -138,7 +66,6 @@ body {
   h5 {
     color: rgba(0, 0, 0, 0.541176);
     font-size: 0.9rem;
-    // padding-bottom: 2rem;
   }
 
   h3, h5 {

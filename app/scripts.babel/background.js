@@ -7,12 +7,12 @@ chrome.runtime.onInstalled.addListener(details => {
   }
 });
 
-chrome.browserAction.onClicked.addListener(function() {
-  chrome.tabs.query({url: chrome.extension.getURL('index.html')}, function(tabs) {
+chrome.action.onClicked.addListener(function() {
+  chrome.tabs.query({url: chrome.runtime.getURL('index.html')}, function(tabs) {
     if ( tabs.length > 0 ) {
       chrome.tabs.update(tabs[0].id,{'active':true});
     } else {
-      chrome.tabs.create({url: chrome.extension.getURL('index.html')});
+      chrome.tabs.create({url: chrome.runtime.getURL('index.html')});
     }
   });
 });

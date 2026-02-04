@@ -1,3 +1,1 @@
-{
-  "presets": ["es2015"]
-}
+{ "presets": [["@babel/preset-env", {"targets":{"chrome":"120"}}], "@babel/preset-react"] }

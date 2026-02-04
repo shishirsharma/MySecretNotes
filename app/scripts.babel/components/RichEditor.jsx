@@ -113,11 +113,12 @@ export default class RichEditor extends React.Component {
     var initialState = convertFromRaw(JSON.parse(aValue));
     this.state = {editorState: EditorState.createWithContent(initialState), init: true};
 
-    this.focus = () => this.refs.editor.focus();
+    this.editorRef = React.createRef();
+    this.focus = () => this.editorRef.current?.focus();
     this.onChange = (editorState) => {
       const currentContentState = this.state.editorState.getCurrentContent();
       const newContentState = editorState.getCurrentContent();
-      if (window.console) { console.debug('[RichEditor] ', JSON.stringify(convertToRaw(newContentState))); } 
+      if (window.console) { console.debug('[RichEditor] ', JSON.stringify(convertToRaw(newContentState))); }
       if (currentContentState !== newContentState) {
         // There was a change in the content
         var newEditorState = this._handleTitle(editorState);
@@ -144,7 +145,6 @@ export default class RichEditor extends React.Component {
   }
 
   componentDidMount() {
-    // var that = this;
     if (window.console) { console.debug('[RichEditor] componentDidMount:', this.props.uuid, this.state.init); }
     if(this.state.init === true) {
       this._handleGet(this.state.editorState)
@@ -152,11 +152,11 @@ export default class RichEditor extends React.Component {
     this.focus();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const props = this.props;
-    const content = this.state.editorState.getCurrentContent();
-    if(nextProps.update) {
-      const serialized = nextProps.encrypt(JSON.stringify(convertToRaw(content)));
+  componentDidUpdate(prevProps) {
+    if (this.props.update && !prevProps.update) {
+      const props = this.props;
+      const content = this.state.editorState.getCurrentContent();
+      const serialized = this.props.encrypt(JSON.stringify(convertToRaw(content)));
       var data = {};
       data[props.uuid] = serialized;
       console.debug('[RichEditor] updated:', props.uuid, ' [', serialized, ']');
@@ -319,7 +319,7 @@ export default class RichEditor extends React.Component {
                   onChange={this.onChange}
                   onTab={this.onTab}
                   placeholder=""
-                  ref="editor"
+                  ref={this.editorRef}
                   spellCheck={true}
               />
             </div>
@@ -348,54 +348,3 @@ class CloseButton extends React.Component {
     );
   }
 };
-
-
-
-
-
-
-
-
-/* const cloudrail = require("cloudrail-si");
- * cloudrail.Settings.setKey("[CloudRail License Key]");
- *
- * const redirectReceiver = cloudrail.RedirectReceivers.getLocalAuthenticator(12345); // for local testing
- * const redirectUri = "http://localhost:12345"; // for local testing
- *
- * // let cs = new cloudrail.services.Box(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
- * // let cs = new cloudrail.services.OneDrive(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
- * // let cs = new cloudrail.services.OneDriveBusiness(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
- * // let cs = new cloudrail.services.GoogleDrive(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
- * let cs = new cloudrail.services.Dropbox(redirectReceiver, "[clientIdentifier]", "[clientSecret]", redirectUri, "state");
- *
- * cs.createFolder("/TestFolder", (err) => { // <---
- *     if (err) throw err;
- *     let fileStream = fs.createReadStream("UserData.csv");
- *     let size = fs.statSync("UserData.csv").size;
- *     cs.upload("/TestFolder/Data.csv", fileStream, size, false, (err) => { // <---
- *         if (err) throw err;
- *         console.debug("Upload successfully finished");
- *     });
- * });*/
-
-
-/* import RemoteStorage from 'remotestoragejs';
- *
- * var remoteStorage = new RemoteStorage({
- *     logging: true  // optinally enable debug logs (defaults to false)
- * });
- *
- *
- * var userAddress = ''; // fill me in
- * var token = ''; // fill me in
- *
- * RemoteStorage.Discover(userAddress).then(function (obj) {
- *     console.debug('- configuring remote', userAddress, obj.href, obj.storageType);
- *     remoteStorage.remote.configure({
- *         userAddress: userAddress,
- *         href: obj.href,
- *         storageApi: obj.storageType,
- *         properties: obj.properties,
- *         token: token
- *     });
- * });*/

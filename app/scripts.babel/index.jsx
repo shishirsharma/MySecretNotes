@@ -1,17 +1,15 @@
 'use strict';
 
-import crypto from 'crypto';
-
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
+import '../styles.scss/main.scss';
 import Notes from 'components/Notes';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('main-table'));
+root.render(
     <Notes
-        password='password'
-        first_run={!localStorage['__first_run__']} />,
-    document.getElementById('main-table')
+        first_run={!localStorage['__first_run__']} />
 );
 
 localStorage['__first_run__'] = true;
