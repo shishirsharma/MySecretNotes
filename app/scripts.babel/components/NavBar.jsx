@@ -9,6 +9,8 @@ import BookIcon from '@mui/icons-material/Book';
 import LockIcon from '@mui/icons-material/Lock';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -42,6 +44,23 @@ class SearchBar extends React.Component {
 export default class NavBar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isDarkMode: localStorage.getItem('theme') === 'dark'
+    };
+  }
+
+  componentDidMount() {
+    // Apply saved theme on mount
+    const theme = this.state.isDarkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  toggleTheme = () => {
+    const newDarkMode = !this.state.isDarkMode;
+    this.setState({ isDarkMode: newDarkMode });
+    const theme = newDarkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
   }
 
   handleAddNote(e) {
@@ -81,6 +100,14 @@ export default class NavBar extends React.Component {
             >
               New Note
             </Button>
+            <IconButton
+              color="inherit"
+              onClick={this.toggleTheme}
+              title={this.state.isDarkMode ? 'Light mode' : 'Dark mode'}
+              sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
+            >
+              {this.state.isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
             <IconButton
               color="inherit"
               onClick={this.handleLockNotes.bind(this)}

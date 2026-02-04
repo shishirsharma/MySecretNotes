@@ -258,8 +258,9 @@ class Notes extends React.Component {
             pt: 4,
             pb: 4,
             px: { xs: 1, sm: 2, md: 3 },
-            backgroundColor: '#fafafa',
-            minHeight: 'calc(100vh - 64px)'
+            backgroundColor: 'var(--color-surface)',
+            minHeight: 'calc(100vh - 64px)',
+            transition: 'background-color 300ms ease'
           }}
         >
           {cardColumns}

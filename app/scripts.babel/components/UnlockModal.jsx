@@ -67,19 +67,21 @@ class UnlockModal extends React.Component {
         PaperProps={{
           sx: {
             borderRadius: '8px',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+            boxShadow: 'var(--shadow-lg)',
+            bgcolor: 'var(--color-bg)',
+            color: 'var(--color-text-primary)'
           }
         }}
       >
         <DialogTitle sx={{
-          background: 'linear-gradient(135deg, #00bcd4 0%, #0097a7 100%)',
+          background: 'var(--appbar-bg)',
           color: '#FFF',
-          fontFamily: '"Playfair Display", serif',
-          fontSize: '20px',
+          fontFamily: 'var(--font-body)',
+          fontSize: '18px',
           fontWeight: 600,
-          letterSpacing: '0.5px',
+          letterSpacing: '-0.3px',
           py: 2.5,
-          borderBottom: '1px solid rgba(0,0,0,0.05)'
+          borderBottom: '1px solid rgba(0,0,0,0.1)'
         }}>
           Enter your passkey
         </DialogTitle>
@@ -98,29 +100,34 @@ class UnlockModal extends React.Component {
               sx={{
                 '& .MuiOutlinedInput-root': {
                   fontSize: '15px',
+                  color: 'var(--color-text-primary)',
+                  backgroundColor: 'var(--color-input-bg)',
+                  '& fieldset': {
+                    borderColor: 'var(--color-input-border)'
+                  },
                   '&:hover fieldset': {
-                    borderColor: '#00bcd4'
+                    borderColor: 'var(--color-primary)'
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: '#00bcd4'
+                    borderColor: 'var(--color-primary)'
                   }
                 }
               }}
             />
           </DialogContent>
-          <DialogActions sx={{p: 2, borderTop: '1px solid #e0e0e0'}}>
+          <DialogActions sx={{p: 2, borderTop: '1px solid var(--color-border)'}}>
             <Button
               type="submit"
               variant="contained"
               sx={{
-                bgcolor: '#00bcd4',
+                bgcolor: 'var(--color-primary)',
                 color: 'white',
                 textTransform: 'capitalize',
                 fontWeight: 600,
                 px: 3,
                 py: 1,
                 '&:hover': {
-                  bgcolor: '#0097a7'
+                  bgcolor: 'var(--color-primary-dark)'
                 }
               }}
             >
