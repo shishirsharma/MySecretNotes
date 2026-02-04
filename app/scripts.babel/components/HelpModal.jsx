@@ -24,6 +24,7 @@ class HelpModal extends React.Component {
               onClose={this.props.onClose}
               maxWidth="sm"
               fullWidth
+              autoFocus
               PaperProps={{
                 sx: {
                   borderRadius: '8px',

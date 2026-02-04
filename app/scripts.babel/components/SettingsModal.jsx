@@ -84,6 +84,7 @@ class SettingsModal extends React.Component {
         open={this.props.open || false}
         onClose={() => {}}
         disableEscapeKeyDown
+        autoFocus
         PaperProps={{
           sx: {
             borderRadius: '8px',
