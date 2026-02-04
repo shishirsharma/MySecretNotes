@@ -208,33 +208,8 @@ input::placeholder, textarea::placeholder {
 }
 
 /* Note Cards - Theme Aware */
+/* Card styling moved to theme.js MuiCard component overrides */
 .note-card {
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-  padding: var(--spacing-lg);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--color-accent);
-    opacity: 1;
-  }
-
-  &:hover {
-    box-shadow: var(--shadow-md);
-    border-color: var(--color-primary);
-    transform: translateY(-2px);
-  }
-
   /* Remove tap highlight */
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
