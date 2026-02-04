@@ -4,43 +4,28 @@ const webpack = require('webpack');
 const crypto = require('crypto');
 const fs = require('fs');
 
-// Custom plugin to inject nonce for inline script CSP
-class CSPNoncePlugin {
+// Custom plugin to update CSP for inline script in MV3
+class CSPPlugin {
   apply(compiler) {
-    compiler.hooks.done.tap('CSPNoncePlugin', () => {
+    compiler.hooks.done.tap('CSPPlugin', () => {
       try {
-        // Generate a random nonce
-        const nonce = crypto.randomBytes(16).toString('hex');
-
-        // Read the built index.html
-        const indexPath = path.resolve(__dirname, 'dist/index.html');
-        let indexContent = fs.readFileSync(indexPath, 'utf8');
-
-        // Add nonce attribute to inline script
-        indexContent = indexContent.replace(
-          /<script>/,
-          `<script nonce="${nonce}">`
-        );
-
-        // Write updated index.html
-        fs.writeFileSync(indexPath, indexContent, 'utf8');
-
         // Read manifest.json
-        const manifestPath = path.resolve(__dirname, 'dist/manifest.json');
-        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        const manifestPath = require('path').resolve(__dirname, 'dist/manifest.json');
+        const manifest = JSON.parse(require('fs').readFileSync(manifestPath, 'utf8'));
 
-        // Update CSP with the nonce
+        // Update CSP to allow unsafe-inline for theme initialization script
+        // This is necessary for MV3 to allow the early theme-setting inline script
         manifest.content_security_policy = {
-          extension_pages: `script-src 'self' 'nonce-${nonce}'; object-src 'self'`
+          extension_pages: "script-src 'self' 'unsafe-inline'; object-src 'self'"
         };
 
         // Write updated manifest.json
-        fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
+        require('fs').writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 
-        console.log(`CSPNoncePlugin: Generated nonce: ${nonce}`);
-        console.log(`CSPNoncePlugin: CSP directive: ${manifest.content_security_policy.extension_pages}`);
+        console.log(`CSPPlugin: Updated CSP for extension pages`);
+        console.log(`CSPPlugin: CSP directive: ${manifest.content_security_policy.extension_pages}`);
       } catch (err) {
-        console.error('CSPNoncePlugin error:', err);
+        console.error('CSPPlugin error:', err);
       }
     });
   }
@@ -104,7 +89,7 @@ module.exports = {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer']
     }),
-    new CSPNoncePlugin(),
+    new CSPPlugin(),
     new CopyPlugin({
       patterns: [
         { from: 'app/manifest.json', to: 'manifest.json' },
