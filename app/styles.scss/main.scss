@@ -41,17 +41,17 @@ $fa-font-path: "fonts" !default;
 [data-theme="dark"] {
   --color-bg: #0f172a;
   --color-surface: #1e293b;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #cbd5e1;
-  --color-text-tertiary: #94a3b8;
-  --color-border: #334155;
-  --color-border-light: #1e293b;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e0e7ff;
+  --color-text-tertiary: #a5b4fc;
+  --color-border: #475569;
+  --color-border-light: #2d3748;
   --color-primary: #06b6d4;
   --color-primary-dark: #0891b2;
   --color-primary-light: #164e63;
-  --color-accent: #a78bfa;
+  --color-accent: #c4b5fd;
   --color-accent-light: #312e81;
-  --color-danger: #f87171;
+  --color-danger: #fca5a5;
   --color-danger-light: #7f1d1d;
   --color-input-bg: #1e293b;
   --color-input-border: #475569;
@@ -122,6 +122,25 @@ body {
   transition: background-color 300ms ease, color 300ms ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure text visibility across all elements */
+* {
+  color: inherit;
+}
+
+input, textarea, select, button {
+  color: var(--color-text-primary);
+  background-color: var(--color-input-bg);
+  border-color: var(--color-input-border);
+}
+
+label, span, p, div, a {
+  color: var(--color-text-primary);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-text-tertiary);
 }
 
 .navbar-main {
