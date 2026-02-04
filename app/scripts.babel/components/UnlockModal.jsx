@@ -60,15 +60,72 @@ class UnlockModal extends React.Component {
     }
     if (window.console) { console.debug('[UnlockModal] render'); }
     return (
-      <Dialog open={this.props.open || false} onClose={(e, reason) => this._handleClose(reason)} disableEscapeKeyDown>
-        <DialogTitle sx={{backgroundColor: 'rgb(0,188,212)', color:'#FFF'}}>Enter your passkey</DialogTitle>
+      <Dialog
+        open={this.props.open || false}
+        onClose={(e, reason) => this._handleClose(reason)}
+        disableEscapeKeyDown
+        PaperProps={{
+          sx: {
+            borderRadius: '8px',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          }
+        }}
+      >
+        <DialogTitle sx={{
+          background: 'linear-gradient(135deg, #00bcd4 0%, #0097a7 100%)',
+          color: '#FFF',
+          fontFamily: '"Playfair Display", serif',
+          fontSize: '20px',
+          fontWeight: 600,
+          letterSpacing: '0.5px',
+          py: 2.5,
+          borderBottom: '1px solid rgba(0,0,0,0.05)'
+        }}>
+          Enter your passkey
+        </DialogTitle>
         <form onSubmit={this.handleSubmit}>
-          <DialogContent>
-            {alert}
-            <TextField type="password" inputRef={this.keyInput} onChange={this.handleChange} required placeholder="Enter key here..." fullWidth />
+          <DialogContent sx={{py: 3, px: 3}}>
+            {alert && <div sx={{mb: 2}}>{alert}</div>}
+            <TextField
+              type="password"
+              inputRef={this.keyInput}
+              onChange={this.handleChange}
+              required
+              placeholder="Enter key here..."
+              fullWidth
+              variant="outlined"
+              size="medium"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  fontSize: '15px',
+                  '&:hover fieldset': {
+                    borderColor: '#00bcd4'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00bcd4'
+                  }
+                }
+              }}
+            />
           </DialogContent>
-          <DialogActions>
-            <Button type="submit" variant="contained" color="primary">Unlock</Button>
+          <DialogActions sx={{p: 2, borderTop: '1px solid #e0e0e0'}}>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                bgcolor: '#00bcd4',
+                color: 'white',
+                textTransform: 'capitalize',
+                fontWeight: 600,
+                px: 3,
+                py: 1,
+                '&:hover': {
+                  bgcolor: '#0097a7'
+                }
+              }}
+            >
+              Unlock
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

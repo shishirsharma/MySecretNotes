@@ -59,7 +59,18 @@ class SettingsModal extends React.Component {
     } else {
       msg.settingsModalLabel = 'Change passkey';
       msg.keyInput_placeholder = 'Enter new key here...';
-      close_button = <IconButton aria-label="Close" onClick={this.props.onClose} sx={{color: '#FFF'}}><CloseIcon /></IconButton>
+      close_button = <IconButton
+        aria-label="Close"
+        onClick={this.props.onClose}
+        sx={{
+          color: '#FFF',
+          '&:hover': {
+            bgcolor: 'rgba(255,255,255,0.15)'
+          }
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
     }
 
     let alert = null;
@@ -69,19 +80,96 @@ class SettingsModal extends React.Component {
       alert = <Alert severity="error">Keys & confirm key does not match</Alert>;
     }
     return (
-      <Dialog open={this.props.open || false} onClose={() => {}} disableEscapeKeyDown>
-        <DialogTitle sx={{backgroundColor: 'rgb(0,188,212)', color:'#FFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          {msg.settingsModalLabel}
+      <Dialog
+        open={this.props.open || false}
+        onClose={() => {}}
+        disableEscapeKeyDown
+        PaperProps={{
+          sx: {
+            borderRadius: '8px',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+          }
+        }}
+      >
+        <DialogTitle sx={{
+          background: 'linear-gradient(135deg, #00bcd4 0%, #0097a7 100%)',
+          color: '#FFF',
+          fontFamily: '"Playfair Display", serif',
+          fontSize: '20px',
+          fontWeight: 600,
+          letterSpacing: '0.5px',
+          py: 2.5,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderBottom: '1px solid rgba(0,0,0,0.05)'
+        }}>
+          <span>{msg.settingsModalLabel}</span>
           {close_button}
         </DialogTitle>
         <form onSubmit={this.handleSubmit}>
-          <DialogContent>
-            {alert}
-            <TextField type="password" onChange={this.handleKeyChange} required placeholder={msg.keyInput_placeholder} fullWidth />
-            <TextField type="password" onChange={this.handleConfirmKeyChange} required placeholder="Confirm key..." fullWidth sx={{mt: 1}} />
+          <DialogContent sx={{py: 3, px: 3}}>
+            {alert && <div sx={{mb: 2}}>{alert}</div>}
+            <TextField
+              type="password"
+              onChange={this.handleKeyChange}
+              required
+              placeholder={msg.keyInput_placeholder}
+              fullWidth
+              variant="outlined"
+              size="medium"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  fontSize: '15px',
+                  '&:hover fieldset': {
+                    borderColor: '#00bcd4'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00bcd4'
+                  }
+                }
+              }}
+            />
+            <TextField
+              type="password"
+              onChange={this.handleConfirmKeyChange}
+              required
+              placeholder="Confirm key..."
+              fullWidth
+              variant="outlined"
+              size="medium"
+              sx={{
+                mt: 2,
+                '& .MuiOutlinedInput-root': {
+                  fontSize: '15px',
+                  '&:hover fieldset': {
+                    borderColor: '#00bcd4'
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00bcd4'
+                  }
+                }
+              }}
+            />
           </DialogContent>
-          <DialogActions>
-            <Button type="submit" variant="contained" color="primary">Update</Button>
+          <DialogActions sx={{p: 2, borderTop: '1px solid #e0e0e0'}}>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                bgcolor: '#00bcd4',
+                color: 'white',
+                textTransform: 'capitalize',
+                fontWeight: 600,
+                px: 3,
+                py: 1,
+                '&:hover': {
+                  bgcolor: '#0097a7'
+                }
+              }}
+            >
+              Update
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

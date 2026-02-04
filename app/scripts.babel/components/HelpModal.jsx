@@ -19,10 +19,51 @@ class HelpModal extends React.Component {
 
     render() {
         return (
-            <Dialog open={this.props.open || false} onClose={this.props.onClose}>
-                <DialogTitle sx={{backgroundColor: 'rgb(0,188,212)', color:'#FFF'}}>Key Bindings</DialogTitle>
-                <DialogContent>
-                    <Table size="small">
+            <Dialog
+              open={this.props.open || false}
+              onClose={this.props.onClose}
+              maxWidth="sm"
+              fullWidth
+              PaperProps={{
+                sx: {
+                  borderRadius: '8px',
+                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+                }
+              }}
+            >
+                <DialogTitle sx={{
+                  background: 'linear-gradient(135deg, #00bcd4 0%, #0097a7 100%)',
+                  color: '#FFF',
+                  fontFamily: '"Playfair Display", serif',
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  letterSpacing: '0.5px',
+                  py: 2.5,
+                  borderBottom: '1px solid rgba(0,0,0,0.05)'
+                }}>
+                  Key Bindings
+                </DialogTitle>
+                <DialogContent sx={{py: 3, px: 3}}>
+                    <Table size="small" sx={{
+                      '& .MuiTableHead-root': {
+                        bgcolor: '#f5f5f5'
+                      },
+                      '& .MuiTableCell-head': {
+                        fontFamily: '"Playfair Display", serif',
+                        fontWeight: 600,
+                        borderBottom: '2px solid #e0e0e0',
+                        color: '#1a1a1a',
+                        fontSize: '14px'
+                      },
+                      '& .MuiTableCell-body': {
+                        fontSize: '13px',
+                        color: '#666',
+                        borderBottom: '1px solid #e0e0e0'
+                      },
+                      '& .MuiTableBody-root tr:hover': {
+                        bgcolor: 'rgba(0, 188, 212, 0.04)'
+                      }
+                    }}>
                         <TableHead>
                             <TableRow><TableCell>#</TableCell><TableCell>Key</TableCell><TableCell>Action</TableCell></TableRow>
                         </TableHead>
@@ -41,10 +82,31 @@ class HelpModal extends React.Component {
                             <TableRow><TableCell>12</TableCell><TableCell>⌃ <b>y</b></TableCell><TableCell>Redo</TableCell></TableRow>
                         </TableBody>
                     </Table>
-                    <div>Icons made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver">Madebyoliver</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+                    <div style={{
+                      fontSize: '11px',
+                      color: '#999',
+                      marginTop: '16px',
+                      paddingTop: '12px',
+                      borderTop: '1px solid #e0e0e0',
+                      lineHeight: 1.5
+                    }}>
+                      Icons made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver" style={{color: '#00bcd4', textDecoration: 'none'}}>Madebyoliver</a> from <a href="http://www.flaticon.com" title="Flaticon" style={{color: '#00bcd4', textDecoration: 'none'}}>www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank" style={{color: '#00bcd4', textDecoration: 'none'}}>CC 3.0 BY</a>
+                    </div>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.props.onClose}>Close</Button>
+                <DialogActions sx={{p: 2, borderTop: '1px solid #e0e0e0'}}>
+                    <Button
+                      onClick={this.props.onClose}
+                      sx={{
+                        textTransform: 'capitalize',
+                        fontWeight: 600,
+                        color: '#00bcd4',
+                        '&:hover': {
+                          bgcolor: 'rgba(0, 188, 212, 0.08)'
+                        }
+                      }}
+                    >
+                      Close
+                    </Button>
                 </DialogActions>
             </Dialog>
         )

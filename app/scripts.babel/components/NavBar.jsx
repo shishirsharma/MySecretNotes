@@ -56,21 +56,53 @@ export default class NavBar extends React.Component {
   render() {
     return(
       <AppBar position="static" className="navbar-main">
-        <Toolbar>
-          <IconButton color="inherit" sx={{mr: 1}}>
+        <Toolbar sx={{py: 1.5, px: 2}}>
+          <IconButton color="inherit" sx={{mr: 1.5, '&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}>
             <BookIcon />
           </IconButton>
           <span className="app-title">My Secret Notes</span>
           <SearchBar search={this.props.search} />
-          <div style={{marginLeft: 'auto', display: 'flex', alignItems: 'center'}}>
-            <Button color="inherit" onClick={this.handleAddNote.bind(this)}>New Note</Button>
-            <IconButton color="inherit" onClick={this.handleLockNotes.bind(this)}>
+          <div style={{marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px'}}>
+            <Button
+              color="inherit"
+              onClick={this.handleAddNote.bind(this)}
+              sx={{
+                textTransform: 'capitalize',
+                fontWeight: 600,
+                fontSize: '14px',
+                px: 2,
+                py: 1,
+                '&:hover': {
+                  bgcolor: 'rgba(255,255,255,0.15)',
+                  borderRadius: '4px'
+                },
+                transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
+              New Note
+            </Button>
+            <IconButton
+              color="inherit"
+              onClick={this.handleLockNotes.bind(this)}
+              title="Lock notes"
+              sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
+            >
               <LockIcon />
             </IconButton>
-            <IconButton color="inherit" onClick={this.props.openSettings}>
+            <IconButton
+              color="inherit"
+              onClick={this.props.openSettings}
+              title="Settings"
+              sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
+            >
               <SettingsIcon />
             </IconButton>
-            <IconButton color="inherit" onClick={this.props.openHelp}>
+            <IconButton
+              color="inherit"
+              onClick={this.props.openHelp}
+              title="Help"
+              sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
+            >
               <HelpIcon />
             </IconButton>
           </div>

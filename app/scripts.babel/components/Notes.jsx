@@ -252,7 +252,16 @@ class Notes extends React.Component {
     return (
       <div>
         <NavBar addNote={this.addNote} search={this.search} lockNotes={this.lockNotes} lock={this.state.lock} openSettings={() => this.setState({showSettings: true})} openHelp={() => this.setState({showHelp: true})} />
-        <Container maxWidth={false} sx={{pt: 2}}>
+        <Container
+          maxWidth={false}
+          sx={{
+            pt: 4,
+            pb: 4,
+            px: { xs: 1, sm: 2, md: 3 },
+            backgroundColor: '#fafafa',
+            minHeight: 'calc(100vh - 64px)'
+          }}
+        >
           {cardColumns}
         </Container>
         <HelpModal open={this.state.showHelp} onClose={() => this.setState({showHelp: false})} />

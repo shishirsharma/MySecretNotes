@@ -36,7 +36,7 @@ class CardColumns extends React.Component {
     if (window.console) { console.debug('[cardcolumns] render', cards); }
     var cardItems = cards.map(function (card) {
       return (
-        <Grid item xs={12} sm={6} md={4} key={card.uuid}>
+        <Grid item xs={12} sm={6} md={4} lg={3} key={card.uuid}>
           <Card
               uuid={card.uuid}
               query={this.props.query}
@@ -49,7 +49,7 @@ class CardColumns extends React.Component {
       );
     }, this);
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={3} sx={{mb: 2}}>
         {cardItems}
       </Grid>
     );
