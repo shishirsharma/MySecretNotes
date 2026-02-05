@@ -46,7 +46,8 @@ export const colors = {
     shadowLg: '0 10px 15px rgba(90, 70, 50, 0.1)',
 
     // Overlay gradient for card depth
-    cardGradient: 'linear-gradient(rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.01))',
+    cardGradient: 'linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03))',
+    
   },
 
   // Dark Theme - "Warm & Cozy"
@@ -87,7 +88,7 @@ export const colors = {
     shadowLg: '0 10px 15px rgba(0, 0, 0, 0.5)',
 
     // Overlay gradient for card depth
-    cardGradient: 'linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03))',
+    cardGradient: 'linear-gradient(rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.01))',
   },
 
   // Neutral colors (used in both themes)
