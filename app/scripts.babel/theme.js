@@ -42,11 +42,17 @@ function createCustomTheme(palette) {
       },
     },
     components: {
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            backgroundImage: palette.cardGradient,
+          },
+        },
+      },
       MuiCard: {
         styleOverrides: {
           root: {
             backgroundColor: palette.bg,
-            backgroundImage: palette.cardGradient,
             color: palette.textPrimary,
             boxShadow: palette.shadowSm,
             border: `1px solid ${palette.border}`,
