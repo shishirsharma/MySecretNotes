@@ -53,6 +53,7 @@ function createCustomTheme(palette) {
         styleOverrides: {
           root: {
             backgroundColor: palette.bg,
+            backgroundImage: palette.cardGradient,
             color: palette.textPrimary,
             boxShadow: palette.shadowSm,
             border: `1px solid ${palette.border}`,
