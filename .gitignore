@@ -16,3 +16,6 @@ app.zip
 dist.zip
 
 *.codekit
+
+# Screenshot files
+Screenshot*.png
