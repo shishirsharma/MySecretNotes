@@ -115,6 +115,9 @@ export default class RichEditor extends React.Component {
 
     this.editorRef = React.createRef();
     this.focus = () => this.editorRef.current?.focus();
+    this.handleCardClick = () => {
+      if (this.props.onFocusCard) this.props.onFocusCard(this.props.uuid);
+    };
     this.onChange = (editorState) => {
       const currentContentState = this.state.editorState.getCurrentContent();
       const newContentState = editorState.getCurrentContent();
@@ -149,10 +152,13 @@ export default class RichEditor extends React.Component {
     if(this.state.init === true) {
       this._handleGet(this.state.editorState)
     }
-    this.focus();
+    if (this.props.isFocused) this.focus();
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.isFocused && !prevProps.isFocused) {
+      this.focus();
+    }
     if (this.props.update && !prevProps.update) {
       const props = this.props;
       const content = this.state.editorState.getCurrentContent();
@@ -295,7 +301,7 @@ export default class RichEditor extends React.Component {
     }
 
     return (
-      <Card className="note-card" onClick={this.focus}>
+      <Card className={`note-card${this.props.isFocused ? ' note-card--focused' : ''}`} onClick={this.handleCardClick}>
         <CardContent>
           <div className="RichEditor-root">
             <CloseButton

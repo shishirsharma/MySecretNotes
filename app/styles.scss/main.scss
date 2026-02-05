@@ -210,6 +210,8 @@ input::placeholder, textarea::placeholder {
 /* Note Cards - Theme Aware */
 /* Card styling moved to theme.js MuiCard component overrides */
 .note-card {
+  height: 240px;
+  cursor: pointer;
   /* Remove tap highlight */
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
@@ -283,8 +285,39 @@ input::placeholder, textarea::placeholder {
     line-height: 1.7;
     color: var(--color-text-primary);
     background-color: var(--color-bg);
-    min-height: 200px;
   }
+}
+
+/* Focused card — floats centered over the grid */
+.note-card.note-card--focused {
+  position: fixed !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  width: min(600px, 90vw);
+  height: min(70vh, 520px) !important;
+  z-index: 1000;
+  overflow-y: auto !important;
+  cursor: default;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3) !important;
+  border-color: var(--color-primary) !important;
+  transition: box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+  &:hover {
+    transform: translate(-50%, -50%) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+/* Backdrop behind the focused card */
+.note-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 999;
 }
 
 /* Draft.js Editor Theme Styling */

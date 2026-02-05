@@ -21,7 +21,9 @@ class Card extends React.Component {
           update={this.props.update}
           query={this.props.query}
           uuid={this.props.uuid}
-          deleteNote={this.props.deleteNote} />
+          deleteNote={this.props.deleteNote}
+          isFocused={this.props.isFocused}
+          onFocusCard={this.props.onFocusCard} />
     );
   }
 }
@@ -30,7 +32,26 @@ class CardColumns extends React.Component {
   constructor(props) {
     if (window.console) { console.debug('[cardcolumns] constructor'); }
     super(props);
+    this.state = { focusedCard: null };
+    this.handleFocus = (uuid) => this.setState({ focusedCard: uuid });
+    this.handleBlur = () => this.setState({ focusedCard: null });
+    this.handleDeleteNote = (uuid) => {
+      if (this.state.focusedCard === uuid) this.setState({ focusedCard: null });
+      this.props.deleteNote(uuid);
+    };
+    this.handleKeyDown = (e) => {
+      if (e.key === 'Escape' && this.state.focusedCard) this.handleBlur();
+    };
   }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
   render() {
     var cards = this.props.cards;
     if (window.console) { console.debug('[cardcolumns] render', cards); }
@@ -44,14 +65,21 @@ class CardColumns extends React.Component {
               content={card.content}
               decrypt={this.props.decrypt}
               encrypt={this.props.encrypt}
-              deleteNote={this.props.deleteNote} />
+              deleteNote={this.handleDeleteNote}
+              isFocused={this.state.focusedCard === card.uuid}
+              onFocusCard={this.handleFocus} />
         </Grid>
       );
     }, this);
     return (
-      <Grid container spacing={3} sx={{mb: 2}}>
-        {cardItems}
-      </Grid>
+      <>
+        <Grid container spacing={3} sx={{mb: 2}}>
+          {cardItems}
+        </Grid>
+        {this.state.focusedCard && (
+          <div className="note-backdrop" onClick={this.handleBlur} />
+        )}
+      </>
     );
   }
 }
