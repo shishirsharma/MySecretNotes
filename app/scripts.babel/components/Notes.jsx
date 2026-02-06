@@ -93,15 +93,20 @@ class Notes extends React.Component {
   componentDidMount() {
     if (window.console) { console.debug('[Notes] componentDidMount:', this.state); }
 
-    if (this.state.first_run == true) {
-      // Show welcome modal first on first run
-      this.setState({showWelcome: true});
-    } else if(this.state.init === true) {
-      this._handleGet(this.state)
-      this.setState({showUnlock: true});
-    } else if (this.state.locked == true) {
-      this.setState({showUnlock: true});
-    }
+    // Load cards to determine true first run status
+    chrome.storage.local.get('cards', (result) => {
+      const hasCards = result.cards && result.cards.length > 0;
+      const isFirstRun = !hasCards;
+
+      if (isFirstRun) {
+        // No cards exist - this is true first run, show welcome
+        this.setState({showWelcome: true});
+      } else if (this.state.locked == true) {
+        // Cards exist but locked - show unlock modal
+        this._handleGet(this.state);
+        this.setState({showUnlock: true});
+      }
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {

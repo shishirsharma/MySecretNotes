@@ -63,7 +63,7 @@ class SettingsModal extends React.Component {
     var close_button = null;
     var description = null;
     if (init) {
-      msg.settingsModalLabel = 'Create Passkey';
+      msg.settingsModalLabel = 'Set New Passcode';
       msg.keyInput_placeholder = 'Enter a passkey...';
       description = (
         <Box sx={{mb: 2.5}}>
