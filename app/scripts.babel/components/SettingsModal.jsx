@@ -138,7 +138,7 @@ class SettingsModal extends React.Component {
           alignItems: 'center',
           borderBottom: '1px solid rgba(0,0,0,0.1)'
         }}>
-          <span>{msg.settingsModalLabel}</span>
+          {msg.settingsModalLabel}
           {close_button}
         </DialogTitle>
         <form onSubmit={this.handleSubmit}>
