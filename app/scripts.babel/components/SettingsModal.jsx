@@ -130,7 +130,7 @@ class SettingsModal extends React.Component {
       >
         <DialogTitle sx={{
           background: 'var(--appbar-bg)',
-          color: '#FFF',
+          color: 'white !important',
           fontFamily: 'var(--font-body)',
           fontSize: '18px',
           fontWeight: 600,
@@ -139,7 +139,10 @@ class SettingsModal extends React.Component {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderBottom: '1px solid rgba(0,0,0,0.1)'
+          borderBottom: '1px solid rgba(0,0,0,0.1)',
+          '& span': {
+            color: 'white'
+          }
         }}>
           <span>{msg.settingsModalLabel}</span>
           {close_button}

@@ -32,7 +32,7 @@ class WelcomeModal extends React.Component {
       >
         <DialogTitle sx={{
           background: 'var(--appbar-bg)',
-          color: '#FFF',
+          color: 'white !important',
           fontFamily: 'var(--font-body)',
           fontSize: '20px',
           fontWeight: 600,
