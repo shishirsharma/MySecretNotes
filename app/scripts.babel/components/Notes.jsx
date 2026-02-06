@@ -318,8 +318,8 @@ class Notes extends React.Component {
           </Container>
           <HelpModal open={this.state.showHelp} onClose={() => this.setState({showHelp: false})} />
           <UnlockModal open={this.state.showUnlock} onClose={() => this.setState({showUnlock: false})} unlockNotes={this.unlockNotes} invalid_key={this.state.invalid_key}/>
-          <WelcomeModal open={this.state.showWelcome} onClose={this.closeWelcome} />
-          { settingsModal }
+          {this.state.showWelcome && <WelcomeModal open={true} onClose={this.closeWelcome} />}
+          {this.state.showSettings && settingsModal}
         </div>
       </ThemeProvider>
     );

@@ -12,15 +12,21 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CloseIcon from '@mui/icons-material/Close';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import InputAdornment from '@mui/material/InputAdornment';
 
 class SettingsModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {key: '', confirmKey: '', alert: 'info', init: this.props.init};
+    this.state = {key: '', confirmKey: '', alert: 'info', init: this.props.init, showPassword: false};
 
     this.handleSubmit = (e) => { this._handleSubmit(e) }
     this.handleKeyChange = (e) => { this._handleInputChange(e) }
     this.handleConfirmKeyChange = (e) => { this._handleConfirmInputChange(e) }
+    this.togglePasswordVisibility = () => {
+      this.setState({showPassword: !this.state.showPassword})
+    }
   }
 
   _handleSubmit(event) {
@@ -166,13 +172,27 @@ class SettingsModal extends React.Component {
             {description}
             {alert && <Box sx={{mb: 2}}>{alert}</Box>}
             <TextField
-              type="password"
+              type={this.state.showPassword ? "text" : "password"}
               onChange={this.handleKeyChange}
               required
               placeholder={msg.keyInput_placeholder}
               fullWidth
               variant="outlined"
               size="medium"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={this.togglePasswordVisibility}
+                      edge="end"
+                      size="small"
+                      sx={{color: 'var(--color-text-secondary)'}}
+                    >
+                      {this.state.showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   fontSize: '15px',
@@ -191,13 +211,27 @@ class SettingsModal extends React.Component {
               }}
             />
             <TextField
-              type="password"
+              type={this.state.showPassword ? "text" : "password"}
               onChange={this.handleConfirmKeyChange}
               required
-              placeholder="Confirm key..."
+              placeholder={this.state.init ? "Confirm passkey..." : "Confirm new key..."}
               fullWidth
               variant="outlined"
               size="medium"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={this.togglePasswordVisibility}
+                      edge="end"
+                      size="small"
+                      sx={{color: 'var(--color-text-secondary)'}}
+                    >
+                      {this.state.showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
               sx={{
                 mt: 2,
                 '& .MuiOutlinedInput-root': {
