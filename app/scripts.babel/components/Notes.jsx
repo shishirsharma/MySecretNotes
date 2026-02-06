@@ -124,7 +124,7 @@ class Notes extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (window.console) { console.debug('[Notes] componentDidUpdate:', this.state); }
-    if (this.state.locked == true && !this.state.showUnlock) {
+    if (this.state.locked == true && !this.state.showUnlock && !this.state.showWelcome && !this.state.showSettings && !this.state.first_run) {
       this.setState({showUnlock: true});
     }
   }
