@@ -68,7 +68,11 @@ class Notes extends React.Component {
     }
 
     this.closeWelcome = () => {
-      this.setState({showWelcome: false, showSettings: true});
+      this.setState({showWelcome: false});
+      // Delay showing settings modal until after welcome modal closes
+      setTimeout(() => {
+        this.setState({showSettings: true});
+      }, 300);
     }
 
     this.updateTheme = (theme) => {
