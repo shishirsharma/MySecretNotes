@@ -25,7 +25,7 @@ class Notes extends React.Component {
     var init = true;
     var locked = true;
     var first_run = this.props.first_run;
-    var currentTheme = localStorage.getItem('theme') || 'light';
+    var currentTheme = 'light';
 
     this.state = {cards, password, query, init, locked, first_run, currentTheme, showUnlock: false, showSettings: false, showHelp: false, showWelcome: first_run};
 
@@ -92,6 +92,12 @@ class Notes extends React.Component {
 
   componentDidMount() {
     if (window.console) { console.debug('[Notes] componentDidMount:', this.state); }
+
+    // Load theme from storage
+    chrome.storage.local.get('theme', (result) => {
+      const theme = result.theme || 'light';
+      this.setState({ currentTheme: theme });
+    });
 
     // Load cards to determine true first run status
     chrome.storage.local.get('cards', (result) => {

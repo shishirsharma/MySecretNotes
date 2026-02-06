@@ -50,13 +50,17 @@ export default class NavBar extends React.Component {
     super(props);
     this.state = {
       anchorEl: null,
-      currentTheme: localStorage.getItem('theme') || 'light'
+      currentTheme: 'light'
     };
   }
 
   componentDidMount() {
-    // Apply saved theme on mount
-    document.documentElement.setAttribute('data-theme', this.state.currentTheme);
+    // Load theme from chrome.storage.local
+    chrome.storage.local.get('theme', (result) => {
+      const theme = result.theme || 'light';
+      this.setState({ currentTheme: theme });
+      document.documentElement.setAttribute('data-theme', theme);
+    });
   }
 
   handleMenuOpen = (event) => {
@@ -80,7 +84,7 @@ export default class NavBar extends React.Component {
   setTheme = (theme) => {
     this.setState({ currentTheme: theme });
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    chrome.storage.local.set({ theme: theme });
     // Notify parent component (Notes) of theme change
     if (this.props.onThemeChange) {
       this.props.onThemeChange(theme);
