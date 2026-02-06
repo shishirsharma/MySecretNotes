@@ -66,6 +66,8 @@ class UnlockModal extends React.Component {
         onClose={(e, reason) => this._handleClose(reason)}
         disableEscapeKeyDown
         autoFocus
+        maxWidth="sm"
+        fullWidth
         PaperProps={{
           sx: {
             borderRadius: '8px',

@@ -145,6 +145,8 @@ class SettingsModal extends React.Component {
         onClose={() => {}}
         disableEscapeKeyDown
         autoFocus
+        maxWidth="sm"
+        fullWidth
         PaperProps={{
           sx: {
             borderRadius: '8px',
