@@ -8,6 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 
 class UnlockModal extends React.Component {
   constructor(props) {
@@ -82,13 +83,13 @@ class UnlockModal extends React.Component {
           fontWeight: 600,
           letterSpacing: '-0.3px',
           py: 2.5,
-          borderBottom: '1px solid rgba(0,0,0,0.1)'
+          borderBottom: '1px solid var(--color-border)'
         }}>
           Enter your passkey
         </DialogTitle>
         <form onSubmit={this.handleSubmit}>
           <DialogContent sx={{py: 3, px: 3}}>
-            {alert && <div sx={{mb: 2}}>{alert}</div>}
+            {alert && <Box sx={{mb: 2}}>{alert}</Box>}
             <TextField
               type="password"
               inputRef={this.keyInput}

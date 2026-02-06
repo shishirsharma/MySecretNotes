@@ -11,6 +11,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Box from '@mui/material/Box';
 
 class HelpModal extends React.Component {
     constructor(props) {
@@ -42,7 +43,7 @@ class HelpModal extends React.Component {
                   fontWeight: 600,
                   letterSpacing: '-0.3px',
                   py: 2.5,
-                  borderBottom: '1px solid rgba(0,0,0,0.1)'
+                  borderBottom: '1px solid var(--color-border)'
                 }}>
                   Key Bindings
                 </DialogTitle>
@@ -85,7 +86,7 @@ class HelpModal extends React.Component {
                             <TableRow><TableCell>12</TableCell><TableCell>⌃ <b>y</b></TableCell><TableCell>Redo</TableCell></TableRow>
                         </TableBody>
                     </Table>
-                    <div style={{
+                    <Box sx={{
                       fontSize: '11px',
                       color: 'var(--color-text-tertiary)',
                       marginTop: '16px',
@@ -94,7 +95,7 @@ class HelpModal extends React.Component {
                       lineHeight: 1.5
                     }}>
                       Icons made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver" style={{color: 'var(--color-primary)', textDecoration: 'none'}}>Madebyoliver</a> from <a href="http://www.flaticon.com" title="Flaticon" style={{color: 'var(--color-primary)', textDecoration: 'none'}}>www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank" style={{color: 'var(--color-primary)', textDecoration: 'none'}}>CC 3.0 BY</a>
-                    </div>
+                    </Box>
                 </DialogContent>
                 <DialogActions sx={{p: 2, borderTop: '1px solid var(--color-border)'}}>
                     <Button

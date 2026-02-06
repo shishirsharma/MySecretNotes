@@ -136,7 +136,7 @@ class SettingsModal extends React.Component {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderBottom: '1px solid rgba(0,0,0,0.1)'
+          borderBottom: '1px solid var(--color-border)'
         }}>
           {msg.settingsModalLabel}
           {close_button}
@@ -144,7 +144,7 @@ class SettingsModal extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <DialogContent sx={{py: 3, px: 3}}>
             {description}
-            {alert && <div sx={{mb: 2}}>{alert}</div>}
+            {alert && <Box sx={{mb: 2}}>{alert}</Box>}
             <TextField
               type="password"
               onChange={this.handleKeyChange}

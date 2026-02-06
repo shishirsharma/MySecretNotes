@@ -35,7 +35,7 @@ class WelcomeModal extends React.Component {
           fontSize: '20px',
           letterSpacing: '-0.3px',
           py: 2.5,
-          borderBottom: '1px solid rgba(0,0,0,0.1)'
+          borderBottom: '1px solid var(--color-border)'
         }}>
           Welcome to My Secret Notes! 📝
         </DialogTitle>
