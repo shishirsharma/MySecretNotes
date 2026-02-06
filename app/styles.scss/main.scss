@@ -294,8 +294,8 @@ input::placeholder, textarea::placeholder {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) !important;
-  width: min(600px, 90vw);
-  height: min(70vh, 520px) !important;
+  width: 70vw;
+  height: 70vh !important;
   z-index: 1000;
   overflow-y: auto !important;
   cursor: default;

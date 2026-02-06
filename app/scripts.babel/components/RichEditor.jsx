@@ -111,12 +111,19 @@ export default class RichEditor extends React.Component {
       aValue = default_note_content;
     }
     var initialState = convertFromRaw(JSON.parse(aValue));
-    this.state = {editorState: EditorState.createWithContent(initialState), init: true};
+    this.state = {editorState: EditorState.createWithContent(initialState), init: true, contentChanged: false};
 
     this.editorRef = React.createRef();
     this.focus = () => this.editorRef.current?.focus();
     this.handleCardClick = () => {
       if (this.props.onFocusCard) this.props.onFocusCard(this.props.uuid);
+    };
+    this.handleBlur = () => {
+      if (window.console) { console.debug('[RichEditor] blur, contentChanged:', this.state.contentChanged); }
+      if (this.state.contentChanged && this.props.updateNoteTimestamp) {
+        this.props.updateNoteTimestamp(this.props.uuid);
+        this.setState({ contentChanged: false });
+      }
     };
     this.onChange = (editorState) => {
       const currentContentState = this.state.editorState.getCurrentContent();
@@ -127,7 +134,7 @@ export default class RichEditor extends React.Component {
         var newEditorState = this._handleTitle(editorState);
         if (newEditorState) {
           this._handleStore(newEditorState);
-          this.setState({editorState: newEditorState});
+          this.setState({editorState: newEditorState, contentChanged: true});
         } else {
           if (window.console) { console.debug('[RichEditor] <<< State did not save >>>'); }
         }
@@ -314,7 +321,7 @@ export default class RichEditor extends React.Component {
                 editorState={editorState}
                 onToggle={this.toggleInlineStyle}
                 /> */}
-            <div className={className} >
+            <div className={className} onBlur={this.handleBlur}>
               <Editor
                   blockStyleFn={getBlockStyle}
                   customStyleMap={styleMap}

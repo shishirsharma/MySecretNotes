@@ -61,6 +61,11 @@ class Notes extends React.Component {
       this._handleDeleteNote(uuid);
     }
 
+    this.updateNoteTimestamp = (uuid) => {
+      if (window.console) { console.debug('[Notes] updating timestamp for', uuid); }
+      this._handleUpdateTimestamp(uuid);
+    }
+
     this.updateTheme = (theme) => {
       if (window.console) { console.debug('[Notes] updating theme:', theme); }
       this.setState({ currentTheme: theme });
@@ -160,6 +165,26 @@ class Notes extends React.Component {
     chrome.storage.local.get(cards_key, function(result) {
       state.cards = result[cards_key];
       if (state.cards != undefined) {
+        // Migrate old cards without timestamps
+        let needsMigration = false;
+        state.cards = state.cards.map((card, index) => {
+          if (!card.created || !card.modified) {
+            needsMigration = true;
+            // Assign timestamps based on array position (older cards get older timestamps)
+            const baseTime = Date.now() - (state.cards.length - index) * 1000;
+            return {
+              ...card,
+              created: card.created || baseTime,
+              modified: card.modified || baseTime
+            };
+          }
+          return card;
+        });
+
+        if (needsMigration) {
+          this._handleCards(state.cards);
+        }
+
         this.setState(state, function() {
           if (window.console) { console.debug('[chrome.storage] loading cards: ', state.cards); }
         });
@@ -214,7 +239,8 @@ class Notes extends React.Component {
   _handleAddNote() {
     var state = Object.assign({}, this.state);
     var uuid = generateUUID();
-    state.cards = [{uuid: uuid }].concat(state.cards);
+    const now = Date.now();
+    state.cards = [{uuid: uuid, created: now, modified: now}].concat(state.cards);
     if (window.console) { console.debug('[Notes] note added', state.cards); }
     this._handleCards(state.cards);
     this.setState(state, function () {
@@ -232,6 +258,17 @@ class Notes extends React.Component {
     this.setState({cards, lock, password, query}, function () {
       if (window.console) { console.debug('[Notes] updated state', this.state.cards); }
     });
+  }
+
+  _handleUpdateTimestamp(uuid) {
+    const cards = this.state.cards.map(card => {
+      if (card.uuid === uuid) {
+        return { ...card, modified: Date.now() };
+      }
+      return card;
+    });
+    this._handleCards(cards);
+    this.setState({ cards });
   }
 
   render() {
@@ -253,7 +290,8 @@ class Notes extends React.Component {
                         update={this.state.update}
                         decrypt={this.decrypt}
                         encrypt={this.encrypt}
-                        deleteNote={this.deleteNote} />;
+                        deleteNote={this.deleteNote}
+                        updateNoteTimestamp={this.updateNoteTimestamp} />;
       settingsModal = <SettingsModal open={this.state.showSettings} onClose={() => this.setState({showSettings: false})} updateNotes={this.updateNotes} />
     }
 

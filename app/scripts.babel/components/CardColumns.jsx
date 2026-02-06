@@ -22,6 +22,7 @@ class Card extends React.Component {
           query={this.props.query}
           uuid={this.props.uuid}
           deleteNote={this.props.deleteNote}
+          updateNoteTimestamp={this.props.updateNoteTimestamp}
           isFocused={this.props.isFocused}
           onFocusCard={this.props.onFocusCard} />
     );
@@ -55,7 +56,15 @@ class CardColumns extends React.Component {
   render() {
     var cards = this.props.cards;
     if (window.console) { console.debug('[cardcolumns] render', cards); }
-    var cardItems = cards.map(function (card) {
+
+    // Sort cards by modified timestamp (most recent first)
+    var sortedCards = [...cards].sort((a, b) => {
+      const aModified = a.modified || 0;
+      const bModified = b.modified || 0;
+      return bModified - aModified;
+    });
+
+    var cardItems = sortedCards.map(function (card) {
       return (
         <Grid item xs={12} sm={6} md={4} lg={3} key={card.uuid}>
           <Card
@@ -66,6 +75,7 @@ class CardColumns extends React.Component {
               decrypt={this.props.decrypt}
               encrypt={this.props.encrypt}
               deleteNote={this.handleDeleteNote}
+              updateNoteTimestamp={this.props.updateNoteTimestamp}
               isFocused={this.state.focusedCard === card.uuid}
               onFocusCard={this.handleFocus} />
         </Grid>
