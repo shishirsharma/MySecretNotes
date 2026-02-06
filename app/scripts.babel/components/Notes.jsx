@@ -106,11 +106,18 @@ class Notes extends React.Component {
 
       if (isFirstRun) {
         // No cards exist - this is true first run, show welcome
-        this.setState({showWelcome: true});
-      } else if (this.state.locked == true) {
-        // Cards exist but locked - show unlock modal
-        this._handleGet(this.state);
-        this.setState({showUnlock: true});
+        this.setState({showWelcome: true, first_run: true});
+      } else {
+        // Cards exist - correct first_run state if it was wrong
+        // (this handles migrations from old app versions)
+        if (this.state.locked == true) {
+          // Cards exist but locked - show unlock modal
+          this._handleGet(this.state);
+          this.setState({showUnlock: true, first_run: false});
+        } else {
+          // Cards exist and unlocked
+          this.setState({first_run: false});
+        }
       }
     });
   }
