@@ -11,6 +11,7 @@ import CardColumns from 'components/CardColumns';
 import HelpModal from 'components/HelpModal';
 import UnlockModal from 'components/UnlockModal';
 import SettingsModal from 'components/SettingsModal';
+import WelcomeModal from 'components/WelcomeModal';
 import Container from '@mui/material/Container';
 
 class Notes extends React.Component {
@@ -26,7 +27,7 @@ class Notes extends React.Component {
     var first_run = this.props.first_run;
     var currentTheme = localStorage.getItem('theme') || 'light';
 
-    this.state = {cards, password, query, init, locked, first_run, currentTheme, showUnlock: false, showSettings: false, showHelp: false};
+    this.state = {cards, password, query, init, locked, first_run, currentTheme, showUnlock: false, showSettings: false, showHelp: false, showWelcome: first_run};
 
     this.addNote = (e) => {
       e.preventDefault();
@@ -66,6 +67,10 @@ class Notes extends React.Component {
       this._handleUpdateTimestamp(uuid);
     }
 
+    this.closeWelcome = () => {
+      this.setState({showWelcome: false, showSettings: true});
+    }
+
     this.updateTheme = (theme) => {
       if (window.console) { console.debug('[Notes] updating theme:', theme); }
       this.setState({ currentTheme: theme });
@@ -85,7 +90,8 @@ class Notes extends React.Component {
     if (window.console) { console.debug('[Notes] componentDidMount:', this.state); }
 
     if (this.state.first_run == true) {
-      this.setState({showSettings: true});
+      // Show welcome modal first on first run
+      this.setState({showWelcome: true});
     } else if(this.state.init === true) {
       this._handleGet(this.state)
       this.setState({showUnlock: true});
@@ -308,6 +314,7 @@ class Notes extends React.Component {
           </Container>
           <HelpModal open={this.state.showHelp} onClose={() => this.setState({showHelp: false})} />
           <UnlockModal open={this.state.showUnlock} onClose={() => this.setState({showUnlock: false})} unlockNotes={this.unlockNotes} invalid_key={this.state.invalid_key}/>
+          <WelcomeModal open={this.state.showWelcome} onClose={this.closeWelcome} />
           { settingsModal }
         </div>
       </ThemeProvider>

@@ -9,6 +9,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import CloseIcon from '@mui/icons-material/Close';
 
 class SettingsModal extends React.Component {
@@ -53,12 +55,44 @@ class SettingsModal extends React.Component {
 
     var msg = {}
     var close_button = null;
+    var description = null;
     if (init) {
-      msg.settingsModalLabel = 'Create passkey';
-      msg.keyInput_placeholder = 'Enter a key here...';
+      msg.settingsModalLabel = 'Create Passkey';
+      msg.keyInput_placeholder = 'Enter a passkey...';
+      description = (
+        <Box sx={{mb: 2.5}}>
+          <Typography variant="body2" sx={{color: 'var(--color-text-secondary)', mb: 1.5}}>
+            Create a strong passkey to encrypt and protect all your notes. This is the master key that locks your data.
+          </Typography>
+          <Box sx={{
+            backgroundColor: 'var(--color-surface)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '4px',
+            p: 1.5,
+            mb: 1.5
+          }}>
+            <Typography variant="body2" sx={{fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.6}}>
+              <strong>Tips for a strong passkey:</strong>
+              <ul style={{margin: '8px 0', paddingLeft: '20px'}}>
+                <li>Use a mix of uppercase, lowercase, numbers, and symbols</li>
+                <li>Make it at least 8 characters long</li>
+                <li>Don't use personal information</li>
+                <li>Keep it somewhere safe - you'll need it to unlock your notes</li>
+              </ul>
+            </Typography>
+          </Box>
+        </Box>
+      );
     } else {
-      msg.settingsModalLabel = 'Change passkey';
-      msg.keyInput_placeholder = 'Enter new key here...';
+      msg.settingsModalLabel = 'Change Passkey';
+      msg.keyInput_placeholder = 'Enter new passkey...';
+      description = (
+        <Box sx={{mb: 2.5}}>
+          <Typography variant="body2" sx={{color: 'var(--color-text-secondary)', mb: 1.5}}>
+            Update your passkey to a new one. All existing notes will be re-encrypted with the new passkey.
+          </Typography>
+        </Box>
+      );
       close_button = <IconButton
         aria-label="Close"
         onClick={this.props.onClose}
@@ -112,6 +146,7 @@ class SettingsModal extends React.Component {
         </DialogTitle>
         <form onSubmit={this.handleSubmit}>
           <DialogContent sx={{py: 3, px: 3}}>
+            {description}
             {alert && <div sx={{mb: 2}}>{alert}</div>}
             <TextField
               type="password"
