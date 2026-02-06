@@ -81,6 +81,16 @@ class SettingsModal extends React.Component {
               </ul>
             </Typography>
           </Box>
+          <Box sx={{
+            backgroundColor: 'rgba(255, 152, 0, 0.08)',
+            border: '1px solid rgba(255, 152, 0, 0.3)',
+            borderRadius: '4px',
+            p: 1.5
+          }}>
+            <Typography variant="body2" sx={{fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.6}}>
+              <strong>⚠️ Important:</strong> If you forget this passkey, you cannot recover your notes. There is no password reset or recovery option. Make sure you remember it or store it in a safe place like a password manager.
+            </Typography>
+          </Box>
         </Box>
       );
     } else {
@@ -91,6 +101,16 @@ class SettingsModal extends React.Component {
           <Typography variant="body2" sx={{color: 'var(--color-text-secondary)', mb: 1.5}}>
             Update your passkey to a new one. All existing notes will be re-encrypted with the new passkey.
           </Typography>
+          <Box sx={{
+            backgroundColor: 'rgba(255, 152, 0, 0.08)',
+            border: '1px solid rgba(255, 152, 0, 0.3)',
+            borderRadius: '4px',
+            p: 1.5
+          }}>
+            <Typography variant="body2" sx={{fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.6}}>
+              <strong>⚠️ Important:</strong> If you forget your new passkey, you cannot recover your notes. There is no password reset option. Make sure you remember the new passkey before saving it.
+            </Typography>
+          </Box>
         </Box>
       );
       close_button = <IconButton

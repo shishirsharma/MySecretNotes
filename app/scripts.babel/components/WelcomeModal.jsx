@@ -89,10 +89,22 @@ class WelcomeModal extends React.Component {
             border: '1px solid var(--color-border)',
             borderRadius: '4px',
             p: 1.5,
-            mt: 2.5
+            mt: 2.5,
+            mb: 2
           }}>
             <Typography variant="body2" sx={{fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: 500}}>
               💡 <strong>Tip:</strong> Your notes are sorted by most recently edited. Click on any note to expand and edit it in focus mode.
+            </Typography>
+          </Box>
+
+          <Box sx={{
+            backgroundColor: 'rgba(255, 152, 0, 0.08)',
+            border: '1px solid rgba(255, 152, 0, 0.3)',
+            borderRadius: '4px',
+            p: 1.5
+          }}>
+            <Typography variant="body2" sx={{fontSize: '12px', color: 'var(--color-text-secondary)', fontWeight: 500}}>
+              ⚠️ <strong>Remember:</strong> You'll be asked to create a passkey to encrypt your notes. This passkey cannot be recovered if forgotten. Keep it safe!
             </Typography>
           </Box>
         </DialogContent>
