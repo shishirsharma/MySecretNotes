@@ -166,7 +166,7 @@ export default class NavBar extends React.Component {
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Settings</ListItemText>
+                <ListItemText>Change Passkey</ListItemText>
               </MenuItem>
               <MenuItem onClick={this.handleOpenHelp}>
                 <ListItemIcon>
