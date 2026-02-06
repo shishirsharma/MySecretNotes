@@ -5,12 +5,16 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import BookIcon from '@mui/icons-material/Book';
-import LockIcon from '@mui/icons-material/Lock';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
+import LockIcon from '@mui/icons-material/Lock';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -45,6 +49,7 @@ export default class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      anchorEl: null,
       currentTheme: localStorage.getItem('theme') || 'light'
     };
   }
@@ -52,6 +57,24 @@ export default class NavBar extends React.Component {
   componentDidMount() {
     // Apply saved theme on mount
     document.documentElement.setAttribute('data-theme', this.state.currentTheme);
+  }
+
+  handleMenuOpen = (event) => {
+    this.setState({ anchorEl: event.currentTarget });
+  }
+
+  handleMenuClose = () => {
+    this.setState({ anchorEl: null });
+  }
+
+  handleAddNote(e) {
+    this.props.addNote(e);
+  }
+
+  handleLockNotes = (e) => {
+    if (window.console) { console.log('[NavBar] lockNotes'); }
+    this.handleMenuClose();
+    this.props.lockNotes(e);
   }
 
   setTheme = (theme) => {
@@ -64,16 +87,25 @@ export default class NavBar extends React.Component {
     }
   }
 
-  handleAddNote(e) {
-    this.props.addNote(e);
+  handleThemeToggle = () => {
+    const newTheme = this.state.currentTheme === 'dark' ? 'light' : 'dark';
+    this.setTheme(newTheme);
+    this.handleMenuClose();
   }
 
-  handleLockNotes(e) {
-    if (window.console) { console.log('[NavBar] lockNotes'); }
-    this.props.lockNotes(e);
+  handleOpenSettings = () => {
+    this.handleMenuClose();
+    this.props.openSettings();
+  }
+
+  handleOpenHelp = () => {
+    this.handleMenuClose();
+    this.props.openHelp();
   }
 
   render() {
+    const isMenuOpen = Boolean(this.state.anchorEl);
+
     return(
       <AppBar position="static" className="navbar-main">
         <Toolbar sx={{py: 1.5, px: 2}}>
@@ -103,36 +135,46 @@ export default class NavBar extends React.Component {
             </Button>
             <IconButton
               color="inherit"
-              onClick={() => this.setTheme(this.state.currentTheme === 'dark' ? 'light' : 'dark')}
-              title={this.state.currentTheme === 'dark' ? 'Switch to Light' : 'Switch to Dark'}
-              sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
-            >
-              {this.state.currentTheme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
-            <IconButton
-              color="inherit"
-              onClick={this.handleLockNotes.bind(this)}
-              title="Lock notes"
-              sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
-            >
-              <LockIcon />
-            </IconButton>
-            <IconButton
-              color="inherit"
-              onClick={this.props.openSettings}
-              title="Settings"
+              onClick={this.handleMenuOpen}
+              title="More options"
               sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
             >
               <SettingsIcon />
             </IconButton>
-            <IconButton
-              color="inherit"
-              onClick={this.props.openHelp}
-              title="Help"
-              sx={{'&:hover': {bgcolor: 'rgba(255,255,255,0.1)'}}}
+            <Menu
+              anchorEl={this.state.anchorEl}
+              open={isMenuOpen}
+              onClose={this.handleMenuClose}
+              anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+              transformOrigin={{vertical: 'top', horizontal: 'right'}}
             >
-              <HelpIcon />
-            </IconButton>
+              <MenuItem onClick={this.handleThemeToggle}>
+                <ListItemIcon>
+                  {this.state.currentTheme === 'dark' ? <Brightness7Icon fontSize="small" /> : <Brightness4Icon fontSize="small" />}
+                </ListItemIcon>
+                <ListItemText>
+                  {this.state.currentTheme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                </ListItemText>
+              </MenuItem>
+              <MenuItem onClick={this.handleLockNotes}>
+                <ListItemIcon>
+                  <LockIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Lock Notes</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={this.handleOpenSettings}>
+                <ListItemIcon>
+                  <SettingsIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Settings</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={this.handleOpenHelp}>
+                <ListItemIcon>
+                  <HelpIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Help</ListItemText>
+              </MenuItem>
+            </Menu>
           </div>
         </Toolbar>
       </AppBar>
