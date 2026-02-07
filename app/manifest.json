@@ -19,7 +19,6 @@
   "permissions": [
     "storage",
     "unlimitedStorage",
-    "tabs",
-    "notifications"
+    "tabs"
   ]
 }
