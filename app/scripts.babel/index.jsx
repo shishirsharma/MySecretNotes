@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 
 import '../styles.scss/main.scss';
 import Notes from 'components/Notes';
+import analytics from 'utils/analytics';
 
 const root = createRoot(document.getElementById('main-table'));
 
@@ -18,4 +19,9 @@ chrome.storage.local.get('__first_run__', function(result) {
 
   // Mark that the app has run once
   chrome.storage.local.set({ '__first_run__': true });
+
+  // Track app open event
+  analytics.track('extension_opened', {
+    is_first_run: first_run
+  });
 });

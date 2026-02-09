@@ -16,8 +16,9 @@ class CSPPlugin {
         // Set standard CSP - no inline scripts allowed
         // Default theme is set via CSS variables in index.html <style> tag
         // Theme switching is handled by React/ThemeProvider
+        // Google Analytics is allowed via googletagmanager.com
         manifest.content_security_policy = {
-          extension_pages: "script-src 'self'; object-src 'self'"
+          extension_pages: "script-src 'self' https://www.googletagmanager.com; object-src 'self'"
         };
 
         // Write updated manifest.json
@@ -76,7 +77,7 @@ module.exports = {
     extensions: ['.jsx', '.js'],
     alias: {
       'components': path.resolve(__dirname, 'app/scripts.babel/components'),
-      'utils': path.resolve(__dirname, 'app/scripts.babel/utils.jsx')
+      'utils': path.resolve(__dirname, 'app/scripts.babel/utils')
     },
     fallback: {
       crypto: require.resolve('crypto-browserify'),
