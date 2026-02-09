@@ -75,6 +75,9 @@ analytics.track('keyboard_shortcut_used', {
 
 These are automatically tracked:
 - `extension_opened` - When the extension popup opens (tracks if it's first run)
+- `note_created` - When user creates a new note
+- `note_deleted` - When user deletes a note
+- `note_edited` - When user edits note content (debounced to once per 5 minutes of editing)
 
 ## Notes
 

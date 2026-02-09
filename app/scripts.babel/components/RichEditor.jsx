@@ -201,14 +201,14 @@ export default class RichEditor extends React.Component {
       if (window.console) { console.debug('[chrome.storage] Saved uuid', props.uuid, ': [', serialized, ']'); }
     });
 
-    // Track note edit with debounce (only track once per 2 seconds of editing)
+    // Track note edit with debounce (only track once per 5 minutes of editing)
     if (this.editDebounceTimer) {
       clearTimeout(this.editDebounceTimer);
     }
     this.editDebounceTimer = setTimeout(() => {
       analytics.trackFeature('note_edited');
       this.editDebounceTimer = null;
-    }, 2000);
+    }, 5 * 60 * 1000);
   }
 
   _handleGet(editorState) {
