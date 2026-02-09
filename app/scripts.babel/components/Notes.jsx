@@ -4,7 +4,7 @@ import React from 'react';
 import crypto from 'crypto';
 import { ThemeProvider } from '@mui/material/styles';
 
-import generateUUID from 'utils';
+import generateUUID, { generateTrackingId } from 'utils';
 import { getTheme } from '../theme';
 import analytics from 'utils/analytics';
 import NavBar from 'components/NavBar';
@@ -268,15 +268,16 @@ class Notes extends React.Component {
   _handleAddNote() {
     var state = Object.assign({}, this.state);
     var uuid = generateUUID();
+    var trackingId = generateTrackingId();
     const now = Date.now();
-    state.cards = [{uuid: uuid, created: now, modified: now}].concat(state.cards);
+    state.cards = [{uuid: uuid, trackingId: trackingId, created: now, modified: now}].concat(state.cards);
     if (window.console) { console.debug('[Notes] note added', state.cards); }
     this._handleCards(state.cards);
     this.setState(state, function () {
       if (window.console) { console.debug('[Notes] updated state', this.state); }
     });
     // Track note creation
-    analytics.trackFeature('note_created');
+    analytics.track('note_created', { tracking_id: trackingId });
   }
 
   _handleDeleteNote(uuid) {
@@ -284,13 +285,16 @@ class Notes extends React.Component {
     const password = this.state.password;
     const query = this.state.query;
     const lock = this.state.lock;
+    const deletedCard = old_cards.find(card => card.uuid === uuid);
     var cards = old_cards.filter(function(elem, idx) { if(elem.uuid != uuid) return elem });
     this._handleCards(cards);
     this.setState({cards, lock, password, query}, function () {
       if (window.console) { console.debug('[Notes] updated state', this.state.cards); }
     });
-    // Track note deletion
-    analytics.trackFeature('note_deleted');
+    // Track note deletion with tracking ID
+    if (deletedCard && deletedCard.trackingId) {
+      analytics.track('note_deleted', { tracking_id: deletedCard.trackingId });
+    }
   }
 
   _handleUpdateTimestamp(uuid) {

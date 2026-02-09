@@ -2,6 +2,13 @@
 
 Google Analytics 4 is now integrated with your Chrome extension (Property ID: `G-RTHS9HY3KZ`).
 
+## Privacy-Preserving Note Tracking
+
+Each note is assigned a random `tracking_id` (format: `track_XXXXXXXXXXXX`) instead of using the actual note UUID. This allows you to:
+- **Correlate events** for the same note (creation → edits → deletion)
+- **Preserve user privacy** - no actual note identifiers are sent to Google
+- **Maintain anonymity** - tracking IDs are random and rotated per note
+
 ## How to Track Events
 
 Import the analytics utility in any React component:
@@ -39,18 +46,22 @@ analytics.trackAction('delete_note', 'notes', 'permanent_delete', 1);
 analytics.trackError('Failed to save note', 'save_handler');
 ```
 
-### Examples for Your App
+### Examples for Tracking with Note ID
 
-**In Notes.jsx or NoteItem.jsx:**
+If you add more note-related features, include the `tracking_id` for correlation:
+
 ```javascript
-// When user creates a note
-analytics.trackFeature('create_note');
+// Track a custom note action
+analytics.track('note_exported', {
+  tracking_id: noteTrackingId,
+  format: 'markdown'
+});
 
-// When user deletes a note
-analytics.trackAction('delete', 'notes', 'user_initiated');
-
-// When user exports notes
-analytics.trackFeature('export_notes');
+// Track note sharing
+analytics.track('note_shared', {
+  tracking_id: noteTrackingId,
+  share_method: 'email'
+});
 ```
 
 **In theme switcher:**
@@ -73,11 +84,11 @@ analytics.track('keyboard_shortcut_used', {
 
 ## Built-in Events
 
-These are automatically tracked:
+These are automatically tracked with `tracking_id` for correlation:
 - `extension_opened` - When the extension popup opens (tracks if it's first run)
-- `note_created` - When user creates a new note
-- `note_deleted` - When user deletes a note
-- `note_edited` - When user edits note content (debounced to once per 5 minutes of editing)
+- `note_created` - When user creates a new note (includes `tracking_id`)
+- `note_deleted` - When user deletes a note (includes `tracking_id`)
+- `note_edited` - When user edits note content (debounced to once per 5 minutes of editing, includes `tracking_id`)
 
 ## Notes
 

@@ -21,6 +21,7 @@ class Card extends React.Component {
           update={this.props.update}
           query={this.props.query}
           uuid={this.props.uuid}
+          trackingId={this.props.trackingId}
           deleteNote={this.props.deleteNote}
           updateNoteTimestamp={this.props.updateNoteTimestamp}
           isFocused={this.props.isFocused}
@@ -69,6 +70,7 @@ class CardColumns extends React.Component {
         <Grid item xs={12} sm={6} md={4} lg={3} key={card.uuid}>
           <Card
               uuid={card.uuid}
+              trackingId={card.trackingId}
               query={this.props.query}
               update={this.props.update}
               content={card.content}

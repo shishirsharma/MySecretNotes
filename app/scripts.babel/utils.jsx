@@ -12,5 +12,11 @@ function generateUUID() { // Public Domain/MIT
     });
 }
 
+// Generate a random tracking ID for analytics (not tied to actual note UUID for privacy)
+function generateTrackingId() {
+    return 'track_' + Math.random().toString(36).substr(2, 12);
+}
+
 export default generateUUID;
+export { generateTrackingId };
 

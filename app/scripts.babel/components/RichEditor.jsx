@@ -206,7 +206,9 @@ export default class RichEditor extends React.Component {
       clearTimeout(this.editDebounceTimer);
     }
     this.editDebounceTimer = setTimeout(() => {
-      analytics.trackFeature('note_edited');
+      if (this.props.trackingId) {
+        analytics.track('note_edited', { tracking_id: this.props.trackingId });
+      }
       this.editDebounceTimer = null;
     }, 5 * 60 * 1000);
   }
