@@ -16,9 +16,9 @@ class CSPPlugin {
         // Set standard CSP - no inline scripts allowed
         // Default theme is set via CSS variables in index.html <style> tag
         // Theme switching is handled by React/ThemeProvider
-        // Google Analytics is allowed via googletagmanager.com
+        // Google Analytics uses Measurement Protocol (no external scripts needed)
         manifest.content_security_policy = {
-          extension_pages: "script-src 'self' https://www.googletagmanager.com; object-src 'self'"
+          extension_pages: "script-src 'self'; object-src 'self'; connect-src https://www.google-analytics.com"
         };
 
         // Write updated manifest.json

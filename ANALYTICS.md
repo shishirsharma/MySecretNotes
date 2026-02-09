@@ -1,6 +1,13 @@
 # Google Analytics Setup
 
-Google Analytics 4 is now integrated with your Chrome extension (Property ID: `G-RTHS9HY3KZ`).
+Google Analytics 4 is integrated via the **Measurement Protocol** (Property ID: `G-RTHS9HY3KZ`).
+
+## Why Measurement Protocol?
+
+- ✅ **MV3 Compliant**: No external scripts, no CSP issues
+- ✅ **Full Control**: You decide exactly what data is sent to Google
+- ✅ **Privacy-Friendly**: Minimal data collection (no session recording, no page tracking)
+- ✅ **Lightweight**: Direct HTTP POST instead of loading gtag.js
 
 ## Privacy-Preserving Note Tracking
 
