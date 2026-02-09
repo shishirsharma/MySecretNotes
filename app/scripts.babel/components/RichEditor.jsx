@@ -4,6 +4,7 @@ import React from 'react';
 import {Editor, EditorState, RichUtils, ContentState, convertFromHTML, convertToRaw, convertFromRaw} from 'draft-js';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import analytics from 'utils/analytics';
 
 function getBlockStyle(block) {
   switch (block.getType()) {
@@ -112,6 +113,7 @@ export default class RichEditor extends React.Component {
     }
     var initialState = convertFromRaw(JSON.parse(aValue));
     this.state = {editorState: EditorState.createWithContent(initialState), init: true, contentChanged: false};
+    this.editDebounceTimer = null;
 
     this.editorRef = React.createRef();
     this.focus = () => this.editorRef.current?.focus();
@@ -162,6 +164,13 @@ export default class RichEditor extends React.Component {
     if (this.props.isFocused) this.focus();
   }
 
+  componentWillUnmount() {
+    // Clear debounce timer to prevent memory leaks
+    if (this.editDebounceTimer) {
+      clearTimeout(this.editDebounceTimer);
+    }
+  }
+
   componentDidUpdate(prevProps) {
     if (this.props.isFocused && !prevProps.isFocused) {
       this.focus();
@@ -191,6 +200,15 @@ export default class RichEditor extends React.Component {
     chrome.storage.local.set(data, function() {
       if (window.console) { console.debug('[chrome.storage] Saved uuid', props.uuid, ': [', serialized, ']'); }
     });
+
+    // Track note edit with debounce (only track once per 2 seconds of editing)
+    if (this.editDebounceTimer) {
+      clearTimeout(this.editDebounceTimer);
+    }
+    this.editDebounceTimer = setTimeout(() => {
+      analytics.trackFeature('note_edited');
+      this.editDebounceTimer = null;
+    }, 2000);
   }
 
   _handleGet(editorState) {

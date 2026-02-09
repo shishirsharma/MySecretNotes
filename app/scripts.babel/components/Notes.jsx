@@ -6,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 
 import generateUUID from 'utils';
 import { getTheme } from '../theme';
+import analytics from 'utils/analytics';
 import NavBar from 'components/NavBar';
 import CardColumns from 'components/CardColumns';
 import HelpModal from 'components/HelpModal';
@@ -274,6 +275,8 @@ class Notes extends React.Component {
     this.setState(state, function () {
       if (window.console) { console.debug('[Notes] updated state', this.state); }
     });
+    // Track note creation
+    analytics.trackFeature('note_created');
   }
 
   _handleDeleteNote(uuid) {
@@ -286,6 +289,8 @@ class Notes extends React.Component {
     this.setState({cards, lock, password, query}, function () {
       if (window.console) { console.debug('[Notes] updated state', this.state.cards); }
     });
+    // Track note deletion
+    analytics.trackFeature('note_deleted');
   }
 
   _handleUpdateTimestamp(uuid) {
